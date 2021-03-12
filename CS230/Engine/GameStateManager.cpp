@@ -1,0 +1,105 @@
+/*--------------------------------------------------------------
+ Copyright (C) 2021 DigiPen Institute of Technology.
+ Reproduction or disclosure of this file or its contents without the prior
+ written consent of DigiPen Institute of Technology is prohibited.
+ File Name: GameStateManager.cpp
+ Project: CS230
+ Author: Taeju Kwon
+ Creation date:  2/10/2021
+ -----------------------------------------------------------------*/
+#include "GameState.h"
+#include "GameStateManager.h"
+#include "Input.h"
+#include "Engine.h"
+
+CS230::GameStateManager::GameStateManager()
+{
+	currGameState = nullptr;
+	nextGameState = nullptr;
+	state = State::START;
+}
+
+void CS230::GameStateManager::AddGameState(GameState& gameState)
+{
+	gameStates.push_back(&gameState);
+}
+ 
+void CS230::GameStateManager::SetNextState(int initState)
+{
+	 nextGameState = gameStates[initState];
+}
+
+void CS230::GameStateManager::Shutdown()
+{
+	nextGameState = nullptr;
+}
+
+void CS230::GameStateManager::ReloadState()
+{
+	state = State::UNLOAD;
+}
+
+bool CS230::GameStateManager::HasGameEnded()
+{
+	return state == State::EXIT;
+}
+
+void CS230::GameStateManager::Update()
+{ 
+	switch (state)
+	 {
+	 case State::START:
+		 if (gameStates.empty() == false) {
+			nextGameState = gameStates[0];
+		 	state = State::LOAD;
+		 }
+		else
+		 {
+			 Engine::GetLogger().LogError("LogError");
+			 state = State::SHUTDOWN;
+		 }
+		break;
+		
+	 case State::LOAD:
+		 currGameState = nextGameState;
+		 Engine::GetLogger().LogEvent("Load " + currGameState->GetName());
+		 currGameState->Load();
+		 Engine::GetLogger().LogEvent("Load Complete");
+		 state = State::UPDATE;
+		 break;
+		
+	 case State::UPDATE:
+
+		 if (currGameState != nextGameState) {
+			state = State::UNLOAD;
+		 }
+		else
+		{
+			 Engine::GetLogger().LogVerbose("Update " + currGameState->GetName());
+			 state = State::UPDATE;
+			 currGameState->Update();
+		 }
+		break;
+		
+	 case State::UNLOAD:
+		 Engine::GetLogger().LogEvent("Unload " + currGameState->GetName());
+		 currGameState->Unload();
+		
+		if (nextGameState == nullptr)
+		{
+		   state = State::SHUTDOWN;
+		}
+		else
+		{
+			state = State::LOAD;
+		}
+		break;
+		
+	 case State::SHUTDOWN:
+		 state = State::EXIT;
+		break;
+		
+	 case State::EXIT:
+		break;
+	 }
+}
