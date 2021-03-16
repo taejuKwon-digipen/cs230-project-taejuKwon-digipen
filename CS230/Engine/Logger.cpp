@@ -36,6 +36,7 @@ switch (severity)
 			}
 	}
 	break;
+	
 	case Severity::Debug:
 	{
 		std::string label = "Debug";

@@ -20,10 +20,11 @@ void Level1::Update() {
 	if (levelNext.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::Level2));
 	}
-	
+#ifdef _DEBUG
 	if (levelReload.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().ReloadState();
 	}
+#endif
 }
 void Level1::Unload(){
 }

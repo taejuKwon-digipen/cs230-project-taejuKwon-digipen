@@ -22,7 +22,7 @@ Engine::~Engine() {};
 void Engine::Init(std::string windowName)
 {
 	logger.LogEvent("Engine Init");
-	window.Init("Week 1");
+	window.Init(windowName);
 }
 
 void Engine::Shutdown()

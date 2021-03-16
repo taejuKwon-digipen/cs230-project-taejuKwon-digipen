@@ -20,7 +20,6 @@ namespace CS230 {
 			Debug,			// This should only be used when you are currently trying to debug something
 			Event,			// These are general events, such as key press, exit state, enter state, enter state finish
 			Error,			// This is for an error, such as an asset is not found
-			Verb,
 		};
 
 		Logger(Severity severity, bool useConsole);
