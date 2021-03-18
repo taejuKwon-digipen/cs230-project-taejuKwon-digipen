@@ -9,7 +9,7 @@ Creation date:  2/10/2021
 -----------------------------------------------------------------*/
 #include "Engine.h"
 
-Engine::Engine() :
+Engine::Engine() : lastTick(std::chrono::system_clock::now()), frameCount(0),
 #ifdef _DEBUG				
     logger(CS230::Logger::Severity::Debug, true)
 #else 						
@@ -23,20 +23,35 @@ void Engine::Init(std::string windowName)
 {
 	logger.LogEvent("Engine Init");
 	window.Init(windowName);
+	fpsCalcTime = lastTick;
 }
 
 void Engine::Shutdown()
 {
 	logger.LogEvent("Engine Shutdown");
 }
+// std::chrono::duration<double>(now - lastTick).count() = dt
 
 void Engine::Update()
 {
-	logger.LogVerbose("Engine Update");
+	double dt = std::chrono::duration<double>(std::chrono::system_clock::now() - lastTick).count();
 	
-	gameStateManager.Update();
-	input.Update();
-	window.Update();
+	if(dt > 1 / Target_FPS)
+	{
+		frameCount++;
+		logger.LogVerbose("Engine Update");
+		gameStateManager.Update(dt);
+		input.Update();
+		window.Update();
+		lastTick = std::chrono::system_clock::now();
+	}
+	if (frameCount >= FPS_IntervalFrameCount)
+	{
+		const double countAvarageFPS = frameCount / std::chrono::duration<double>(lastTick - fpsCalcTime).count();
+		logger.LogEvent("FPS: "+ std::to_string(countAvarageFPS));
+		fpsCalcTime = lastTick;
+		frameCount = 0;
+	}
 }
 
 bool Engine::HasGameEnded()

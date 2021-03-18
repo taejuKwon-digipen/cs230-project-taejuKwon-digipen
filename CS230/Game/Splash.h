@@ -10,16 +10,19 @@ Creation date: 2/10/2021
 #pragma once
 #include "../Engine/GameState.h"
 #include "../Engine/Input.h"
+#include "..\Engine\Texture.h"
 
 class Splash : public CS230::GameState {
 public:
 	Splash();
 	void Load() override;
-	void Update() override;
+	void Update(double) override;
 	void Unload() override;
+	void Draw() override;
 
 	std::string GetName() override { return "Splash"; }
 
 private:
 	CS230::InputKey levelNext;
+	CS230::Texture texture;
 };

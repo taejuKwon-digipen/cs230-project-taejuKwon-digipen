@@ -15,7 +15,7 @@ Level1::Level1() : levelNext(CS230::InputKey::Keyboard::Enter), levelReload(CS23
 
 void Level1::Load() {
 }
-void Level1::Update() {
+void Level1::Update(double) {
 	
 	if (levelNext.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::Level2));

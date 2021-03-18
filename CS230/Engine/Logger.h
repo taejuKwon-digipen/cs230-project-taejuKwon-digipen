@@ -11,6 +11,7 @@ Creation date: 2/10/2021
 #pragma once
 #include <string>
 #include <fstream>
+#include <chrono>
 
 namespace CS230 {
 	class Logger {
@@ -29,10 +30,13 @@ namespace CS230 {
 		void LogEvent(std::string text) { Log(Severity::Event, text); }
 		void LogDebug(std::string text) { Log(Severity::Debug, text); }
 		void LogVerbose(std::string text) { Log(Severity::Verbose, text); }
-
+	
 	private:
 		void Log(Severity, std::string displayText);
 		std::ofstream outStream;
 		Severity minLevel;
+
+		std::chrono::system_clock::time_point startTime;           
+		double GetSecondsSinceStart();
 	};
 }

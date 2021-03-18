@@ -14,13 +14,22 @@ Creation date: 2/10/2021
 Splash::Splash() : levelNext(CS230::InputKey::Keyboard::Enter) {}
 
 void Splash::Load() {
+	texture.Load("assets / DigiPen_BLACK_1024px.png");
 }
-void Splash::Update()
+
+void Splash::Update(double)
 {
 	if (levelNext.IsKeyReleased() == true) 
 	{
 		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::Level1));
 	}
 }
+
 void Splash::Unload() {
+}
+
+void Splash::Draw()
+{
+	
+	texture.Draw(Engine::GetWindow().GetSize()/2 - texture.GetSize()/2);
 }

@@ -15,7 +15,7 @@ Level2::Level2() : levelNext(CS230::InputKey::Keyboard::Enter), levelReload(CS23
 
 void Level2::Load() {
 }
-void Level2::Update() {
+void Level2::Update(double) {
 	if (levelNext.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().Shutdown();
 	}
