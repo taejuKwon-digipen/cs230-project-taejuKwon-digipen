@@ -8,14 +8,20 @@ Author: Taeju Kwon
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #include "../Engine/Engine.h"	//GetGameStateManager
-#include "Screens.h"
 #include "Level2.h"
 
-Level2::Level2() : levelNext(CS230::InputKey::Keyboard::Enter), levelReload(CS230::InputKey::Keyboard::R) {}
+Level2::Level2() : levelNext(CS230::InputKey::Keyboard::Enter), levelReload(CS230::InputKey::Keyboard::R),
+ship(math::vec2{ Engine::GetWindow().GetSize().x / 2.0,Engine::GetWindow().GetSize().y / 2.0 }) {};
 
-void Level2::Load() {
+void Level2::Load()
+{
+	ship.Load();
 }
-void Level2::Update(double) {
+
+void Level2::Update(double)
+{
+	ship.Update();
+	
 	if (levelNext.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().Shutdown();
 	}
@@ -24,7 +30,12 @@ void Level2::Update(double) {
 		Engine::GetGameStateManager().ReloadState();
 	}
 #endif
-
 }
 void Level2::Unload() {
+}
+
+void Level2::Draw()
+{
+	Engine::GetWindow().Clear({ 0x000000ff });
+	ship.Draw();
 }

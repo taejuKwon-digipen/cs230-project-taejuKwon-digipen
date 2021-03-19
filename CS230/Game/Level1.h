@@ -10,6 +10,7 @@ Creation date: 2/10/2021
 #pragma once
 #include "../Engine/GameState.h"
 #include "../Engine/Input.h"
+#include "Hero.h"
 
 class Level1 : public CS230::GameState {
 public:
@@ -17,10 +18,16 @@ public:
 	void Load() override;
 	void Update(double) override;
 	void Unload() override;
+	void Draw() override;
 
 	std::string GetName() override { return "Level1"; }
+
+	static constexpr double floor = 126.0f;
 
 protected:
 	CS230::InputKey levelNext;
 	CS230::InputKey levelReload;
+	Hero hero;
+	CS230::Texture background;
+
 };

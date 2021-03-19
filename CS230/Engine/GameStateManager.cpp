@@ -46,8 +46,6 @@ bool CS230::GameStateManager::HasGameEnded()
 
 void CS230::GameStateManager::Update(double dt)
 {
-	currGameState->Draw();
-	
 	switch (state)
 	 {
 	 case State::START:
@@ -81,6 +79,7 @@ void CS230::GameStateManager::Update(double dt)
 			 Engine::GetLogger().LogVerbose("Update " + currGameState->GetName());
 			 state = State::UPDATE;
 			 currGameState->Update(dt);
+			 currGameState->Draw();
 		 }
 		break;
 		
@@ -105,6 +104,4 @@ void CS230::GameStateManager::Update(double dt)
 	 case State::EXIT:
 		break;
 	 }
-
-	
 }

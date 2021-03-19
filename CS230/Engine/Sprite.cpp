@@ -9,6 +9,8 @@ Creation date: 2/18/2021
 -----------------------------------------------------------------*/
 #include "Sprite.h"
 
+CS230::Sprite::Sprite() {};
+
 void CS230::Sprite::Load(const std::filesystem::path& texturePath)
 {
 	texture.Load(texturePath);

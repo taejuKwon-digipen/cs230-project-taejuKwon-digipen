@@ -11,25 +11,27 @@ Creation date: 2/10/2021
 #include "Screens.h"
 #include "Splash.h"
 
-Splash::Splash() : levelNext(CS230::InputKey::Keyboard::Enter) {}
+Splash::Splash(){};
 
 void Splash::Load() {
-	texture.Load("assets / DigiPen_BLACK_1024px.png");
+	texture.Load("assets/DigiPen_BLACK_1024px.png");
 }
 
-void Splash::Update(double)
+void Splash::Update(double dt)
 {
-	if (levelNext.IsKeyReleased() == true) 
+	Timer += dt;
+	if(Timer >= MaxTime)
 	{
 		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::Level1));
 	}
 }
 
 void Splash::Unload() {
+	
 }
 
 void Splash::Draw()
 {
-	
+	Engine::GetWindow().Clear({ 0xffffffff });
 	texture.Draw(Engine::GetWindow().GetSize()/2 - texture.GetSize()/2);
 }

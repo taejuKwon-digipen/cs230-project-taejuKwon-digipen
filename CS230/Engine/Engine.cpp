@@ -30,7 +30,6 @@ void Engine::Shutdown()
 {
 	logger.LogEvent("Engine Shutdown");
 }
-// std::chrono::duration<double>(now - lastTick).count() = dt
 
 void Engine::Update()
 {

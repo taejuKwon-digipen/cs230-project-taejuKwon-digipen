@@ -11,9 +11,13 @@ Creation date:  2/10/2021
 #include "Screens.h"
 #include "Level1.h"
 
-Level1::Level1() : levelNext(CS230::InputKey::Keyboard::Enter), levelReload(CS230::InputKey::Keyboard::R) {}
+Level1::Level1() : levelNext(CS230::InputKey::Keyboard::Enter), levelReload(CS230::InputKey::Keyboard::R),
+hero(math::vec2{ Engine::GetWindow().GetSize().x / 2.0 ,floor }) {};
 
-void Level1::Load() {
+void Level1::Load()
+{
+	background.Load("assets/Background.png");
+	hero.Load();
 }
 void Level1::Update(double) {
 	
@@ -25,6 +29,14 @@ void Level1::Update(double) {
 		Engine::GetGameStateManager().ReloadState();
 	}
 #endif
+
+	hero.Update();
 }
 void Level1::Unload(){
+}
+
+void Level1::Draw()
+{
+	background.Draw(math::vec2(0,0));
+	hero.Draw();
 }

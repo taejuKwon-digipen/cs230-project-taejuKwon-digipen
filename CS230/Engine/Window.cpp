@@ -8,7 +8,6 @@ Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #include <doodle/window.hpp>
-//#include "Window.h"
 #include <doodle/drawing.hpp>    
 #include "Engine.h"		
 
@@ -28,7 +27,7 @@ void on_window_resized(int new_width, int new_height) {
 
 void CS230::Window::Resize(int newWidth, int newHeight)
 {
-    windowSize = {newWidth,newHeight};
+    windowSize = math::ivec2(newWidth,newHeight);
 }
 
 void CS230::Window::Clear(unsigned color)
