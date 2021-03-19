@@ -126,29 +126,29 @@ namespace math
 	
    [[nodiscard]] constexpr ivec2 ivec2::operator *(int rhs) noexcept
    {
-	   this->x* rhs;
-	   this->y* rhs;
+	   this->x*= rhs;
+	   this->y*= rhs;
 	   return *this;
    }
 	
    [[nodiscard]] constexpr vec2 ivec2::operator*(double rhs) noexcept
    {
-	   this->x* rhs;
-	   this->y* rhs;
+	   this->x*= rhs;
+	   this->y*= rhs;
 	   return *this;
    }
 	
    [[nodiscard]] constexpr ivec2 ivec2::operator/(int rhs) noexcept
    {
-	   this->x / rhs;
-	   this->y / rhs;
+	   this->x /= rhs;
+	   this->y /= rhs;
 	   return *this;
    }
 	
    [[nodiscard]] constexpr vec2 ivec2::operator/(double rhs) noexcept
    {
-	   this->x / rhs;
-	   this->y / rhs;
+	   this->x /= rhs;
+	   this->y /= rhs;
 	   return *this;
    }
 	//////////////////////
@@ -160,7 +160,7 @@ namespace math
 	
    [[nodiscard]] constexpr ivec2 operator- (const ivec2& lhs, const ivec2& rhs) noexcept
    {
-	   return ivec2(lhs.x - rhs.x, lhs.y - lhs.y);
+	   return ivec2(lhs.x - rhs.x, lhs.y - rhs.y);
    }
 	
    [[nodiscard]] constexpr ivec2 operator- (const ivec2& rhs) noexcept
