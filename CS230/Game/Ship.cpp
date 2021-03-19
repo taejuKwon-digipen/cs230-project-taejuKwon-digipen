@@ -19,24 +19,24 @@ void Ship::Load()
 	position = startPos;
 }
 
-void Ship::Draw()
+void Ship::Update()
 {
 	if (moveLeftKey.IsKeyDown() == true)
 	{
-		position.x--;
+		position.x-= 5;
 	}
 	else if (moveRightKey.IsKeyDown() == true)
 	{
-		position.x++;
+		position.x+= 5;
 	} else if (moveUpKey.IsKeyDown() == true)
 	{
-		position.y++;
+		position.y += 5;
 	}else if (moveDownKey.IsKeyDown() == true){
-		position.y--;
+		position.y -= 5;
 	}
 }
 
-void Ship::Update()
+void Ship::Draw()
 {
 	sprite.Draw(position);
 }

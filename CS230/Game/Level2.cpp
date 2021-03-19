@@ -36,6 +36,6 @@ void Level2::Unload() {
 
 void Level2::Draw()
 {
-	Engine::GetWindow().Clear({ 0x000000ff });
+	Engine::GetWindow().Clear(0x000000ff);
 	ship.Draw();
 }

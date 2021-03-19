@@ -22,10 +22,8 @@ public:
 
 	std::string GetName() override { return "Level2"; }
 
-	static constexpr double floor = 126.0f;
 private:
 	CS230::InputKey levelNext;
 	CS230::InputKey levelReload;
 	Ship ship;
-	CS230::Texture background;
 };
