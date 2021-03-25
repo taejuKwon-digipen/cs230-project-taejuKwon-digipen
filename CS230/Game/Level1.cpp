@@ -12,14 +12,15 @@ Creation date:  2/10/2021
 #include "Level1.h"
 
 Level1::Level1() : levelNext(CS230::InputKey::Keyboard::Enter), levelReload(CS230::InputKey::Keyboard::R),
-hero(math::vec2{ Engine::GetWindow().GetSize().x / 2.0 ,floor }) {};
+hero(math::vec2{ Engine::GetWindow().GetSize().x / 2.0 ,floor }), ball(math::vec2( 600.0, floor )) {};
 
 void Level1::Load()
 {
 	background.Load("assets/Background.png");
 	hero.Load();
+	ball.Load();
 }
-void Level1::Update(double) {
+void Level1::Update(double dt) {
 	
 	if (levelNext.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::Level2));
@@ -30,7 +31,8 @@ void Level1::Update(double) {
 	}
 #endif
 
-	hero.Update();
+	hero.Update(dt);
+	ball.Update(dt);
 }
 void Level1::Unload(){
 }
@@ -39,4 +41,5 @@ void Level1::Draw()
 {
 	background.Draw(math::vec2(0,0));
 	hero.Draw();
+	ball.Draw();
 }

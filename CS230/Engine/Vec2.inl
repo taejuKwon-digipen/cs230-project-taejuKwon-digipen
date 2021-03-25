@@ -133,8 +133,8 @@ namespace math
 	
    [[nodiscard]] constexpr vec2 ivec2::operator*(double rhs) noexcept
    {
-	   this->x*= rhs;
-	   this->y*= rhs;
+	   this->x *= rhs;
+	   this->y *= rhs;
 	   return *this;
    }
 	
