@@ -19,21 +19,29 @@ void Ship::Load()
 	position = startPos;
 }
 
-void Ship::Update()
+void Ship::Update(double dt)
 {
+
+	position += velocity * dt;
+	
 	if (moveLeftKey.IsKeyDown() == true)
 	{
-		position.x-= 5;
+		velocity.x -=  accel * dt;
 	}
 	else if (moveRightKey.IsKeyDown() == true)
 	{
-		position.x+= 5;
+		velocity.x += accel * dt;
 	} else if (moveUpKey.IsKeyDown() == true)
 	{
-		position.y += 5;
-	}else if (moveDownKey.IsKeyDown() == true){
-		position.y -= 5;
+		velocity.y +=  accel * dt;
+	}else if (moveDownKey.IsKeyDown() == true)
+	{
+		velocity.y -=  accel * dt;
 	}
+	
+	velocity -= velocity * drag * dt;
+	Engine::GetLogger().LogDebug("Velocity = " + to_string(velocity.x) + "," + to_string(velocity.y));
+	TestForwrap();
 }
 
 void Ship::Draw()
@@ -41,5 +49,27 @@ void Ship::Draw()
 	sprite.Draw(position);
 }
 
+void Ship::TestForwrap()
+{
+
+	if (position.x > Engine::GetWindow().GetSize().x/2)
+	{
+		position.x = 0;
+	}
+	else if (position.x == 0.0)
+	{
+		position.x = Engine::GetWindow().GetSize().x/2;
+		
+	}
+	else if (position.y > Engine::GetWindow().GetSize().y/2)
+	{
+		position.y = 0;
+	}
+	else if(position.y == 0.0)
+	{
+		position.y = Engine::GetWindow().GetSize().y/2;
+	}
+
+}
 
 

@@ -18,9 +18,9 @@ void Level2::Load()
 	ship.Load();
 }
 
-void Level2::Update(double)
+void Level2::Update(double dt)
 {
-	ship.Update();
+	ship.Update(dt);
 	
 	if (levelNext.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().Shutdown();

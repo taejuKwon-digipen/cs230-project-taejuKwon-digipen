@@ -18,8 +18,9 @@ class Ship {
 public:
     Ship(math::vec2 startPos);
     void Load();
-    void Update();
+    void Update(double dt);
     void Draw();
+    void TestForwrap();
 
 private:
     CS230::Sprite sprite;
@@ -30,5 +31,13 @@ private:
     CS230::InputKey moveRightKey;
     CS230::InputKey moveUpKey;
     CS230::InputKey moveDownKey;
+
+    math::vec2 velocity;
+
+    static constexpr double accel = 700;
+    static constexpr double drag = 1.0f;
+
+	
+
 };
 
