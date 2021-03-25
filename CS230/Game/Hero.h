@@ -29,7 +29,7 @@ private:
     static constexpr double xDrag = 5.0; //마찰력
     static constexpr double xMVelo = 10.0; //최고속도
 	
-    static constexpr double jumpVelocity = 100.0; 
+    static constexpr double jumpVelocity = 30.0; 
 
     CS230::InputKey moveLeftKey;
     CS230::InputKey moveRightKey;

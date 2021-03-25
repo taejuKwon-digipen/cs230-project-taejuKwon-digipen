@@ -2,11 +2,12 @@
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
-File Name: Ball.h
+File Name: Ball.cpp
 Project: CS230
-Author: Kevin Wright
-Creation date: 2/14/2021
+Author: Taeju Kwon
+Creation date: 2/26/2021
 -----------------------------------------------------------------*/
+
 #pragma once
 #include "..\Engine\Sprite.h"
 #include "..\Engine\Vec2.h"
@@ -25,7 +26,7 @@ private:
     math::vec2 position;
     math::vec2 velocity;
 
-    static constexpr double bounceVelocity = 800.0;
+    static constexpr double bounceVelocity = 250;
 
 	
 };

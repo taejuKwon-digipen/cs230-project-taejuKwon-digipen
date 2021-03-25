@@ -13,8 +13,7 @@ Creation date: 2/18/2021
 
 
 Hero::Hero(math::vec2 startPos) : startPos(startPos), moveLeftKey(CS230::InputKey::Keyboard::Left),
-moveRightKey(CS230::InputKey::Keyboard::Right),moveJumpKey(CS230::InputKey::Keyboard::Up)
-{}
+moveRightKey(CS230::InputKey::Keyboard::Right),moveJumpKey(CS230::InputKey::Keyboard::Up), isJumping(), isRising(){}
 
 void Hero::Load()
 {
@@ -28,8 +27,8 @@ void Hero::Load()
 
 void Hero::Update(double dt)//delta time
 {
-
-	position.x += velocity.x;
+	
+	position += velocity;
 	
 	if (moveRightKey.IsKeyDown() == true)
 	{
@@ -78,7 +77,7 @@ void Hero::Update(double dt)//delta time
 		}
 	}
 
-	if( moveJumpKey.IsKeyDown() == true)
+	if( moveJumpKey.IsKeyDown() == true && isJumping == false)
 	{
 		velocity.y = jumpVelocity;
 		isJumping = true;
