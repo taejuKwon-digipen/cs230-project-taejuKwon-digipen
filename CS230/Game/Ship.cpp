@@ -54,18 +54,18 @@ void Ship::TestForwrap()
 
 	if (position.x > Engine::GetWindow().GetSize().x/2)
 	{
-		position.x = 0;
+		position.x =  - Engine::GetWindow().GetSize().x/2;
 	}
-	else if (position.x == 0.0)
+	else if (position.x == -Engine::GetWindow().GetSize().x / 2)
 	{
 		position.x = Engine::GetWindow().GetSize().x/2;
 		
 	}
 	else if (position.y > Engine::GetWindow().GetSize().y/2)
 	{
-		position.y = 0;
+		position.y = -Engine::GetWindow().GetSize().y / 2;
 	}
-	else if(position.y == 0.0)
+	else if(position.y == -Engine::GetWindow().GetSize().y / 2)
 	{
 		position.y = Engine::GetWindow().GetSize().y/2;
 	}
