@@ -50,12 +50,12 @@ void Hero::Update(double dt)//delta time
 		velocity.x += xDrag * dt;
 		Engine::GetLogger().LogDebug("+ Dragging"); //³ª¸ÓÁö¸é ¿ŞÂÊ ¸ØÃã
 	}
-	if (velocity.x < 0 && moveRightKey.IsKeyDown())
+	if (velocity.x < 0 && moveRightKey.IsKeyDown() == true)
 	{
 		velocity.x += xDrag;
 		Engine::GetLogger().LogDebug("+ Skidding");
 	}
-	else if (velocity.x > 0 && moveLeftKey.IsKeyDown())
+	else if (velocity.x > 0 && moveLeftKey.IsKeyDown() == true)
 	{
 		velocity.x -= xDrag;
 		Engine::GetLogger().LogDebug("- Skidding");
