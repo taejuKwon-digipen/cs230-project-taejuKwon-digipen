@@ -10,7 +10,6 @@ Creation date: 2021.03.15
 
 #include <cmath>
 #include <limits>
-#include <iostream>
 
 using namespace std;
 
@@ -69,9 +68,7 @@ namespace math
         constexpr ivec2& operator *=(const ivec2 rhs) noexcept;
         constexpr ivec2& operator /=(const ivec2 rhs) noexcept;
         constexpr ivec2 operator *(int rhs) noexcept;
-        constexpr vec2 operator*(double rhs) noexcept;
         constexpr ivec2 operator/(int rhs) noexcept;
-        constexpr vec2 operator/(double rhs) noexcept;
 
         constexpr operator vec2()
         {

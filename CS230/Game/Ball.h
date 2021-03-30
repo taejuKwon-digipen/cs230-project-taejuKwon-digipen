@@ -26,7 +26,7 @@ private:
     math::vec2 position;
     math::vec2 velocity;
 
-    static constexpr double bounceVelocity = 250;
+    static constexpr double bounceVelocity = 800;
 
 	
 };

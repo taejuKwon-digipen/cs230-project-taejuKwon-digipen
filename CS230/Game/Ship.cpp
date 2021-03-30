@@ -22,7 +22,8 @@ void Ship::Load()
 void Ship::Update(double dt)
 {
 
-	position += velocity * dt;
+	position.x += velocity.x * dt;
+	position.y += velocity.y * dt;
 	
 	if (moveLeftKey.IsKeyDown() == true)
 	{
@@ -59,7 +60,6 @@ void Ship::TestForwrap()
 	else if (position.x == -Engine::GetWindow().GetSize().x / 2)
 	{
 		position.x = Engine::GetWindow().GetSize().x/2;
-		
 	}
 	else if (position.y > Engine::GetWindow().GetSize().y/2)
 	{
