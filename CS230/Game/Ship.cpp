@@ -17,30 +17,30 @@ void Ship::Load()
 {
 	sprite.Load("assets/Ship.png");
 	position = startPos;
+	velocity = 0.0;
 }
 
 void Ship::Update(double dt)
 {
-
 	position.x += velocity.x * dt;
 	position.y += velocity.y * dt;
 	
 	if (moveLeftKey.IsKeyDown() == true)
 	{
-		velocity.x -=  accel * dt;
+		velocity.x -= accel * dt;
 	}
 	else if (moveRightKey.IsKeyDown() == true)
 	{
 		velocity.x += accel * dt;
 	} else if (moveUpKey.IsKeyDown() == true)
 	{
-		velocity.y +=  accel * dt;
+		velocity.y += accel * dt;
 	}else if (moveDownKey.IsKeyDown() == true)
 	{
-		velocity.y -=  accel * dt;
+		velocity.y -= accel * dt;
 	}
-	
-	velocity -= velocity * drag * dt;
+	velocity.y -= velocity.y * drag * dt;
+	velocity.x -= velocity.x * drag * dt;
 	Engine::GetLogger().LogDebug("Velocity = " + to_string(velocity.x) + "," + to_string(velocity.y));
 	TestForwrap();
 }
@@ -53,23 +53,24 @@ void Ship::Draw()
 void Ship::TestForwrap()
 {
 
-	if (position.x > Engine::GetWindow().GetSize().x/2)
+	if(position.x > Engine::GetWindow().GetSize().x + sprite.GetTextureSize().x/2)
 	{
-		position.x =  - Engine::GetWindow().GetSize().x/2;
+		position.x =  -sprite.GetTextureSize().x / 2;
 	}
-	else if (position.x == -Engine::GetWindow().GetSize().x / 2)
+	else if(position.x < - sprite.GetTextureSize().x / 2)
 	{
-		position.x = Engine::GetWindow().GetSize().x/2;
+		position.x = Engine::GetWindow().GetSize().x + sprite.GetTextureSize().x / 2;
 	}
-	else if (position.y > Engine::GetWindow().GetSize().y/2)
+	else if (position.y <  -sprite.GetTextureSize().y /2)
 	{
-		position.y = -Engine::GetWindow().GetSize().y / 2;
-	}
-	else if(position.y == -Engine::GetWindow().GetSize().y / 2)
+		position.y = Engine::GetWindow().GetSize().y + sprite.GetTextureSize().y / 2;
+	}else if (position.y > Engine::GetWindow().GetSize().y + sprite.GetTextureSize().y / 2)
 	{
-		position.y = Engine::GetWindow().GetSize().y/2;
+		position.y = -sprite.GetTextureSize().y / 2;
 	}
-
+		
 }
+
+
 
 

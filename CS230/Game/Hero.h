@@ -25,11 +25,11 @@ private:
     math::vec2 position;
     math::vec2 velocity = { 0,0 };
 	
-    static constexpr double xAccel = 100.0; //가속
-    static constexpr double xDrag = 50.0; //마찰력
-    static constexpr double xMVelo = 10.0; //최고속도
+    static constexpr double xAccel = 60.0; //가속 
+    static constexpr double xDrag = 80.; //마찰력
+    static constexpr double xMVelo = 40.0; //최고속도
 	
-    static constexpr double jumpVelocity = 90.0; 
+    static constexpr double jumpVelocity = 25.0; 
 
     CS230::InputKey moveLeftKey;
     CS230::InputKey moveRightKey;

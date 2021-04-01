@@ -24,7 +24,7 @@ public:
 	std::string GetName() override { return "Level1"; }
 
 	static constexpr double floor = 126.0f;
-	static constexpr double gravity = -1800.0;
+	static constexpr double gravity = -170.0;
 
 
 protected:

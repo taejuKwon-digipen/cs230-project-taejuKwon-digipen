@@ -19,12 +19,11 @@ void Hero::Load()
 {
 	sprite.Load("assets/Hero.png", {56,14});
 	position = startPos;
+	velocity = 0.0;
 	
 	isJumping = false;
 	isRising = false;
 }
-
-
 void Hero::Update(double dt)//delta time
 {
 	
@@ -33,7 +32,14 @@ void Hero::Update(double dt)//delta time
 	if (moveRightKey.IsKeyDown() == true)
 	{
 		velocity.x += xAccel * dt;
-		Engine::GetLogger().LogDebug("+ Accelerating"); // 오른쪽 버튼 누르면 가속
+		if (velocity.x > 0 && velocity.x < xMVelo) {
+			Engine::GetLogger().LogDebug("+ Accelerating"); // 오른쪽 버튼 누르면 가속
+		}
+		if (velocity.x < 0)
+		{
+			velocity.x += xDrag * 2 * dt;
+			Engine::GetLogger().LogDebug("+ Skidding");
+		}
 	}
 	else if (moveRightKey.IsKeyDown() == false && velocity.x > 0)
 	{
@@ -43,26 +49,21 @@ void Hero::Update(double dt)//delta time
 	else if (moveLeftKey.IsKeyDown() == true)
 	{
 		velocity.x -= xAccel * dt;
-		Engine::GetLogger().LogDebug("- Accelerating"); // 왼쪽 누르면 왼쪽으로
+		if (velocity.x < 0 && velocity.x > -xMVelo) {
+			Engine::GetLogger().LogDebug("- Accelerating"); // 왼쪽 누르면 왼쪽으로
+		}
+		if (velocity.x > 0)
+		{
+			velocity.x -= xDrag * 2 * dt;
+			Engine::GetLogger().LogDebug("- Skidding");
+		}
 	}
 	else if (moveLeftKey.IsKeyDown() == false && velocity.x < 0)
 	{
 		velocity.x += xDrag * dt;
 		Engine::GetLogger().LogDebug("+ Dragging"); //나머지면 왼쪽 멈춤
 	}
-	if (velocity.x < 0 && moveRightKey.IsKeyDown() == true)
-	{
-		velocity.x += xDrag;
-		velocity.x += xAccel;
-		Engine::GetLogger().LogDebug("+ Skidding");
-	}
-	else if (velocity.x > 0 && moveLeftKey.IsKeyDown() == true)
-	{
-		velocity.x -= xDrag;
-		velocity.x -= xAccel;
-		Engine::GetLogger().LogDebug("- Skidding");
-	}
-	
+
 	if(isJumping == true)
 	{
 		velocity.y += Level1::gravity * dt;
@@ -98,8 +99,9 @@ void Hero::Update(double dt)//delta time
 		Engine::GetLogger().LogDebug("- Max velocity");
 	}
 
-
-	if( (velocity.x >0 && velocity.x < 0.1)|| (velocity.x < 0 && velocity.x > -0.1) )
+	
+	if ( moveLeftKey.IsKeyDown() == false && moveRightKey.IsKeyDown() == false &&
+		(velocity.x > 0 && velocity.x < 0.5 || velocity.x < 0 && velocity.x > -0.5))
 	{
 		velocity.x = 0;
 		Engine::GetLogger().LogDebug("Stopped");
