@@ -15,7 +15,7 @@ Ball::Ball(math::vec2 startPos) : initPosition(startPos) {};
 
 void Ball::Load()
 {
-	sprite.Load("assets/Ball.png", (0, 14));
+	sprite.Load("assets/Ball.png", (44, 0));
 	position = initPosition;
 	velocity = math::vec2(0, 0);
 }
@@ -32,11 +32,12 @@ void Ball::Update(double dt)
 		velocity.y = bounceVelocity;
 	}
 	
+	objectMatrix = math::TranslateMatrix(position);
 }
 
-void Ball::Draw()
+void Ball::Draw(math::TransformMatrix cameraMatrix)
 {
-	sprite.Draw(position);
+	sprite.Draw({objectMatrix * cameraMatrix});
 }
 
 

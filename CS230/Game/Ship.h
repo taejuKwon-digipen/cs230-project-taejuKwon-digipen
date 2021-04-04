@@ -32,6 +32,8 @@ private:
     CS230::InputKey moveUpKey;
     CS230::InputKey moveDownKey;
 
+    math::TransformMatrix objectMatrix;
+
     math::vec2 velocity;
 
     static constexpr double accel = 400;

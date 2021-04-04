@@ -12,6 +12,8 @@ Creation date: 2/10/2021
 #include "../Engine/Input.h"
 #include "Hero.h"
 #include "Ball.h"
+#include "Background.h"
+#include "..\Engine/Camera.h"
 
 class Level1 : public CS230::GameState {
 public:
@@ -24,14 +26,17 @@ public:
 	std::string GetName() override { return "Level1"; }
 
 	static constexpr double floor = 126.0f;
-	static constexpr double gravity = -170.0;
-
+	static constexpr double gravity = -1000.0;
 
 protected:
+	CS230::Camera camera;
+	
 	CS230::InputKey levelNext;
 	CS230::InputKey levelReload;
+	Background background;
 	Hero hero;
-	CS230::Texture background;
-	Ball ball;
+	Ball ball1;
+	Ball ball2;
+	Ball ball3;
 
 };

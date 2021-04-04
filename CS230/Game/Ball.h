@@ -12,20 +12,24 @@ Creation date: 2/26/2021
 #include "..\Engine\Sprite.h"
 #include "..\Engine\Vec2.h"
 #include "Ball.h"
+#include "../Engine/Camera.h"
 
 class Ball {
 public:
     Ball(math::vec2 startPos);
     void Load();
     void Update(double dt);
-    void Draw();
+    void Draw(math::TransformMatrix cameraMatrix);
 
 private:
     CS230::Sprite sprite;
     math::vec2 initPosition;
     math::vec2 position;
     math::vec2 velocity;
-    static constexpr double bounceVelocity = 200;
+
+    math::TransformMatrix objectMatrix;
+	
+    static constexpr double bounceVelocity = 500;
 
 	
 };

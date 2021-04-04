@@ -33,5 +33,5 @@ void Splash::Unload() {
 void Splash::Draw()
 {
 	Engine::GetWindow().Clear({ 0xffffffff });
-	texture.Draw(Engine::GetWindow().GetSize()/2 - texture.GetSize()/2);
+	texture.Draw(math::TranslateMatrix(math::vec2((Engine::GetWindow().GetSize()/2 - texture.GetSize()/2))));
 }

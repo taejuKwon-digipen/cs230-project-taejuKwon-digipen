@@ -11,25 +11,31 @@ Creation date: 2/11/2021
 #include "..\Engine\Sprite.h"
 #include "..\Engine\Input.h"
 #include "..\Engine\Vec2.h"
+#include "..\Engine/Camera.h"
 
 class Hero {
 public:
-    Hero(math::vec2 startPos);
+    Hero(math::vec2 startPos, const CS230::Camera& camera);
     void Load();
     void Update(double dt);
-    void Draw();
+    void Draw(math::TransformMatrix cameraMatrix);
+    math::vec2 Getposition() { return position; }
 
 private:
     CS230::Sprite sprite;
     math::vec2 startPos;
     math::vec2 position;
     math::vec2 velocity = { 0,0 };
+
+    const CS230::Camera& camera;
 	
     static constexpr double xAccel = 60.0; //가속 
     static constexpr double xDrag = 80.; //마찰력
     static constexpr double xMVelo = 40.0; //최고속도
 	
-    static constexpr double jumpVelocity = 25.0; 
+    static constexpr double jumpVelocity = 70;
+
+    math::TransformMatrix objectMatrix;
 
     CS230::InputKey moveLeftKey;
     CS230::InputKey moveRightKey;
