@@ -5,12 +5,11 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: Hero.cpp
 Project: CS230
 Author: Taeju Kwon
-Creation date: 2/18/2021
+Creation date: 3/15/2021
 -----------------------------------------------------------------*/
 #include "Hero.h"
 #include "../Engine/Engine.h"
 #include "Level1.h"
-#include <iostream>
 
 
 Hero::Hero(math::vec2 startPos, const CS230::Camera& camera) : startPos(startPos), moveLeftKey(CS230::InputKey::Keyboard::Left),
@@ -28,7 +27,17 @@ void Hero::Load()
 
 void Hero::Update(double dt)//delta time
 {
-	std::cout << position.y << std::endl;
+	if (position.x - camera.GetPosition().x > Engine::GetWindow().GetSize().x - sprite.GetTextureSize().x/2.0)
+	{
+		velocity.x = 0;
+		position.x = Engine::GetWindow().GetSize().x - sprite.GetTextureSize().x / 2.0 + camera.GetPosition().x;
+	}
+	else if (position.x - sprite.GetTextureSize().x / 2.0 < 0)
+	{
+		velocity.x = 0;
+		position.x = 0 + sprite.GetTextureSize().x / 2;
+	}
+	
 	if (moveRightKey.IsKeyDown() == true)
 	{
 		velocity.x += xAccel * dt;
@@ -40,11 +49,6 @@ void Hero::Update(double dt)//delta time
 			velocity.x += xDrag * 2 * dt;
 			Engine::GetLogger().LogDebug("+ Skidding");
 		}
-	}
-	else if (moveRightKey.IsKeyDown() == false && velocity.x > 0)
-	{
-		velocity.x -= xDrag * dt;
-		Engine::GetLogger().LogDebug("- Dragging"); //오른쪽 안눌리고 + 이면 drag 적용
 	}
 	
 	else if (moveLeftKey.IsKeyDown() == true)
@@ -59,22 +63,17 @@ void Hero::Update(double dt)//delta time
 			Engine::GetLogger().LogDebug("- Skidding");
 		}
 	}
+	else if (moveRightKey.IsKeyDown() == false && velocity.x > 0)
+	{
+		velocity.x -= xDrag * dt;
+		Engine::GetLogger().LogDebug("- Dragging"); //오른쪽 안눌리고 + 이면 drag 적용
+	}
 	else if (moveLeftKey.IsKeyDown() == false && velocity.x < 0)
 	{
 		velocity.x += xDrag * dt;
 		Engine::GetLogger().LogDebug("+ Dragging"); //나머지면 왼쪽 멈춤
 	}
 
-	if (position.x - camera.GetPosition().x > Engine::GetWindow().GetSize().x - sprite.GetTextureSize().x/2.0)
-	{
-		velocity.x = 0;
-		position.x = Engine::GetWindow().GetSize().x - sprite.GetTextureSize().x / 2 + camera.GetPosition().x;
-	}
-	else if (position.x < 0)
-	{
-		velocity.x = 0;
-		position.x = 0 + sprite.GetTextureSize().x / 2;
-	}
 
 	//=====================================================================================
 	
@@ -114,14 +113,13 @@ void Hero::Update(double dt)//delta time
 	}
 
 	
-	if ( moveLeftKey.IsKeyDown() == false && moveRightKey.IsKeyDown() == false &&
-		(velocity.x > 0 && velocity.x < 0.5 || velocity.x < 0 && velocity.x > -0.5))
+	if ( moveLeftKey.IsKeyDown() == false && moveRightKey.IsKeyDown() == false &&(velocity.x > 0 && velocity.x < 0.5 || velocity.x < 0 && velocity.x > -0.5))
 	{
 		velocity.x = 0;
 		Engine::GetLogger().LogDebug("Stopped");
 	}
 
-	position += velocity;
+	position += velocity * dt;
 	
 	if(isJumping == true && (position.y < Level1::floor))
 	{

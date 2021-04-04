@@ -29,11 +29,11 @@ private:
 
     const CS230::Camera& camera;
 	
-    static constexpr double xAccel = 60.0; //가속 
-    static constexpr double xDrag = 80.; //마찰력
-    static constexpr double xMVelo = 40.0; //최고속도
+    static constexpr double xAccel = 700; //가속 
+    static constexpr double xDrag = 1000; //마찰력
+    static constexpr double xMVelo = 1400; //최고속도
 	
-    static constexpr double jumpVelocity = 70;
+    static constexpr double jumpVelocity = 1300;
 
     math::TransformMatrix objectMatrix;
 

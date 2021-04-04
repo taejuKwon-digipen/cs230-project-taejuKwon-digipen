@@ -41,7 +41,7 @@ void Ship::Update(double dt)
 	}
 	velocity.y -= velocity.y * drag * dt;
 	velocity.x -= velocity.x * drag * dt;
-	Engine::GetLogger().LogDebug("Velocity = " + to_string(velocity.x) + "," + to_string(velocity.y));
+	Engine::GetLogger().LogDebug("Velocity = " + std::to_string(velocity.x) + "," + std::to_string(velocity.y));
 	TestForwrap();
 	objectMatrix = math::TranslateMatrix(position);
 }

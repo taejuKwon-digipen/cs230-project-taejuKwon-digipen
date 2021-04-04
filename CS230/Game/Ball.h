@@ -29,7 +29,7 @@ private:
 
     math::TransformMatrix objectMatrix;
 	
-    static constexpr double bounceVelocity = 500;
+    static constexpr double bounceVelocity = 1000;
 
 	
 };

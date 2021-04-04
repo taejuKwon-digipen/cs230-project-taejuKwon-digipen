@@ -8,8 +8,8 @@ Creation date: 2021.03.15
 -----------------------------------------------------------------*/
 #pragma once
 
-#include <cmath>
-#include <limits>
+#include <cmath>  //sqrt
+#include <limits>  //epsilon
 
 using namespace std;
 

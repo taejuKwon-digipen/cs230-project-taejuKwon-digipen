@@ -26,7 +26,7 @@ public:
 	std::string GetName() override { return "Level1"; }
 
 	static constexpr double floor = 126.0f;
-	static constexpr double gravity = -1000.0;
+	static constexpr double gravity = -4000;
 
 protected:
 	CS230::Camera camera;
