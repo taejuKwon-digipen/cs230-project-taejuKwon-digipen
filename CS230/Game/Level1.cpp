@@ -13,7 +13,7 @@ Creation date:  2/10/2021
 #include "..\Engine/Camera.h"
 
 Level1::Level1() : levelNext(CS230::InputKey::Keyboard::Enter), levelReload(CS230::InputKey::Keyboard::R),
-hero(math::vec2{ Engine::GetWindow().GetSize().x / 2.0 ,floor, },camera), ball1(math::vec2( 600.0, floor )), ball2(math::vec2(2700.0, floor)),
+hero(math::vec2( Engine::GetWindow().GetSize().x / 2.0 ,floor ),camera), ball1(math::vec2( 600.0, floor )), ball2(math::vec2(2700.0, floor)),
 ball3(math::vec2(4800.0, floor)),
 camera({ {Engine::GetWindow().GetSize().x * 0.15, 0 },{Engine::GetWindow().GetSize().x * 0.35, Engine::GetWindow().GetSize().y / 1.0 } }) {};
 
@@ -30,7 +30,6 @@ void Level1::Load()
 	ball3.Load();
 }
 void Level1::Update(double dt) {
-	
 	if (levelNext.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::Level2));
 	}
@@ -39,14 +38,11 @@ void Level1::Update(double dt) {
 		Engine::GetGameStateManager().ReloadState();
 	}
 #endif
-	
 	hero.Update(dt);
 	camera.Update(hero.Getposition());
 	ball1.Update(dt);
 	ball2.Update(dt);
 	ball3.Update(dt);
-
-
 }
 void Level1::Unload(){
 	background.Unload();

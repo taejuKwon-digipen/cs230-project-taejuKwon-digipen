@@ -149,7 +149,7 @@ namespace math
 	
    [[nodiscard]] constexpr ivec2 operator- (const ivec2& rhs) noexcept
    {
-	   return ivec2(rhs.x-rhs.y);
+	   return ivec2(-rhs.x,-rhs.y);
    }
 	
    [[nodiscard]] constexpr ivec2 operator* (int lhs, const ivec2 rhs) noexcept

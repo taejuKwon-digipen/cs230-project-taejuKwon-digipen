@@ -65,9 +65,11 @@ void Ship::TestForwrap()
 	else if (position.y <  -sprite.GetTextureSize().y /2)
 	{
 		position.y = Engine::GetWindow().GetSize().y + sprite.GetTextureSize().y / 2;
-	}else if (position.y > Engine::GetWindow().GetSize().y + sprite.GetTextureSize().y / 2)
+	}
+	else if (position.y > Engine::GetWindow().GetSize().y + sprite.GetTextureSize().y/2)
 	{
-		position.y = -sprite.GetTextureSize().y / 2;
+		position.y = -sprite.GetTextureSize().y/2;
+
 	}
 		
 }

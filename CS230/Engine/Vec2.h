@@ -29,9 +29,9 @@ namespace math
         double x, y;
     	
 
-        constexpr vec2() noexcept : vec2(0, 0) {};
-        constexpr vec2(double _x, double _y) noexcept : x(_x), y(_y) {};
-        constexpr vec2(double val) noexcept : vec2(val, val) {};
+        constexpr vec2() noexcept : vec2(0, 0) {}
+        constexpr vec2(double _x, double _y) noexcept : x(_x), y(_y) {}
+        constexpr vec2(double val) noexcept : vec2(val, val) {}
         constexpr vec2(const vec2& v) = default;
 
         constexpr vec2& operator += (const vec2& rhs) noexcept;
@@ -54,13 +54,13 @@ namespace math
     constexpr bool operator!=(const vec2& lhs, const vec2& rhs) noexcept;
 
 
-    struct ivec2
+    struct [[nodiscard]] ivec2
     {
         int x, y;
     	
-        constexpr ivec2() noexcept : ivec2(0, 0) {};
-        constexpr ivec2(int _x, int _y) noexcept : x(_x), y(_y) {};
-        constexpr ivec2(int val) noexcept : ivec2(val, val) {};
+        constexpr ivec2() noexcept : ivec2(0, 0) {}
+        constexpr ivec2(int _x, int _y) noexcept : x(_x), y(_y) {}
+        constexpr ivec2(int val) noexcept : ivec2(val, val) {}
         constexpr ivec2(const ivec2& v) = default;
 
         constexpr ivec2& operator +=(const ivec2 rhs) noexcept;

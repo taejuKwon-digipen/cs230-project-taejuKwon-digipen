@@ -22,7 +22,7 @@ namespace math
 
     };
 
-    struct irect2
+    struct [[nodiscard]] irect2
     {
         ivec2 bottom_left{ 0,0 };
         ivec2 top_right{ 0,0 };

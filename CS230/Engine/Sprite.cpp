@@ -22,6 +22,7 @@ void CS230::Sprite::Load(const std::filesystem::path& texturePath, math::ivec2 h
 {
 	texture.Load(texturePath);
 	hotSpot = hotSpotPosition;
+
 }
 
 void CS230::Sprite::Draw(math::TransformMatrix displayMatrix)

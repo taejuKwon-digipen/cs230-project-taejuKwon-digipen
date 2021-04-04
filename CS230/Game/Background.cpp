@@ -14,7 +14,7 @@ Creation date: 31/3/2021
 
 void Background::Add(const std::filesystem::path& texturePath, int level)
 {
-	backgrounds.push_back(ParallaxInfo{ CS230::Texture{texturePath} ,level });
+	backgrounds.push_back(ParallaxInfo{ texturePath ,level });
 }
 
 void Background::Unload()

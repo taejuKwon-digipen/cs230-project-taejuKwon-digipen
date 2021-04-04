@@ -10,6 +10,7 @@ Creation date: 2/18/2021
 #include "Hero.h"
 #include "../Engine/Engine.h"
 #include "Level1.h"
+#include <iostream>
 
 
 Hero::Hero(math::vec2 startPos, const CS230::Camera& camera) : startPos(startPos), moveLeftKey(CS230::InputKey::Keyboard::Left),
@@ -17,7 +18,7 @@ moveRightKey(CS230::InputKey::Keyboard::Right), moveJumpKey(CS230::InputKey::Key
 
 void Hero::Load()
 {
-	sprite.Load("assets/Hero.png", {56,14});
+	sprite.Load("assets/Hero.png", math::ivec2{56,14});
 	position = startPos;
 	velocity = 0.0;
 
@@ -27,6 +28,7 @@ void Hero::Load()
 
 void Hero::Update(double dt)//delta time
 {
+	std::cout << position.y << std::endl;
 	if (moveRightKey.IsKeyDown() == true)
 	{
 		velocity.x += xAccel * dt;
@@ -83,7 +85,7 @@ void Hero::Update(double dt)//delta time
 		if(isRising == true && velocity.y <= 0)
 		{
 			isRising = false;
-			Engine::GetLogger().LogDebug("Top of jump (Early) - YPos: " + to_string(position.y));
+			Engine::GetLogger().LogDebug("Top of jump - YPos: " + to_string(position.y));
 		} else if(isRising == true && moveJumpKey.IsKeyReleased() == true)
 		{
 			velocity.y = 0;
@@ -119,6 +121,8 @@ void Hero::Update(double dt)//delta time
 		Engine::GetLogger().LogDebug("Stopped");
 	}
 
+	position += velocity;
+	
 	if(isJumping == true && (position.y < Level1::floor))
 	{
 		velocity.y = 0;
@@ -126,14 +130,14 @@ void Hero::Update(double dt)//delta time
 		isJumping = false;
 		Engine::GetLogger().LogDebug("Ending Jump - YPos: " + to_string(position.y));
 	}
-	position += velocity;
 
 	objectMatrix = math::TranslateMatrix(position);
 }
 
 void Hero::Draw(math::TransformMatrix cameraMatrix)
 {
-	sprite.Draw(objectMatrix * cameraMatrix);
+	sprite.Draw( objectMatrix * cameraMatrix);
+
 }
 
 
