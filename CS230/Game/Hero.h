@@ -12,6 +12,7 @@ Creation date: 2/11/2021
 #include "..\Engine\Input.h"
 #include "..\Engine\Vec2.h"
 #include "..\Engine/Camera.h"
+#include "..\Engine/TransformMatrix.h"
 
 class Hero {
 public:
@@ -22,6 +23,61 @@ public:
     math::vec2 Getposition() { return position; }
 
 private:
+
+    class State {
+    public:
+        virtual void Enter(Hero* hero) = 0;
+        virtual void Update(Hero* hero, double dt) = 0;
+        virtual void TestForExit(Hero* hero) = 0;
+        virtual std::string GetName() = 0;
+    };
+    class State_Idle : public State {
+    public:
+        virtual void Enter(Hero* hero) override;
+        virtual void Update(Hero* hero, double dt) override;
+        virtual void TestForExit(Hero* hero) override;
+        std::string GetName() override { return "Idle"; }
+    };
+    class State_Running : public State {
+    public:
+        virtual void Enter(Hero* hero) override;
+        virtual void Update(Hero* hero, double dt) override;
+        virtual void TestForExit(Hero* hero) override;
+        std::string GetName() override { return "Running"; }
+    };
+    class State_Skidding : public State {
+    public:
+        virtual void Enter(Hero* hero) override;
+        virtual void Update(Hero* hero, double dt) override;
+        virtual void TestForExit(Hero* hero) override;
+        std::string GetName() override { return "Skidding"; }
+    };
+    class State_Jumping : public State {
+    public:
+        virtual void Enter(Hero* hero) override;
+        virtual void Update(Hero* hero, double dt) override;
+        virtual void TestForExit(Hero* hero) override;
+        std::string GetName() override { return "Jumping"; }
+    };
+    class State_Falling : public State {
+    public:
+        virtual void Enter(Hero* hero) override;
+        virtual void Update(Hero* hero, double dt) override;
+        virtual void TestForExit(Hero* hero) override;
+        std::string GetName() override { return "Falling"; }
+    };
+    State_Idle stateIdle;
+    State_Running stateRunning;
+    State_Skidding stateSkidding;
+    State_Jumping stateJumping;
+    State_Falling stateFalling;
+
+    void UpdateXVelocity(double dt);     //Change X velocity stuff
+    void ChangeState(State* newState);
+
+    State* currState;
+
+	
     CS230::Sprite sprite;
     math::vec2 startPos;
     math::vec2 position;
@@ -43,5 +99,6 @@ private:
 
     bool isJumping ; //중력을 가할 때 사용
     bool isRising ; //올라갔을때
+    bool pressing = false;
 };
 

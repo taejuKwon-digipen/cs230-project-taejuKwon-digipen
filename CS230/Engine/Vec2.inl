@@ -8,7 +8,6 @@ Creation date: 2021.03.15
 -----------------------------------------------------------------*/
 namespace math
 {
-
     constexpr vec2& vec2::operator += (const vec2& rhs) noexcept
    {
 		this->x += rhs.x;

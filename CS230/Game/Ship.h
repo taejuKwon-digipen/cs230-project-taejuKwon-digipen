@@ -27,17 +27,19 @@ private:
     math::vec2 startPos;
     math::vec2 position;
 
-    CS230::InputKey moveLeftKey;
-    CS230::InputKey moveRightKey;
-    CS230::InputKey moveUpKey;
-    CS230::InputKey moveDownKey;
+    CS230::InputKey rotateCounterKey;
+    CS230::InputKey  rotateClockKey;
+    CS230::InputKey accelerateKey;
 
     math::TransformMatrix objectMatrix;
+    math::RotateMatrix rotate;
 
     math::vec2 velocity;
 
     static constexpr double accel = 400;
     static constexpr double drag = 1.0f;
+    double radian = 0;
+    double shipVelo = 0.5;
 
 	
 

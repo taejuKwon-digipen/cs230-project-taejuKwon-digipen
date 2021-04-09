@@ -13,8 +13,10 @@ Creation date: 2/12/2021
 namespace math {
     class TransformMatrix {
     public:
+    	
         TransformMatrix();
-
+        vec2 operator * (vec2 rhs) const;
+    	
         const double* operator[](int index) const { return matrix[index]; }
         TransformMatrix operator * (TransformMatrix rhs) const;
         TransformMatrix& operator *= (TransformMatrix rhs);
@@ -28,5 +30,16 @@ namespace math {
         TranslateMatrix(ivec2 translate);
         TranslateMatrix(vec2 translate);
     };
+
+    class RotateMatrix : public TransformMatrix {
+    public:
+        RotateMatrix(double radians);
+    };
+
+    class ScaleMatrix : public TransformMatrix {
+    public:
+        ScaleMatrix(vec2 scale);
+    };
+
 }
 

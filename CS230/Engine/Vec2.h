@@ -57,7 +57,7 @@ namespace math
     struct [[nodiscard]] ivec2
     {
         int x, y;
-    	
+
         constexpr ivec2() noexcept : ivec2(0, 0) {}
         constexpr ivec2(int _x, int _y) noexcept : x(_x), y(_y) {}
         constexpr ivec2(int val) noexcept : ivec2(val, val) {}
@@ -70,10 +70,12 @@ namespace math
         constexpr ivec2 operator *(int rhs) noexcept;
         constexpr ivec2 operator/(int rhs) noexcept;
 
-        constexpr operator vec2()
+        explicit constexpr operator vec2()
         {
-            return vec2{ static_cast<double>(this->x), static_cast<double>(this->y) };
+	        return vec2{ static_cast<double>(x),static_cast<double>(y) };
         }
+ 
+
 
     };
 
