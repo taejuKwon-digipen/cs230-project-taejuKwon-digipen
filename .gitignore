@@ -1,6 +1,7 @@
+
 .vs/
 Debug/
 Release/
 x64/
-CS230/Trace.log/
-CS230/.vcxproj.user
+*.log
+*.user

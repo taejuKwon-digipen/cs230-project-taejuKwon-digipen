@@ -3,92 +3,79 @@ Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: Vec2.h
-Author: Taeju Kwon
-Creation date: 2021.03.15
+Project: CS230
+Author: Rudy Castan
+Creation date:
 -----------------------------------------------------------------*/
 #pragma once
+#include <limits>
 
-#include <cmath>  //sqrt
-#include <limits>  //epsilon
-
-using namespace std;
-
-namespace math
-{
+namespace math {
     [[nodiscard]] constexpr double abs(double d) noexcept { return (d < 0.0) ? -d : d; }
-
-    [[nodiscard]] constexpr bool is_equal(double d1, double d2) noexcept
-    {
+    [[nodiscard]] constexpr bool   is_equal(double d1, double d2) noexcept {
         return abs(d1 - d2) <= std::numeric_limits<double>::epsilon() * abs(d1 + d2);
     }
+    [[nodiscard]] constexpr bool   is_equal(int i1, int i2) noexcept {
+        return i1 == i2;
+    }
 
-    [[nodiscard]] constexpr bool is_equal(int i1, int i2) noexcept { return i1 == i2; }
-
-    struct [[nodiscard]] vec2
-    {
-        double x, y;
-    	
-
-        constexpr vec2() noexcept : vec2(0, 0) {}
-        constexpr vec2(double _x, double _y) noexcept : x(_x), y(_y) {}
-        constexpr vec2(double val) noexcept : vec2(val, val) {}
-        constexpr vec2(const vec2& v) = default;
-
-        constexpr vec2& operator += (const vec2& rhs) noexcept;
-        constexpr vec2& operator -= (const vec2& rhs) noexcept;
-        constexpr vec2& operator *= (double scale) noexcept;
-        constexpr vec2& operator /= (double scale) noexcept;
-        constexpr vec2 operator*(double rhs) noexcept;
-        constexpr vec2 operator/ (double rhs) noexcept;
+    struct [[nodiscard]] vec2 {
+        double x{ 0.0 };
+        double y{ 0.0 };
 
 
-        constexpr double LengthSquared() noexcept;
-        vec2 Normalize() noexcept;
+        constexpr vec2() noexcept = default;
+        constexpr vec2(double x_value, double y_value) noexcept : x{ x_value }, y{ y_value } {};
 
-    };
-    constexpr vec2 operator+(const vec2& lhs, const vec2& rhs) noexcept;
-    constexpr vec2 operator-(const vec2& lhs, const vec2& rhs) noexcept;
-    constexpr vec2 operator-(const vec2& rhs) noexcept;
-    constexpr vec2 operator*(double lhs, const vec2& rhs) noexcept;
-    constexpr bool operator==(const vec2& lhs, const vec2& rhs) noexcept;
-    constexpr bool operator!=(const vec2& lhs, const vec2& rhs) noexcept;
+        [[nodiscard]] constexpr bool operator==(const vec2& v) const noexcept;
+        [[nodiscard]] constexpr bool operator!=(const vec2& v) const noexcept;
 
+        constexpr vec2  operator+(const vec2& v) const noexcept;
+        constexpr vec2& operator+=(const vec2& v) noexcept;
 
-    struct [[nodiscard]] ivec2
-    {
-        int x, y;
+        constexpr vec2  operator-(const vec2& v) const noexcept;
+        constexpr vec2& operator-=(const vec2& v) noexcept;
 
-        constexpr ivec2() noexcept : ivec2(0, 0) {}
-        constexpr ivec2(int _x, int _y) noexcept : x(_x), y(_y) {}
-        constexpr ivec2(int val) noexcept : ivec2(val, val) {}
-        constexpr ivec2(const ivec2& v) = default;
+        constexpr vec2 operator-() const noexcept;
 
-        constexpr ivec2& operator +=(const ivec2 rhs) noexcept;
-        constexpr ivec2& operator -=(const ivec2 rhs) noexcept;
-        constexpr ivec2& operator *=(const ivec2 rhs) noexcept;
-        constexpr ivec2& operator /=(const ivec2 rhs) noexcept;
-        constexpr ivec2 operator *(int rhs) noexcept;
-        constexpr ivec2 operator/(int rhs) noexcept;
-
-        explicit constexpr operator vec2()
-        {
-	        return vec2{ static_cast<double>(x),static_cast<double>(y) };
-        }
- 
-
-
+        constexpr vec2  operator*(double scale) const noexcept;
+        constexpr vec2  operator/(double divisor) const noexcept;
+        constexpr vec2& operator*=(double scale) noexcept;
+        constexpr vec2& operator/=(double divisor) noexcept;
     };
 
-    constexpr ivec2 operator+ (const ivec2& lhs, const ivec2& rhs) noexcept;
-    constexpr ivec2 operator- (const ivec2& lhs, const ivec2& rhs) noexcept;
-    constexpr ivec2 operator- (const ivec2& rhs) noexcept;
-    constexpr ivec2 operator* (int lhs, const ivec2 rhs) noexcept;
-    constexpr vec2 operator* (double lhs, const ivec2& rhs) noexcept;
-    constexpr bool operator == (const ivec2& lhs, const ivec2& rhs) noexcept;
-    constexpr bool operator != (const ivec2& lhs, const ivec2& rhs) noexcept;
-	
+    constexpr vec2 operator*(double scale, const vec2& v) noexcept;
+
+    struct [[nodiscard]] ivec2 {
+        int x{ 0 };
+        int y{ 0 };
+
+
+        constexpr ivec2() noexcept = default;
+        constexpr ivec2(int x_value, int y_value) noexcept : x{ x_value }, y{ y_value } {};
+        explicit constexpr operator vec2() { return vec2{ static_cast<double>(x),static_cast<double>(y) }; }
+
+        [[nodiscard]] constexpr bool operator==(const ivec2& v) const noexcept;
+        [[nodiscard]] constexpr bool operator!=(const ivec2& v) const noexcept;
+
+        constexpr ivec2  operator+(const ivec2& v) const noexcept;
+        constexpr ivec2& operator+=(const ivec2& v) noexcept;
+
+        constexpr ivec2  operator-(const ivec2& v) const noexcept;
+        constexpr ivec2& operator-=(const ivec2& v) noexcept;
+
+        constexpr ivec2 operator-() const noexcept;
+
+        constexpr ivec2  operator*(int scale) const noexcept;
+        constexpr ivec2  operator/(int divisor) const noexcept;
+        constexpr ivec2& operator*=(int scale) noexcept;
+        constexpr ivec2& operator/=(int divisor) noexcept;
+
+        constexpr vec2  operator*(double scale) const noexcept;
+        constexpr vec2  operator/(double divisor) const noexcept;
+        constexpr vec2& operator*=(double scale) noexcept;
+        constexpr vec2& operator/=(double divisor) noexcept;
+    };
 }
-	
 
 #include "Vec2.inl"
-

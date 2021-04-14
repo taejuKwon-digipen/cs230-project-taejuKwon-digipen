@@ -11,19 +11,22 @@ Creation date: 2/11/2021
 #include "..\Engine\Sprite.h"
 #include "..\Engine\Input.h"
 #include "..\Engine\Vec2.h"
-#include "..\Engine/Camera.h"
-#include "..\Engine/TransformMatrix.h"
+#include "..\Engine\TransformMatrix.h"
+
+//class CS230::Camera;
+namespace CS230 {
+	class Camera;
+}
 
 class Hero {
 public:
-    Hero(math::vec2 startPos, const CS230::Camera& camera);
-    void Load();
-    void Update(double dt);
-    void Draw(math::TransformMatrix cameraMatrix);
-    math::vec2 Getposition() { return position; }
+	Hero(math::vec2 startPos, const CS230::Camera& camera);
+	void Load();
+	void Update(double dt);
+	void Draw(math::TransformMatrix cameraMatrix);
 
+	const math::vec2& GetPosition() const { return position; }
 private:
-
     class State {
     public:
         virtual void Enter(Hero* hero) = 0;
@@ -72,33 +75,24 @@ private:
     State_Jumping stateJumping;
     State_Falling stateFalling;
 
-    void UpdateXVelocity(double dt);     //Change X velocity stuff
+    void UpdateXVelocity(double dt);
     void ChangeState(State* newState);
 
     State* currState;
+	const CS230::Camera& camera;
+	CS230::Sprite sprite;
+	math::vec2 startPos;
+	math::vec2 position;
+	math::vec2 velocity;
+	math::TransformMatrix objectMatrix;
+	bool isFlipped;
 
-	
-    CS230::Sprite sprite;
-    math::vec2 startPos;
-    math::vec2 position;
-    math::vec2 velocity = { 0,0 };
+	static constexpr double jumpVelocity = 950;
+	static constexpr double xAccel = 500;
+	static constexpr double xDrag = 750;
+	static constexpr double maxXVelocity = 750;
 
-    const CS230::Camera& camera;
-	
-    static constexpr double xAccel = 700; //가속 
-    static constexpr double xDrag = 1000; //마찰력
-    static constexpr double xMVelo = 1400; //최고속도
-	
-    static constexpr double jumpVelocity = 1300;
-
-    math::TransformMatrix objectMatrix;
-
-    CS230::InputKey moveLeftKey;
-    CS230::InputKey moveRightKey;
-    CS230::InputKey moveJumpKey;
-
-    bool isJumping ; //중력을 가할 때 사용
-    bool isRising ; //올라갔을때
-    bool pressing = false;
+	CS230::InputKey jumpKey;
+	CS230::InputKey moveLeftKey;
+	CS230::InputKey moveRightKey;
 };
-

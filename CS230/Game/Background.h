@@ -16,11 +16,10 @@ namespace CS230 {
 
 class Background {
 public:
-    void Add(const std::filesystem::path& texturePath, int level);
+    void Add(const std::filesystem::path &texturePath, int level);
     void Unload();
     void Draw(const CS230::Camera& camera);
     math::ivec2 Size();
-
 private:
     struct ParallaxInfo {
         CS230::Texture texture;
@@ -28,4 +27,3 @@ private:
     };
     std::vector<ParallaxInfo> backgrounds;
 };
-

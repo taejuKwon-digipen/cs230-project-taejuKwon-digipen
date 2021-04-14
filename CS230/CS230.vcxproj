@@ -21,9 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{60e9e0be-fc8d-41e8-adfc-83ba9f4ad69c}</ProjectGuid>
-    <RootNamespace>CS230</RootNamespace>
+    <ProjectGuid>{871a11d8-ad36-4293-8ba6-a37c59e1f2aa}</ProjectGuid>
+    <RootNamespace>CS2302021</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>CS230</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -88,7 +89,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -97,7 +97,6 @@
     <PostBuildEvent>
       <Command>if not exist "$(OutputPath)Assets" mkdir "$(OutputPath)Assets"
 xcopy /d /y Assets\* "$(OutputPath)Assets"
-
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -109,7 +108,6 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -120,7 +118,6 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"
     <PostBuildEvent>
       <Command>if not exist "$(OutputPath)Assets" mkdir "$(OutputPath)Assets"
 xcopy /d /y Assets\* "$(OutputPath)Assets"
-
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -130,7 +127,6 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,7 +135,6 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"
     <PostBuildEvent>
       <Command>if not exist "$(OutputPath)Assets" mkdir "$(OutputPath)Assets"
 xcopy /d /y Assets\* "$(OutputPath)Assets"
-
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -151,7 +146,6 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,7 +156,6 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"
     <PostBuildEvent>
       <Command>if not exist "$(OutputPath)Assets" mkdir "$(OutputPath)Assets"
 xcopy /d /y Assets\* "$(OutputPath)Assets"
-
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

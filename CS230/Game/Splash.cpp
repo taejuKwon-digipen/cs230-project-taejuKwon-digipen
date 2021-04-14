@@ -8,30 +8,28 @@ Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #include "../Engine/Engine.h"	//GetGameStateManager
+#include "../Engine/TransformMatrix.h"
 #include "Screens.h"
 #include "Splash.h"
 
-Splash::Splash(){};
+Splash::Splash() {}
 
 void Splash::Load() {
 	texture.Load("assets/DigiPen_BLACK_1024px.png");
+	timer = 0;
 }
 
-void Splash::Update(double dt)
-{
-	Timer += dt;
-	if(Timer >= MaxTime)
-	{
-		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::Level1));
+void Splash::Update(double dt) {
+	timer += dt;
+	if (timer >= DISPLAY_TIME) {
+		Engine::Instance().GetGameStateManager().SetNextState(static_cast<int>(Screens::Level1));
 	}
 }
 
 void Splash::Unload() {
-	
 }
+void Splash::Draw() {
+	Engine::GetWindow().Clear(0xFFFFFFFF);
 
-void Splash::Draw()
-{
-	Engine::GetWindow().Clear({ 0xffffffff });
-	texture.Draw(math::TranslateMatrix(math::vec2((Engine::GetWindow().GetSize()/2 - texture.GetSize()/2))));
+	texture.Draw(math::TranslateMatrix({ (Engine::GetWindow().GetSize() - texture.GetSize()) / 2.0 }));
 }

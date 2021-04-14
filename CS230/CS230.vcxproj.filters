@@ -1,18 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{b852239b-f134-4598-9503-3bae312b9abd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
-      <UniqueIdentifier>{ea307128-e893-4d67-8fd5-000bb059d107}</UniqueIdentifier>
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\Engine.cpp">
+    <ClCompile Include="Engine\Logger.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GameStateManager.cpp">
+    <ClCompile Include="Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Input.cpp">
@@ -21,7 +23,7 @@
     <ClCompile Include="Engine\Input_Doodle.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Logger.cpp">
+    <ClCompile Include="Engine\GameStateManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Window.cpp">
@@ -40,14 +42,14 @@
     <ClCompile Include="Engine\Texture.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Sprite.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Hero.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\Ship.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Sprite.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Game\Ball.cpp">
       <Filter>Game</Filter>
@@ -55,27 +57,27 @@
     <ClCompile Include="Engine\Camera.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Background.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\TransformMatrix.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Background.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Logger.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Engine.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GameState.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GameStateManager.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Input.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Logger.h">
+    <ClInclude Include="Engine\GameStateManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameState.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Window.h">
@@ -93,13 +95,10 @@
     <ClInclude Include="Game\Splash.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Vec2.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Texture.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Sprite.h">
+    <ClInclude Include="Engine\Vec2.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Game\Hero.h">
@@ -107,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="Game\Ship.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Sprite.h">
+      <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Game\Ball.h">
       <Filter>Game</Filter>
@@ -117,10 +119,13 @@
     <ClInclude Include="Game\Background.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Rect.h">
+    <ClInclude Include="Engine\Camera.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\TransformMatrix.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rect.h">
       <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,7 +22,7 @@ namespace CS230 {
 		void SetNextState(int initState);
 		void Shutdown();
 		void ReloadState();
-		bool HasGameEnded();
+		bool HasGameEnded() { return state == State::EXIT; }
 
 	private:
 		enum class State {

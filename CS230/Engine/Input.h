@@ -25,7 +25,7 @@ namespace CS230 {
 		bool IsKeyDown() const;
 		bool IsKeyReleased() const;
 	private:
-		Keyboard button; //inputkey
+		Keyboard button;
 	};
 
 	class Input {

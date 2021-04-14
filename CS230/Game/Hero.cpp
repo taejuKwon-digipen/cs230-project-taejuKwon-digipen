@@ -4,197 +4,188 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: Hero.cpp
 Project: CS230
-Author: Taeju Kwon
-Creation date: 3/15/2021
+Author: Kevin Wright
+Creation date: 2/11/2021
 -----------------------------------------------------------------*/
+#include "../Engine/Engine.h"	//GetLogger
+#include "../Engine/Camera.h"
+#include "Level1.h"	//Level1::gravity
 #include "Hero.h"
-#include "../Engine/Engine.h"
-#include "Level1.h"
 
-
-Hero::Hero(math::vec2 startPos, const CS230::Camera& camera) : startPos(startPos), moveLeftKey(CS230::InputKey::Keyboard::Left),
-moveRightKey(CS230::InputKey::Keyboard::Right), moveJumpKey(CS230::InputKey::Keyboard::Up), isJumping(), isRising(), camera(camera),pressing() {};
-
-void Hero::Load()
-{
-	sprite.Load("assets/Hero.png", math::ivec2{56,14});
-	position = startPos;
-	velocity = 0.0;
-
-	currState = &stateIdle;
-	currState->Enter(this);
-
-	isJumping = false;
-	isRising = false;
+Hero::Hero(math::vec2 startPos, const CS230::Camera& camera) : startPos(startPos), camera(camera),
+									currState(&stateIdle), jumpKey(CS230::InputKey::Keyboard::Up),
+									moveLeftKey(CS230::InputKey::Keyboard::Left), moveRightKey(CS230::InputKey::Keyboard::Right) {
 }
 
-void Hero::Update(double dt)//delta time
-{
+void Hero::Load() {
+	sprite.Load("assets/Hero.png", { 56, 14 });
+	position = startPos;
+	velocity = { 0,0 };
+	isFlipped = false;
+	currState = &stateIdle;
+	currState->Enter(this);
+}
 
+void Hero::Update(double dt) {
 	currState->Update(this, dt);
 	position += velocity * dt;
 	currState->TestForExit(this);
 
-	
-	if (position.x - camera.GetPosition().x > Engine::GetWindow().GetSize().x - sprite.GetTextureSize().x / 2.0)
-	{
+	// Boundary Check
+	if (position.x < camera.GetPosition().x + sprite.GetTextureSize().x / 2) {
+		position.x = camera.GetPosition().x + sprite.GetTextureSize().x / 2;
 		velocity.x = 0;
-		position.x = Engine::GetWindow().GetSize().x - sprite.GetTextureSize().x / 2.0 + camera.GetPosition().x;
 	}
-	else if (position.x - sprite.GetTextureSize().x / 2.0 < 0)
-	{
+	if (position.x + sprite.GetTextureSize().x / 2 > camera.GetPosition().x + Engine::GetWindow().GetSize().x) {
+		position.x = camera.GetPosition().x + Engine::GetWindow().GetSize().x - sprite.GetTextureSize().x / 2;
 		velocity.x = 0;
-		position.x = 0 + sprite.GetTextureSize().x / 2;
 	}
-	
-	if (moveLeftKey.IsKeyDown() == true && velocity.x > 0)
-	{
-		velocity.x -= xDrag * 2 * dt;
-		Engine::GetLogger().LogDebug("- Skidding");
-	} else 	if (moveRightKey.IsKeyDown() == true && velocity.x < 0)
-	{
-		velocity.x += xDrag * 2 * dt;
-		Engine::GetLogger().LogDebug("+ Skidding");
-	}
-	
-
-
-	//=====================================================================================
-	
-	if(isJumping == true)
-	{
-		velocity.y += Level1::gravity * dt;
-		
-		if(isRising == true && velocity.y <= 0)
-		{
-			isRising = false;
-			Engine::GetLogger().LogDebug("Top of jump - YPos: " + to_string(position.y));
-		} else if(isRising == true && moveJumpKey.IsKeyReleased() == true)
-		{
-			velocity.y = 0;
-			isRising = false;
-			Engine::GetLogger().LogDebug("Top of jump (Early) - YPos:" + to_string(position.y));
-		}
-	}
-
-	if( moveJumpKey.IsKeyDown() == true && isJumping == false)
-	{
-		velocity.y = jumpVelocity;
-		isJumping = true;
-		isRising = true;
-		Engine::GetLogger().LogDebug("Starting Jump - YPos:" + to_string(position.y));
-	}
-
-	if (velocity.x > xMVelo)
-	{
-		velocity.x = xMVelo; //최고속도
-		Engine::GetLogger().LogDebug("+ Max velocity");
-	}
-	else if (velocity.x < -xMVelo)
-	{
-		velocity.x = -xMVelo; //최고속도
-		Engine::GetLogger().LogDebug("- Max velocity");
-	}
-
-	
-	if ( moveLeftKey.IsKeyDown() == false && moveRightKey.IsKeyDown() == false &&(velocity.x > 0 && velocity.x < 0.5 || velocity.x < 0 && velocity.x > -0.5))
-	{
-		velocity.x = 0;
-		Engine::GetLogger().LogDebug("Stopped");
-	}
-
-	position += velocity * dt;
-	
-	if(isJumping == true && (position.y < Level1::floor))
-	{
-		velocity.y = 0;
-		position.y = Level1::floor;
-		isJumping = false;
-		Engine::GetLogger().LogDebug("Ending Jump - YPos: " + to_string(position.y));
-	}
-
 	objectMatrix = math::TranslateMatrix(position);
-
-	if(pressing == true)
-	{
-		objectMatrix *= math::ScaleMatrix(math::vec2{ -1., 1. });
-	}else if (pressing == false)
-	{
-		objectMatrix *= math::ScaleMatrix(math::vec2{ 1.,1. });
-	}
-
 	if (isFlipped == true) {
-		// Scale objectMatrix to flip
-		...
+		objectMatrix *= math::ScaleMatrix({ -1.0, 1 });
 	}
-
 }
 
-void Hero::Draw(math::TransformMatrix cameraMatrix)
-{
-	sprite.Draw( cameraMatrix * objectMatrix);
-}
-
-void Hero::UpdateXVelocity(double dt)
-{
-
-	if (moveRightKey.IsKeyDown() == true)
-	{
-		pressing = false;
-		velocity.x += xAccel * dt;
-		if (velocity.x > 0 && velocity.x < xMVelo) {
-			Engine::GetLogger().LogDebug("+ Accelerating"); // 오른쪽 버튼 누르면 가속
-		}
-	}
-
-	else if (moveLeftKey.IsKeyDown() == true)
-	{
-		pressing = true;
-		velocity.x -= xAccel * dt;
-		if (velocity.x < 0 && velocity.x > -xMVelo) {
-			Engine::GetLogger().LogDebug("- Accelerating"); // 왼쪽 누르면 왼쪽으로
-		}
-	}
-
-	else if (moveRightKey.IsKeyDown() == false && velocity.x > 0)
-	{
-		velocity.x -= xDrag * dt;
-		Engine::GetLogger().LogDebug("- Dragging"); //오른쪽 안눌리고 + 이면 drag 적용
-	}
-	else if (moveLeftKey.IsKeyDown() == false && velocity.x < 0)
-	{
-		velocity.x += xDrag * dt;
-		Engine::GetLogger().LogDebug("+ Dragging"); //나머지면 왼쪽 멈춤
-	}
+void Hero::Draw(math::TransformMatrix cameraMatrix) {
+	sprite.Draw(cameraMatrix * objectMatrix);
 }
 
 void Hero::ChangeState(State* newState) {
-	Engine::GetLogger().LogDebug("Leaving State: " + currState->GetName() + " Entering State: " + newState->GetName());
+	Engine::GetLogger().LogDebug("Hero Leaving State: " + currState->GetName() + " Entering State: " + newState->GetName());
 	currState = newState;
 	currState->Enter(this);
 }
 
 
+void Hero::State_Idle::Enter(Hero*) {}
+void Hero::State_Idle::Update(Hero*, double) {}
+void Hero::State_Idle::TestForExit(Hero* hero) {
+	if (hero->moveLeftKey.IsKeyDown() == true) {
+		hero->ChangeState(&hero->stateRunning);
+	}
+	if (hero->moveRightKey.IsKeyDown() == true) {
+		hero->ChangeState(&hero->stateRunning);
+	}
+	if (hero->jumpKey.IsKeyDown() == true) {
+		hero->ChangeState(&hero->stateJumping);
+	}
+}
+
+void Hero::State_Running::Enter(Hero* hero) {
+	if (hero->moveRightKey.IsKeyDown() == true) {
+		hero->isFlipped = false;
+	}
+	if (hero->moveLeftKey.IsKeyDown() == true) {
+		hero->isFlipped = true;
+	}
+}
+void Hero::State_Running::Update(Hero* hero, double dt) {
+	hero->UpdateXVelocity(dt);
+}
+void Hero::State_Running::TestForExit(Hero* hero) {
+	if (hero->moveLeftKey.IsKeyDown() == true && hero->velocity.x > 0) {
+		hero->ChangeState(&hero->stateSkidding);
+	}
+	if (hero->moveRightKey.IsKeyDown() == true && hero->velocity.x < 0) {
+		hero->ChangeState(&hero->stateSkidding);
+	}
+	if (hero->velocity.x == 0) {
+		hero->ChangeState(&hero->stateIdle);
+	}
+	if (hero->jumpKey.IsKeyDown() == true) {
+		hero->ChangeState(&hero->stateJumping);
+	}
+}
+
+void Hero::State_Skidding::Enter(Hero*) {}
+void Hero::State_Skidding::Update(Hero* hero, double dt) {
+	if (hero->velocity.x > 0) {
+		hero->velocity.x -= (xDrag + xAccel) * dt;
+	} else if (hero->velocity.x < 0) {
+		hero->velocity.x += (xDrag + xAccel) * dt;
+	}
+}
+void Hero::State_Skidding::TestForExit(Hero* hero) {
+	if (hero->moveLeftKey.IsKeyDown() == true) {
+		if (hero->velocity.x <= 0) {
+			hero->ChangeState(&hero->stateRunning);
+		}
+	} else if (hero->moveRightKey.IsKeyDown() == true) {
+		if (hero->velocity.x >= 0) {
+			hero->ChangeState(&hero->stateRunning);
+		}
+	} else {
+		hero->ChangeState(&hero->stateRunning);
+	}
+	if (hero->jumpKey.IsKeyDown() == true) {
+		hero->ChangeState(&hero->stateJumping);
+	}
+}
+
 void Hero::State_Jumping::Enter(Hero* hero) {
-	hero->velocity.y = Hero::jumpVelocity;   //Set the velocity.y
+	hero->velocity.y = Hero::jumpVelocity;
 }
 void Hero::State_Jumping::Update(Hero* hero, double dt) {
-	hero->velocity.y -= Level1::gravity * dt;  //Apply Gravity
-	hero->UpdateXVelocity(dt);  //Change X Velocity stuff
+	hero->velocity.y -= Level1::gravity * dt;
+	hero->UpdateXVelocity(dt);
 }
 void Hero::State_Jumping::TestForExit(Hero* hero) {
-	if (hero->moveJumpKey.IsKeyDown() == false) {  //Jump Key not pressed
+	if (hero->jumpKey.IsKeyDown() == false) {
+		hero->ChangeState(&hero->stateFalling);
 		hero->velocity.y = 0;
-	}
-	if (hero->velocity.y <= 0) {
+	} else if (hero->velocity.y <= 0) {
 		hero->ChangeState(&hero->stateFalling);
 	}
 }
 
+void Hero::State_Falling::Enter(Hero*) {}
+void Hero::State_Falling::Update(Hero* hero, double dt) {
+	hero->velocity.y -= Level1::gravity * dt;
+	hero->UpdateXVelocity(dt);
+}
+void Hero::State_Falling::TestForExit(Hero* hero) {
+	if (hero->GetPosition().y <= Level1::floor) {
+		if (hero->velocity.x > 0) {
+			if (hero->moveLeftKey.IsKeyDown() == true) {
+				hero->ChangeState(&hero->stateSkidding);
+			} else {
+				hero->ChangeState(&hero->stateRunning);
+			}
+		} else if (hero->velocity.x < 0) {
+			if (hero->moveRightKey.IsKeyDown() == true) {
+				hero->ChangeState(&hero->stateSkidding);
+			} else {
+				hero->ChangeState(&hero->stateRunning);
+			}
+		} else {
+			hero->ChangeState(&hero->stateIdle);
+		}
+		hero->velocity.y = 0;
 
+		hero->position.y = Level1::floor;
+	}
+}
 
-
-
-
-
-
+void Hero::UpdateXVelocity(double dt) {
+	if (moveLeftKey.IsKeyDown() == true) {
+		velocity.x -= Hero::xAccel * dt;	// apply acceleration
+		if (velocity.x < -Hero::maxXVelocity) {
+			velocity.x = -Hero::maxXVelocity;
+		}
+	} else if (moveRightKey.IsKeyDown() == true) {
+		velocity.x += Hero::xAccel * dt;	// apply acceleration
+		if (velocity.x > Hero::maxXVelocity) {
+			velocity.x = Hero::maxXVelocity;
+		}
+	} else {
+		// no key is down, need to apply drag to slow down
+		double xDragDt = Hero::xDrag * dt;
+		if (velocity.x > xDragDt) {
+			velocity.x -= xDragDt;
+		} else if (velocity.x < -xDragDt) {
+			velocity.x += xDragDt;
+		} else {
+			velocity.x = 0;
+		}
+	}
+}

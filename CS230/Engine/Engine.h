@@ -9,12 +9,11 @@ Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #pragma once
-
 #include <chrono>
 #include "GameStateManager.h"
 #include "Input.h"
-#include "Logger.h"
 #include "Window.h"
+#include "Logger.h"
 
 class Engine {
 public:
@@ -28,7 +27,6 @@ public:
     void Shutdown();
     void Update();
     bool HasGameEnded();
-
 private:
     Engine();
     ~Engine();
@@ -45,6 +43,4 @@ private:
     static constexpr double Target_FPS = 60.0;
     static constexpr int FPS_IntervalSec = 5;
     static constexpr int FPS_IntervalFrameCount = static_cast<int>(FPS_IntervalSec * Target_FPS);
-
 };
-

@@ -7,7 +7,6 @@ Project: CS230
 Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
-
 #pragma once
 
 enum class Screens {

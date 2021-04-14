@@ -32,11 +32,9 @@ int main(void) {
 		while (engine.HasGameEnded() == false) {
 			engine.Update();
 		}
-		
 		engine.Shutdown();
 		return 0;
-	}
-	catch (std::exception& e) {
+	} catch (std::exception& e) {
 		std::cerr << e.what() << "\n";
 		return -1;
 	}

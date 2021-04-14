@@ -8,8 +8,8 @@ Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #pragma once
-#include "../Engine/GameState.h"
-#include "../Engine/Texture.h"
+#include "..\Engine\GameState.h"
+#include "..\Engine\Texture.h"
 
 class Splash : public CS230::GameState {
 public:
@@ -20,9 +20,9 @@ public:
 	void Draw() override;
 
 	std::string GetName() override { return "Splash"; }
-
 private:
+	double timer;
+	const int DISPLAY_TIME = 3;
 	CS230::Texture texture;
-	double Timer = 0;
-	double MaxTime = 3;
 };
+

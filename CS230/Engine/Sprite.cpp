@@ -4,63 +4,44 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: Sprite.cpp
 Project: CS230
-Author: Taeju Kwon
-Creation date: 2/18/2021
+Author: Kevin Wright
+Creation date: 2/11/2021
 -----------------------------------------------------------------*/
+#include "Engine.h"			//Engine::GetLogger
+#include "TransformMatrix.h"
 #include "Sprite.h"
 
-CS230::Sprite::Sprite() {};
+CS230::Sprite::Sprite() {}
 
-void CS230::Sprite::Load(const std::filesystem::path& texturePath)
-{
+void CS230::Sprite::Load(const std::filesystem::path& texturePath) {
 	texture.Load(texturePath);
-	hotSpot = texture.GetSize() / 2;
-	hotSpotList.push_back(hotSpot);
+	hotSpotList.push_back({ GetTextureSize() / 2 });
 }
 
-void CS230::Sprite::Load(const std::filesystem::path& texturePath, math::ivec2 hotSpotPosition)
-{
+void CS230::Sprite::Load(const std::filesystem::path& texturePath, math::ivec2 hotspot) {
 	texture.Load(texturePath);
-	hotSpot = hotSpotPosition;
-	hotSpotList.push_back(hotSpot);
+	hotSpotList.push_back(hotspot);
 }
 
-void CS230::Sprite::Load(const std::filesystem::path& texturePath, std::initializer_list<math::ivec2> hotspots)
-{
+void CS230::Sprite::Load(const std::filesystem::path& texturePath, std::initializer_list<math::ivec2> hotspots) {
 	texture.Load(texturePath);
-
-	for (math::ivec2 hotspot : hotspots)
-	{
-		hotSpotList.push_back(hotSpot);
+	for (math::ivec2 hotspot : hotspots) {
+		hotSpotList.push_back(hotspot);
 	}
 }
 
-
-void CS230::Sprite::Draw(math::TransformMatrix displayMatrix)
-{
-	//texture.Draw(displayMatrix * math::TranslateMatrix(-hotSpot));
-
-	for (int i = 0; i < hotSpotList.size(); i++)
-	{
-		texture.Draw(displayMatrix * math::TranslateMatrix(GetHotSpot(0)));
-	}
-}
-
-math::ivec2 CS230::Sprite::GetHotSpot(int index)
-{
-	if (empty(hotSpotList) == true)
-	{
-		Engine::GetLogger().LogError("Not valid hotspot index");
-	} 
-
-	return math::ivec2{} = hotSpotList[index];
-}
-
-math::ivec2 CS230::Sprite::GetTextureSize()
-{
+math::ivec2 CS230::Sprite::GetTextureSize() {
 	return texture.GetSize();
 }
 
+math::ivec2 CS230::Sprite::GetHotSpot(int index) {
+	if (index >= hotSpotList.size()) {
+		Engine::GetLogger().LogError("Sprite is missing hotspot index: " + std::to_string(index));
+		return { 0,0 };
+	}
+	return hotSpotList[index];
+}
 
-
-
+void CS230::Sprite::Draw(math::TransformMatrix displayMatrix) {
+	texture.Draw(displayMatrix * math::TranslateMatrix(-GetHotSpot(0)));
+}

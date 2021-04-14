@@ -5,43 +5,38 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: Ship.h
 Project: CS230
 Author: Kevin Wright
-Creation date: 2/18/2021
+Creation date: 2/11/2021
 -----------------------------------------------------------------*/
-
 #pragma once
-
-#include "..\Engine\Sprite.h"
 #include "..\Engine\Input.h"
+#include "..\Engine\Sprite.h"
 #include "..\Engine\Vec2.h"
+#include "..\Engine\TransformMatrix.h"
 
 class Ship {
 public:
-    Ship(math::vec2 startPos);
-    void Load();
-    void Update(double dt);
-    void Draw();
-    void TestForwrap();
+	Ship(math::vec2 startPos);
+	void Load();
+	void Update(double dt);
+	void Draw();
 
 private:
-    CS230::Sprite sprite;
-    math::vec2 startPos;
-    math::vec2 position;
+	void TestForWrap();
+	CS230::Sprite sprite;
+	CS230::Sprite flameLeft;
+	CS230::Sprite flameRight;
+	math::vec2 initPosition;
+	math::vec2 position;
+	math::vec2 velocity;    
+	math::TransformMatrix objectMatrix;
+	double rotationAmount;
 
-    CS230::InputKey rotateCounterKey;
-    CS230::InputKey  rotateClockKey;
-    CS230::InputKey accelerateKey;
+	bool isAccelerating;
+	static constexpr double accel = 400;
+	static constexpr double drag = 1;
+	static constexpr double rotationRate = 2.0;
 
-    math::TransformMatrix objectMatrix;
-    math::RotateMatrix rotate;
-
-    math::vec2 velocity;
-
-    static constexpr double accel = 400;
-    static constexpr double drag = 1.0f;
-    double radian = 0;
-    double shipVelo = 0.5;
-
-	
-
+	CS230::InputKey rotateCounterKey;
+	CS230::InputKey rotateClockKey;
+	CS230::InputKey accelerateKey;
 };
-
