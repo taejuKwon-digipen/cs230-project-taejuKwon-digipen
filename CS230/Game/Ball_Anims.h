@@ -6,7 +6,7 @@ File Name: Ball_Anims.h
 Project: CS230
 Author: Taeju Kwon
 Creation date: 3/10/2021
------------------------------------------------------------------*/pragma once
+-----------------------------------------------------------------*/
 #pragma once
 
 enum class Ball_Anim {
