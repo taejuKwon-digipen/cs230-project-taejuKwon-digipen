@@ -11,6 +11,7 @@ Creation date: 2/11/2021
 #include "../Engine/Camera.h"
 #include "Level1.h"	//Level1::gravity
 #include "Hero.h"
+#include "Hero_Anims.h"
 
 Hero::Hero(math::vec2 startPos, const CS230::Camera& camera) : startPos(startPos), camera(camera),
 									currState(&stateIdle), jumpKey(CS230::InputKey::Keyboard::Up),
@@ -18,7 +19,7 @@ Hero::Hero(math::vec2 startPos, const CS230::Camera& camera) : startPos(startPos
 }
 
 void Hero::Load() {
-	sprite.Load("assets/Hero.png", { 56, 14 });
+	sprite.Load("assets/Hero.spt");
 	position = startPos;
 	velocity = { 0,0 };
 	isFlipped = false;
@@ -30,14 +31,15 @@ void Hero::Update(double dt) {
 	currState->Update(this, dt);
 	position += velocity * dt;
 	currState->TestForExit(this);
+	sprite.Update(dt);
 
 	// Boundary Check
-	if (position.x < camera.GetPosition().x + sprite.GetTextureSize().x / 2) {
-		position.x = camera.GetPosition().x + sprite.GetTextureSize().x / 2;
+	if (position.x < camera.GetPosition().x + sprite.GetFrameSize().x / 2) {
+		position.x = camera.GetPosition().x + sprite.GetFrameSize().x / 2;
 		velocity.x = 0;
 	}
-	if (position.x + sprite.GetTextureSize().x / 2 > camera.GetPosition().x + Engine::GetWindow().GetSize().x) {
-		position.x = camera.GetPosition().x + Engine::GetWindow().GetSize().x - sprite.GetTextureSize().x / 2;
+	if (position.x + sprite.GetFrameSize().x / 2 > camera.GetPosition().x + Engine::GetWindow().GetSize().x) {
+		position.x = camera.GetPosition().x + Engine::GetWindow().GetSize().x - sprite.GetFrameSize().x / 2;
 		velocity.x = 0;
 	}
 	objectMatrix = math::TranslateMatrix(position);
@@ -57,8 +59,14 @@ void Hero::ChangeState(State* newState) {
 }
 
 
-void Hero::State_Idle::Enter(Hero*) {}
-void Hero::State_Idle::Update(Hero*, double) {}
+void Hero::State_Idle::Enter(Hero* hero)
+{
+	hero->sprite.PlayAnimation(static_cast<int>(Hero_Anim::Hero_Idle_Anim));
+}
+void Hero::State_Idle::Update(Hero*, double)
+{
+	
+}
 void Hero::State_Idle::TestForExit(Hero* hero) {
 	if (hero->moveLeftKey.IsKeyDown() == true) {
 		hero->ChangeState(&hero->stateRunning);
@@ -72,6 +80,9 @@ void Hero::State_Idle::TestForExit(Hero* hero) {
 }
 
 void Hero::State_Running::Enter(Hero* hero) {
+
+	hero->sprite.PlayAnimation(static_cast<int>(Hero_Anim::Hero_Run_Anim));
+	
 	if (hero->moveRightKey.IsKeyDown() == true) {
 		hero->isFlipped = false;
 	}
@@ -97,8 +108,12 @@ void Hero::State_Running::TestForExit(Hero* hero) {
 	}
 }
 
-void Hero::State_Skidding::Enter(Hero*) {}
+void Hero::State_Skidding::Enter(Hero* hero)
+{
+	hero->sprite.PlayAnimation(static_cast<int>(Hero_Anim::Hero_Skid_Anim));
+}
 void Hero::State_Skidding::Update(Hero* hero, double dt) {
+	
 	if (hero->velocity.x > 0) {
 		hero->velocity.x -= (xDrag + xAccel) * dt;
 	} else if (hero->velocity.x < 0) {
@@ -123,6 +138,7 @@ void Hero::State_Skidding::TestForExit(Hero* hero) {
 }
 
 void Hero::State_Jumping::Enter(Hero* hero) {
+	hero->sprite.PlayAnimation(static_cast<int>(Hero_Anim::Hero_Jump_Anim));
 	hero->velocity.y = Hero::jumpVelocity;
 }
 void Hero::State_Jumping::Update(Hero* hero, double dt) {
@@ -138,7 +154,10 @@ void Hero::State_Jumping::TestForExit(Hero* hero) {
 	}
 }
 
-void Hero::State_Falling::Enter(Hero*) {}
+void Hero::State_Falling::Enter(Hero* hero)
+{
+	hero->sprite.PlayAnimation(static_cast<int>(Hero_Anim::Hero_Jump_Anim));
+}
 void Hero::State_Falling::Update(Hero* hero, double dt) {
 	hero->velocity.y -= Level1::gravity * dt;
 	hero->UpdateXVelocity(dt);

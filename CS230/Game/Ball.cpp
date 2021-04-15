@@ -4,17 +4,18 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: Ball.cpp
 Project: CS230
-Author: Kevin Wright
-Creation date: 2/14/2021
+Author: Taeju Kwon
+Creation date: 3/10/2021
 -----------------------------------------------------------------*/
 #include "../Engine/Engine.h"  //GetLogger
 #include "Level1.h"	//Level1::gravity, floor
 #include "Ball.h"
+#include "Ball_Anims.h"
 
 Ball::Ball(math::vec2 startPos) : initPosition(startPos), velocity({ 0,0 }), currState(&stateLand) {}
 
 void Ball::Load() {
-	sprite.Load("assets/Ball.png", { 43, 0 });
+	sprite.Load("assets/Ball.spt");
 	position = initPosition;
     velocity = { 0, 0 };
     currState = &stateLand;
@@ -22,6 +23,7 @@ void Ball::Load() {
 }
 
 void Ball::Update(double dt) {
+    sprite.Update(dt);
     currState->Update(this, dt);
     position += velocity * dt;
     currState->TestForExit(this);
@@ -40,6 +42,7 @@ void Ball::ChangeState(State* newState) {
 }
 
 void Ball::State_Bounce::Enter(Ball* ball) {
+    ball->sprite.PlayAnimation(static_cast<int>(Ball_Anim::None_Anim));
     ball->velocity.y = Ball::bounceVelocity;
 }
 void Ball::State_Bounce::Update(Ball* ball, double dt) {
@@ -53,8 +56,14 @@ void Ball::State_Bounce::TestForExit(Ball* ball) {
     }
 }
 
-void Ball::State_Land::Enter(Ball*) { }
+void Ball::State_Land::Enter(Ball* ball)
+{
+    ball->sprite.PlayAnimation(static_cast<int>(Ball_Anim::Squish_Anim));
+}
 void Ball::State_Land::Update([[maybe_unused]] Ball* ball, [[maybe_unused]] double dt) {}
 void Ball::State_Land::TestForExit(Ball* ball) {
-	ball->ChangeState(&ball->stateBounce);
+	if(ball->sprite.IsAnimationDone() == true)
+	{
+        ball->ChangeState(&ball->stateBounce);
+	}
 }

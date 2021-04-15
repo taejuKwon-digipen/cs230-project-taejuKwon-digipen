@@ -4,34 +4,96 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: Sprite.cpp
 Project: CS230
-Author: Kevin Wright
-Creation date: 2/11/2021
+Author: Taeju Kwon
+Creation date: 12/3/2021
 -----------------------------------------------------------------*/
+#include "Sprite.h"
 #include "Engine.h"			//Engine::GetLogger
 #include "TransformMatrix.h"
-#include "Sprite.h"
+#include "Texture.h"
+
 
 CS230::Sprite::Sprite() {}
 
-void CS230::Sprite::Load(const std::filesystem::path& texturePath) {
-	texture.Load(texturePath);
-	hotSpotList.push_back({ GetTextureSize() / 2 });
+CS230::Sprite::~Sprite() {
+	for (Animation* anim : animations) {
+		delete anim;
+	}
+	animations.clear();
 }
 
-void CS230::Sprite::Load(const std::filesystem::path& texturePath, math::ivec2 hotspot) {
-	texture.Load(texturePath);
-	hotSpotList.push_back(hotspot);
-}
+void CS230::Sprite::Load(const std::filesystem::path& spriteInfoFile) {
+	
+	hotSpotList.clear();
+	frameTexel.clear();
 
-void CS230::Sprite::Load(const std::filesystem::path& texturePath, std::initializer_list<math::ivec2> hotspots) {
-	texture.Load(texturePath);
-	for (math::ivec2 hotspot : hotspots) {
-		hotSpotList.push_back(hotspot);
+	if (spriteInfoFile.extension() != ".spt") {
+		throw std::runtime_error("Bad Filetype.  " + spriteInfoFile.generic_string() + " not a sprite info file (.spt)");
+	}
+	std::ifstream inFile(spriteInfoFile);
+
+	if (inFile.is_open() == false) {
+		throw std::runtime_error("Failed to load " + spriteInfoFile.generic_string());
+	}
+
+	std::string text;
+	inFile >> text;
+	texture.Load(text);
+	frameSize = texture.GetSize();
+
+	inFile >> text;
+	while (inFile.eof() == false) {
+		if (text == "FrameSize") {
+			inFile >> frameSize.x;
+			inFile >> frameSize.y;
+		}
+		else if (text == "NumFrames") {
+			int numFrames;
+			inFile >> numFrames;
+			for (int i = 0; i < numFrames; i++) {
+				frameTexel.push_back({ frameSize.x * i, 0 });
+			}
+		}
+		else if (text == "Frame") {
+			int frameLocationX, frameLocationY;
+			inFile >> frameLocationX;
+			inFile >> frameLocationY;
+			frameTexel.push_back({ frameLocationX, frameLocationY });
+		}
+		else if (text == "HotSpot") {
+			int hotSpotX, hotSpotY;
+			inFile >> hotSpotX;
+			inFile >> hotSpotY;
+			hotSpotList.push_back({ hotSpotX, hotSpotY });
+		}
+		else if(text == "Anim")
+		{
+			std::string FileName;
+			inFile >> FileName;
+			animations.push_back(new Animation(FileName));
+		}
+		else {
+			Engine::GetLogger().LogError("Unknown spt command " + text);
+		}
+		inFile >> text;
+	}
+	if (frameTexel.empty() == true) {
+		frameTexel.push_back({ 0,0 });
+	}
+	if(animations.empty() == true)
+	{
+		animations.push_back(new Animation());
 	}
 }
 
-math::ivec2 CS230::Sprite::GetTextureSize() {
-	return texture.GetSize();
+math::ivec2 CS230::Sprite::GetFrameSize() const
+{
+	return math::ivec2(frameSize.x, frameSize.y);
+}
+
+math::ivec2 CS230::Sprite::GetFrameTexel(int frameNum) const
+{
+	return frameTexel[frameNum];
 }
 
 math::ivec2 CS230::Sprite::GetHotSpot(int index) {
@@ -42,6 +104,40 @@ math::ivec2 CS230::Sprite::GetHotSpot(int index) {
 	return hotSpotList[index];
 }
 
-void CS230::Sprite::Draw(math::TransformMatrix displayMatrix) {
-	texture.Draw(displayMatrix * math::TranslateMatrix(-GetHotSpot(0)));
+void CS230::Sprite::Draw(math::TransformMatrix displayMatrix)
+{
+	texture.Draw(displayMatrix * math::TranslateMatrix(-GetHotSpot(0)), GetFrameTexel(animations[currAnim]->GetDisplayFrame()), frameSize);
 }
+
+void CS230::Sprite::PlayAnimation(int anim)
+{
+	animations[currAnim]->ResetAnimation();
+
+	if(animations.size() <= anim)
+	{
+		Engine::GetLogger().LogError("not animation");
+		currAnim = 0;
+	} else
+	{
+		currAnim = anim;
+	}
+}
+
+void CS230::Sprite::Update(double dt)
+{
+	animations[currAnim]->Update(dt);
+}
+
+bool CS230::Sprite::IsAnimationDone()
+{
+	if(animations[currAnim]->IsAnimationDone() == true)
+	{
+		return true;
+	}
+	return false;
+}
+
+
+
+
+

@@ -13,7 +13,6 @@ Creation date: 2/11/2021
 #include "..\Engine\Vec2.h"
 #include "..\Engine\TransformMatrix.h"
 
-//class CS230::Camera;
 namespace CS230 {
 	class Camera;
 }
