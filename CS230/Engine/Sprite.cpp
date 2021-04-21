@@ -11,9 +11,10 @@ Creation date: 12/3/2021
 #include "Engine.h"			//Engine::GetLogger
 #include "TransformMatrix.h"
 #include "Texture.h"
+#include "Animation.h"
 
 
-CS230::Sprite::Sprite() {}
+CS230::Sprite::Sprite() : currAnim(0), currFrame(0), texturePtr(nullptr) {}
 
 CS230::Sprite::~Sprite() {
 	for (Animation* anim : animations) {
@@ -38,8 +39,9 @@ void CS230::Sprite::Load(const std::filesystem::path& spriteInfoFile) {
 
 	std::string text;
 	inFile >> text;
-	texture.Load(text);
-	frameSize = texture.GetSize();
+	/*texturePtr.Load(text);*/
+	texturePtr = Engine::GetTextureManager().Load(text);
+	frameSize = texturePtr->GetSize();
 
 	inFile >> text;
 	while (inFile.eof() == false) {
@@ -106,7 +108,7 @@ math::ivec2 CS230::Sprite::GetHotSpot(int index) {
 
 void CS230::Sprite::Draw(math::TransformMatrix displayMatrix)
 {
-	texture.Draw(displayMatrix * math::TranslateMatrix(-GetHotSpot(0)), GetFrameTexel(animations[currAnim]->GetDisplayFrame()), frameSize);
+	texturePtr->Draw(displayMatrix * math::TranslateMatrix(-GetHotSpot(0)), GetFrameTexel(animations[currAnim]->GetDisplayFrame()), frameSize);
 }
 
 void CS230::Sprite::PlayAnimation(int anim)

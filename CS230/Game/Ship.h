@@ -12,24 +12,19 @@ Creation date: 2/11/2021
 #include "..\Engine\Sprite.h"
 #include "..\Engine\Vec2.h"
 #include "..\Engine\TransformMatrix.h"
+#include "..\Engine/GameObject.h"
 
-class Ship {
+class Ship : public CS230::GameObject{
 public:
 	Ship(math::vec2 startPos);
-	void Load();
-	void Update(double dt);
-	void Draw();
+	void Update(double dt) override;
+	void Draw(math::TransformMatrix cameraMatrix) override;
 
 private:
 	void TestForWrap();
-	CS230::Sprite sprite;
+	
 	CS230::Sprite flameLeft;
 	CS230::Sprite flameRight;
-	math::vec2 initPosition;
-	math::vec2 position;
-	math::vec2 velocity;    
-	math::TransformMatrix objectMatrix;
-	double rotationAmount;
 
 	bool isAccelerating;
 	static constexpr double accel = 400;

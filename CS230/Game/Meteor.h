@@ -1,29 +1,27 @@
+
 /*--------------------------------------------------------------
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
-File Name: Splash.h
+File Name: Meteor.h
 Project: CS230
 Author: Kevin Wright
-Creation date: 2/10/2021
+Creation date: 2/15/2021
 -----------------------------------------------------------------*/
+
 #pragma once
-#include "..\Engine\GameState.h"
-#include "..\Engine\Texture.h"
 
-class Splash : public CS230::GameState {
+#include "..\Engine\GameObject.h"
+
+class Meteor : public CS230::GameObject {
 public:
-	Splash();
-	void Load() override;
+	
+	Meteor();
 	void Update(double dt) override;
-	void Unload() override;
-	void Draw() override;
 
-	std::string GetName() override { return "Splash"; }
 private:
-	double timer;
-	const int DISPLAY_TIME = 3;
-	CS230::Texture* texturePtr;
-
+	
+	void TestForWrap();
 };
+
 

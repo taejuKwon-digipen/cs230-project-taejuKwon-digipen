@@ -10,17 +10,26 @@ Creation date: 2/10/2021
 #include "../Engine/Engine.h"   //GetWindow, GetGameStateManager
 #include "Screens.h"
 #include "Level2.h"
+#include "Ship.h"
+#include "Meteor.h"
 
 Level2::Level2() 
-	: ship({ Engine::GetWindow().GetSize() / 2.0 }), 
-		levelReload(CS230::InputKey::Keyboard::R), levelNext(CS230::InputKey::Keyboard::Enter) {}
+	:levelReload(CS230::InputKey::Keyboard::R), levelNext(CS230::InputKey::Keyboard::Enter){}
 
-void Level2::Load() {
-	ship.Load();
+void Level2::Load()
+{
+	gameObjectManager.Add(new Ship({ Engine::GetWindow().GetSize() / 2.0 }));
+	gameObjectManager.Add(new Meteor());
+	gameObjectManager.Add(new Meteor());
+	gameObjectManager.Add(new Meteor());
+	gameObjectManager.Add(new Meteor());
+	gameObjectManager.Add(new Meteor());
+
 }
 
 void Level2::Update(double dt) {
-	ship.Update(dt);
+	
+	gameObjectManager.UpdateAll(dt);
 
 	if (levelNext.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().Shutdown();
@@ -33,10 +42,10 @@ void Level2::Update(double dt) {
 }
 
 void Level2::Unload() {
+	gameObjectManager.Unload();
 }
 
 void Level2::Draw() {
 	Engine::GetWindow().Clear(0x000000FF);
-
-	ship.Draw();
+	gameObjectManager.DrawAll(cameraMatrix);
 }

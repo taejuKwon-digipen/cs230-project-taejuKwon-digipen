@@ -12,10 +12,11 @@ Creation date: 2/10/2021
 #include "Screens.h"
 #include "Splash.h"
 
-Splash::Splash() {}
+Splash::Splash() : texturePtr(nullptr),timer(0.) {}
 
 void Splash::Load() {
-	texture.Load("assets/DigiPen_BLACK_1024px.png");
+	/*texture.Load("assets/DigiPen_BLACK_1024px.png");*/
+	texturePtr = Engine::GetTextureManager().Load("assets/DigiPen_BLACK_1024px.png");
 	timer = 0;
 }
 
@@ -31,5 +32,6 @@ void Splash::Unload() {
 void Splash::Draw() {
 	Engine::GetWindow().Clear(0xFFFFFFFF);
 
-	texture.Draw(math::TranslateMatrix({ (Engine::GetWindow().GetSize() - texture.GetSize()) / 2.0 }));
+	/*texture.Draw(math::TranslateMatrix({ (Engine::GetWindow().GetSize() - texture.GetSize()) / 2.0 }));*/
+	texturePtr->Draw(math::TranslateMatrix({ (Engine::GetWindow().GetSize() - texturePtr->GetSize() ) / 2.0 }));
 }

@@ -8,14 +8,18 @@ Author: Kevin Wright
 Creation date: 2/11/2021
 -----------------------------------------------------------------*/
 #pragma once
-#include <string>
+#include <filesystem>
 #include <vector>
 #include "Vec2.h"
-#include "Texture.h"
-#include "Animation.h"
 
 namespace math {
 	class TransformMatrix;
+}
+
+namespace CS230
+{
+	class Texture;
+	class Animation;
 }
 
 namespace CS230 {
@@ -41,7 +45,7 @@ namespace CS230 {
 		int currAnim;
 		std::vector<Animation*> animations;
 
-		Texture texture;
+		Texture* texturePtr;
 		int currFrame;
 		math::ivec2 frameSize;
 		std::vector<math::ivec2> frameTexel;

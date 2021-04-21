@@ -7,61 +7,43 @@ Project: CS230
 Author: Taeju Kwon
 Creation date: 3/10/2021
 -----------------------------------------------------------------*/
-#include "../Engine/Engine.h"  //GetLogger
 #include "Level1.h"	//Level1::gravity, floor
 #include "Ball.h"
 #include "Ball_Anims.h"
 
-Ball::Ball(math::vec2 startPos) : initPosition(startPos), velocity({ 0,0 }), currState(&stateLand) {}
-
-void Ball::Load() {
-	sprite.Load("assets/Ball.spt");
-	position = initPosition;
-    velocity = { 0, 0 };
-    currState = &stateLand;
+Ball::Ball(math::vec2 startPos) : GameObject(startPos) {
+    sprite.Load("assets/Ball.spt");
+    currState = &stateBounce;
     currState->Enter(this);
 }
 
-void Ball::Update(double dt) {
-    sprite.Update(dt);
-    currState->Update(this, dt);
-    position += velocity * dt;
-    currState->TestForExit(this);
-
-	objectMatrix = math::TranslateMatrix(position);
-}
-
-void Ball::Draw(math::TransformMatrix cameraMatrix) {
-	sprite.Draw(cameraMatrix * objectMatrix);
-}
-
-void Ball::ChangeState(State* newState) {
-	Engine::GetLogger().LogDebug("Ball Leaving State: " + currState->GetName() + " Entering State: " + newState->GetName());
-    currState = newState;
-    currState->Enter(this);
-}
-
-void Ball::State_Bounce::Enter(Ball* ball) {
+void Ball::State_Bounce::Enter(GameObject* object) {
+    Ball* ball = static_cast<Ball*>(object);
     ball->sprite.PlayAnimation(static_cast<int>(Ball_Anim::None_Anim));
-    ball->velocity.y = Ball::bounceVelocity;
+    ball->SetVelocity({ ball->GetVelocity().x, bounceVelocity }); // x는 안변함 -> 자기자신의 값
 }
-void Ball::State_Bounce::Update(Ball* ball, double dt) {
-    ball->velocity.y -= Level1::gravity * dt;
+void Ball::State_Bounce::Update(GameObject* object, double dt) {
+    Ball* ball = static_cast<Ball*>(object);
+    ball->UpdateVelocity({ ball->GetVelocity().x, -(Level1::gravity * dt) });
 }
-void Ball::State_Bounce::TestForExit(Ball* ball) {
-    if (ball->position.y < Level1::floor) {
-        ball->position.y = Level1::floor;
-        ball->velocity.y = 0;
+void Ball::State_Bounce::TestForExit(GameObject* object) {
+    Ball* ball = static_cast<Ball*>(object);
+    if (ball->GetPosition().y < Level1::floor) {
+        ball->SetPosition({ ball->GetPosition().x, Level1::floor });
+        ball->SetVelocity({ ball->GetVelocity().x, 0 });
         ball->ChangeState(&ball->stateLand);
     }
 }
 
-void Ball::State_Land::Enter(Ball* ball)
+void Ball::State_Land::Enter(GameObject* object)
 {
+    Ball* ball = static_cast<Ball*>(object);
     ball->sprite.PlayAnimation(static_cast<int>(Ball_Anim::Squish_Anim));
 }
-void Ball::State_Land::Update([[maybe_unused]] Ball* ball, [[maybe_unused]] double dt) {}
-void Ball::State_Land::TestForExit(Ball* ball) {
+void Ball::State_Land::Update([[maybe_unused]] GameObject* object, [[maybe_unused]] double dt){}
+
+void Ball::State_Land::TestForExit(GameObject* object) {
+    Ball* ball = static_cast<Ball*>(object);
 	if(ball->sprite.IsAnimationDone() == true)
 	{
         ball->ChangeState(&ball->stateBounce);

@@ -11,14 +11,16 @@ Creation date: 2/11/2021
 #include "../Engine/TransformMatrix.h"
 #include "Background.h"
 
+#include "../Engine/Engine.h"
+
 void Background::Add(const std::filesystem::path& texturePath, int level) {
-    backgrounds.push_back({ CS230::Texture(texturePath), level });
+    backgrounds.push_back({Engine::GetTextureManager().Load(texturePath), level });
 }
 
 math::ivec2 Background::Size() {
     for (ParallaxInfo& levelInfo : backgrounds) {
         if (levelInfo.level == 1) {
-            return levelInfo.texture.GetSize();
+            return levelInfo.texturePtr->GetSize();
         }
     }
     return { 0,0 };
@@ -30,6 +32,6 @@ void Background::Unload() {
 
 void Background::Draw(const CS230::Camera &camera) {
     for (ParallaxInfo& levelInfo : backgrounds) {
-        levelInfo.texture.Draw(math::TranslateMatrix(-math::vec2{ camera.GetPosition().x / levelInfo.level, camera.GetPosition().y }));
+        levelInfo.texturePtr->Draw(math::TranslateMatrix(-math::vec2{ camera.GetPosition().x / levelInfo.level, camera.GetPosition().y }));
     }
 }

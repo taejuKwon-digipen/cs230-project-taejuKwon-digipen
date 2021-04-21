@@ -9,6 +9,8 @@ Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #include "Engine.h"
+#include <stdlib.h>
+#include <time.h>
 
 Engine::Engine() : frameCount(0), lastTick(std::chrono::system_clock::now()),
 #ifdef _DEBUG				
@@ -24,6 +26,10 @@ void Engine::Init(std::string windowName) {
 	logger.LogEvent("Engine Init");
 	window.Init(windowName);
 	fpsCalcTime = lastTick;
+
+	unsigned int Time = static_cast<unsigned int>(time(nullptr));
+	srand(Time);
+	Engine::GetLogger().LogEvent("Seed = " + std::to_string(Time));
 }
 
 void Engine::Shutdown() {

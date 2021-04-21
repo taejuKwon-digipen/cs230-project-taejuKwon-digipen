@@ -11,45 +11,30 @@ Creation date: 2/14/2021
 #include "..\Engine\Sprite.h"
 #include "..\Engine\Vec2.h"
 #include "..\Engine\TransformMatrix.h"
+#include "..\Engine\GameObject.h"
 
-class Ball {
+namespace math { struct vec2; }
+
+class Ball : public CS230::GameObject{
 public:
 	Ball(math::vec2 startPos);
-	void Load();
-	void Update(double dt);
-	void Draw(math::TransformMatrix cameraMatrix);
 
 private:
-	class State {
-	public:
-		virtual void Enter(Ball* ball) = 0;
-		virtual void Update(Ball* ball, double dt) = 0;
-		virtual void TestForExit(Ball* ball) = 0;
-		virtual std::string GetName() = 0;
-	};
-	class State_Bounce : public State {
-		void Enter(Ball* ball) override;
-		void Update(Ball* ball, double dt) override;
-		void TestForExit(Ball* ball) override;
-		std::string GetName() override { return "bounce"; }
-	};
-	class State_Land : public State {
-		void Enter(Ball* ball) override;
-		void Update(Ball* ball, double dt) override;
-		void TestForExit(Ball* ball) override;
-		std::string GetName() override { return "land"; }
-	};
+    class State_Bounce : public State {
+        void Enter(GameObject* object) override;
+        void Update(GameObject* object, double dt) override;
+        void TestForExit(GameObject* object) override;
+        std::string GetName() override { return "bounce"; }
+    };
+    class State_Land : public State {
+        void Enter(GameObject* object) override;
+        void Update(GameObject* object, double dt) override;
+        void TestForExit(GameObject* object) override;
+        std::string GetName() override { return "squish"; }
+    };
+
 	State_Bounce stateBounce;
 	State_Land stateLand;
-	State* currState;
-
-	void ChangeState(State* newState);
-
-	CS230::Sprite sprite;
-	math::vec2 initPosition;
-	math::vec2 position;
-	math::vec2 velocity;
-	math::TransformMatrix objectMatrix;
 
 	static constexpr double bounceVelocity = 700;
 };

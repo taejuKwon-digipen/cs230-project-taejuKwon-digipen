@@ -12,34 +12,34 @@ Creation date: 3/10/2021
 #include "Ship.h"
 #include "Flame_Anims.h"
 
-Ship::Ship(math::vec2 pos) : initPosition(pos), rotateCounterKey(CS230::InputKey::Keyboard::A), 
-				rotateClockKey(CS230::InputKey::Keyboard::D), accelerateKey(CS230::InputKey::Keyboard::W) {}
-
-void Ship::Load() {
+Ship::Ship(math::vec2 pos) :rotateCounterKey(CS230::InputKey::Keyboard::A), 
+				rotateClockKey(CS230::InputKey::Keyboard::D), accelerateKey(CS230::InputKey::Keyboard::W), isAccelerating(false),
+				GameObject(pos, GetRotation(), GetScale())
+{
 	sprite.Load("assets/Ship.spt");
-	position = initPosition;
-
 	flameLeft.Load("assets/Flame.spt");
 	flameRight.Load("assets/Flame.spt");
-	velocity = { 0,0 };
-	rotationAmount = 0;
 }
 
-void Ship::Update(double dt) {
-
+void Ship::Update(double dt)
+{
 	sprite.Update(dt);
 	flameLeft.Update(dt);
 	flameRight.Update(dt);
 	
 	if (rotateClockKey.IsKeyDown() == true) {
-		rotationAmount -= Ship::rotationRate * dt;
+		/*rotationAmount -= Ship::rotationRate * dt;*/
+		UpdateRotation({ -Ship::rotationRate * dt });
 	}
 	if (rotateCounterKey.IsKeyDown() == true) {
-		rotationAmount += Ship::rotationRate * dt;
+		UpdateRotation({ Ship::rotationRate * dt });
 	}
-	math::TransformMatrix roation = math::RotateMatrix(rotationAmount);
+	
+	math::TransformMatrix roation = math::RotateMatrix(GetRotation());
+	
 	if (accelerateKey.IsKeyDown() == true) {
-		velocity += math::RotateMatrix(rotationAmount) * math::vec2 { 0, accel* dt };
+		/*velocity += math::RotateMatrix(rotationAmount) * math::vec2 { 0, accel* dt };*/
+		UpdateVelocity(math::RotateMatrix(GetRotation()) * math::vec2{ 0, accel * dt });
 		if (isAccelerating == false) {
 			flameLeft.PlayAnimation(static_cast<int>(Flame_Anim::Flame_Anim));
 			flameRight.PlayAnimation(static_cast<int>(Flame_Anim::Flame_Anim));
@@ -54,29 +54,38 @@ void Ship::Update(double dt) {
 		}
 	}
 
-	velocity -= (velocity * Ship::drag * dt);
+	/*velocity -= (velocity * Ship::drag * dt);*/
+	UpdateVelocity({ -(GetVelocity() * Ship::drag * dt) });
 
-	position += velocity * dt;
+	/*position += velocity * dt;*/
+	UpdatePosition( GetVelocity() * dt );
 
-	objectMatrix = math::TranslateMatrix(position) * math::RotateMatrix(rotationAmount) * math::ScaleMatrix({ 0.75, 0.75 });
+	SetScale({  0.75, 0.75 });
+	/*objectMatrix = math::TranslateMatrix(position) * math::RotateMatrix(rotationAmount) * math::ScaleMatrix({ 0.75, 0.75 });*/
 	TestForWrap();
 }
 
 void Ship::TestForWrap() {
-	if (position.y > Engine::GetWindow().GetSize().y + sprite.GetFrameSize().y / 2.0) {
-		position.y = 0 - sprite.GetFrameSize().y / 2.0;
-	} else if (position.y < 0 - sprite.GetFrameSize().y / 2.0) {
-		position.y = Engine::GetWindow().GetSize().y + sprite.GetFrameSize().y / 2.0;
+	if (GetPosition().y > Engine::GetWindow().GetSize().y + sprite.GetFrameSize().y / 2.0) {
+		/*position.y = 0 - sprite.GetFrameSize().y / 2.0;*/
+		SetPosition({ GetPosition().x, 0 - sprite.GetFrameSize().y / 2.0 });
+	} else if (GetPosition().y < 0 - sprite.GetFrameSize().y / 2.0) {
+		/*position.y = Engine::GetWindow().GetSize().y + sprite.GetFrameSize().y / 2.0;*/
+		SetPosition({ GetPosition().x,Engine::GetWindow().GetSize().y + sprite.GetFrameSize().y / 2.0 });
 	}
-	if (position.x > Engine::GetWindow().GetSize().x + sprite.GetFrameSize().x / 2.0) {
-		position.x = 0 - sprite.GetFrameSize().x / 2.0;
-	} else if (position.x < 0 - sprite.GetFrameSize().x / 2.0) {
-		position.x = Engine::GetWindow().GetSize().x + sprite.GetFrameSize().x / 2.0;
+	if (GetPosition().x > Engine::GetWindow().GetSize().x + sprite.GetFrameSize().x / 2.0) {
+		/*position.x = 0 - sprite.GetFrameSize().x / 2.0;*/
+		SetPosition({ 0 - sprite.GetFrameSize().x / 2.0 , GetPosition().y });
+	} else if (GetPosition().x < 0 - sprite.GetFrameSize().x / 2.0) {
+		/*position.x = Engine::GetWindow().GetSize().x + sprite.GetFrameSize().x / 2.0;*/
+		SetPosition({ Engine::GetWindow().GetSize().x + sprite.GetFrameSize().x / 2.0 , GetPosition().y });
 	}
 }
 
-void Ship::Draw() {
-	flameRight.Draw(objectMatrix * math::TranslateMatrix(sprite.GetHotSpot(1)));
-	flameLeft.Draw(objectMatrix * math::TranslateMatrix(sprite.GetHotSpot(2)));
-	sprite.Draw(objectMatrix);
+void Ship::Draw(math::TransformMatrix cameraMatrix) {
+	GetMatrix();
+	
+	flameRight.Draw(GetMatrix() * math::TranslateMatrix(sprite.GetHotSpot(1)) * cameraMatrix);
+	flameLeft.Draw(GetMatrix() * math::TranslateMatrix(sprite.GetHotSpot(2)) * cameraMatrix);
+	sprite.Draw(GetMatrix()* cameraMatrix);
 }

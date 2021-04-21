@@ -10,7 +10,10 @@ Creation date: 2/10/2021
 #pragma once
 #include "..\Engine\GameState.h"
 #include "..\Engine\Input.h"
-#include "Ship.h"
+#include "..\Engine/GameObjectManager.h"
+#include "..\Engine/TransformMatrix.h"
+
+class Ship;
 
 class Level2 : public CS230::GameState {
 public:
@@ -22,8 +25,11 @@ public:
 
 	std::string GetName() override { return "Level 2"; }
 private:
-	Ship ship;
+	
 	CS230::InputKey levelReload;
 	CS230::InputKey levelNext;
+
+	CS230::GameObjectManager gameObjectManager;
+	math::TransformMatrix cameraMatrix;
 };
 

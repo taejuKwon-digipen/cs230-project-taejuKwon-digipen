@@ -10,6 +10,7 @@ Creation date: 2/10/2021
 #include "Engine.h"			//logger
 #include "GameStateManager.h"
 #include "GameState.h"
+#include "TextureManager.h"
 
 CS230::GameStateManager::GameStateManager() : currGameState(nullptr), nextGameState(nullptr), state(State::START) {}
 
@@ -46,6 +47,10 @@ void CS230::GameStateManager::Update(double dt) {
 		break;
 	case State::UNLOAD:
 		Engine::GetLogger().LogEvent("Unload " + currGameState->GetName());
+		if(currGameState != nextGameState)
+		{
+			Engine::GetTextureManager().Unload();
+		}
 		currGameState->Unload();
 		if (nextGameState == nullptr) {
 			state = State::SHUTDOWN;
