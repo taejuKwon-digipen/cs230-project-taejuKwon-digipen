@@ -8,7 +8,7 @@ Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #include "Input.h"
-#include "Engine.h"		//GetInput
+#include "Engine.h"	
 
 CS230::Input::Input() {
 	keyDown.resize(static_cast<int>(InputKey::Keyboard::Count));

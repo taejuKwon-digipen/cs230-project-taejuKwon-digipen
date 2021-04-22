@@ -12,7 +12,7 @@ Creation date: 12/3/2021
 #include "TransformMatrix.h"
 #include "Texture.h"
 #include "Animation.h"
-
+ 
 
 CS230::Sprite::Sprite() : currAnim(0), currFrame(0), texturePtr(nullptr) {}
 

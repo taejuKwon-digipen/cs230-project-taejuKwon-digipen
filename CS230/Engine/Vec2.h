@@ -19,7 +19,7 @@ namespace math {
         return i1 == i2;
     }
 
-    struct [[nodiscard]] vec2 {
+    struct [[nodiscard]] vec2 { 
         double x{ 0.0 };
         double y{ 0.0 };
 

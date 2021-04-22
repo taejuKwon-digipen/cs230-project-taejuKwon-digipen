@@ -9,7 +9,7 @@ Creation date: 2/15/2021
 -----------------------------------------------------------------*/
 
 #include "TreeStump.h"
-
+ 
 TreeStump::TreeStump(math::vec2 pos, int size) : GameObject(pos) {
 	switch (size) {
 	case 1:

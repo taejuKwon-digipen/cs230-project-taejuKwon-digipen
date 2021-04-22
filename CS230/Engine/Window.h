@@ -23,3 +23,4 @@ namespace CS230 {
         math::ivec2 windowSize;
     };
 }
+ 

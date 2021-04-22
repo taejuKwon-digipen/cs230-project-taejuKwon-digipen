@@ -9,7 +9,7 @@ Creation date: 2/12/2021
 -----------------------------------------------------------------*/
 #pragma once
 #include "Vec2.h"
-
+ 
 namespace math {
     struct [[nodiscard]] rect2 {
         vec2 bottomLeft{ 0.0, 0.0 };

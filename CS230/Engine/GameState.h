@@ -9,7 +9,7 @@ Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #pragma once
-#include <string>
+#include <string> 
 
 namespace CS230 {
 	class GameState {
@@ -19,6 +19,5 @@ namespace CS230 {
 		virtual void Draw() = 0;
 		virtual void Unload() = 0;
 		virtual std::string GetName() = 0;
-	private:
 	};
 }

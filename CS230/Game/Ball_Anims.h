@@ -8,7 +8,7 @@ Author: Taeju Kwon
 Creation date: 3/10/2021
 -----------------------------------------------------------------*/
 #pragma once
-
+ 
 enum class Ball_Anim {
     None_Anim,
     Squish_Anim,

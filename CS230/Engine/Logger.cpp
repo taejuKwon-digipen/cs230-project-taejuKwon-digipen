@@ -7,7 +7,7 @@ Project: CS230
 Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
-#include <iostream>    // cout.rdbuf
+#include <iostream>  
 #include "Logger.h"
 
 CS230::Logger::Logger(Logger::Severity severity, bool useConsole, std::chrono::system_clock::time_point startTime) :

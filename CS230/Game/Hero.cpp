@@ -8,7 +8,7 @@ Author: Kevin Wright
 Creation date: 2/11/2021
 -----------------------------------------------------------------*/
 #include "../Engine/Engine.h"	//GetLogger
-#include "../Engine/Camera.h"
+#include "../Engine/Camera.h" 
 #include "Level1.h"	//Level1::gravity
 #include "Hero.h"
 #include "Hero_Anims.h"

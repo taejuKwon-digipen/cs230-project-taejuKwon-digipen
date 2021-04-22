@@ -20,7 +20,7 @@ Ball::Ball(math::vec2 startPos) : GameObject(startPos) {
 void Ball::State_Bounce::Enter(GameObject* object) {
     Ball* ball = static_cast<Ball*>(object);
     ball->sprite.PlayAnimation(static_cast<int>(Ball_Anim::None_Anim));
-    ball->SetVelocity({ ball->GetVelocity().x, bounceVelocity }); // x는 안변함 -> 자기자신의 값
+    ball->SetVelocity({ ball->GetVelocity().x, bounceVelocity }); 
 }
 void Ball::State_Bounce::Update(GameObject* object, double dt) {
     Ball* ball = static_cast<Ball*>(object);

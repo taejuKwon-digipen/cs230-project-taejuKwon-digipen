@@ -26,4 +26,4 @@ private:
         int level;
     };
     std::vector<ParallaxInfo> backgrounds;
-};
+}; 

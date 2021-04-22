@@ -20,7 +20,7 @@ CS230::Texture* CS230::TextureManager::Load(const std::filesystem::path& filePat
 }
 
 void CS230::TextureManager::Unload()
-{
+{ 
 	Engine::GetLogger().LogEvent("Clear Textures");
 
 	for(const std::pair<std::filesystem::path, Texture*>& _Map : pathToTexture)

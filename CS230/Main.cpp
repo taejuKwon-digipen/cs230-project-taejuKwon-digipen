@@ -9,12 +9,10 @@ Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #include <stdexcept>	//std::exception
 #include <iostream>		//std::cerr
-
 #include "Engine/Engine.h"
 #include "Game/Splash.h"
 #include "Game/Level1.h"
 #include "Game/Level2.h"
-#include "Game/Screens.h"
 
 
 int main(void) {

@@ -8,9 +8,7 @@ Author: Kevin Wright
 Creation date: 2/14/2021
 -----------------------------------------------------------------*/
 #pragma once
-#include "..\Engine\Sprite.h"
 #include "..\Engine\Vec2.h"
-#include "..\Engine\TransformMatrix.h"
 #include "..\Engine\GameObject.h"
 
 namespace math { struct vec2; }

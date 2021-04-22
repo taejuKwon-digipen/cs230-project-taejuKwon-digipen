@@ -21,7 +21,7 @@ void CS230::Window::Resize(int newWidth, int newHeight) {
     windowSize.x = newWidth;
     windowSize.y = newHeight;
 }
-
+ 
 math::ivec2 CS230::Window::GetSize() {
     return windowSize;
 }

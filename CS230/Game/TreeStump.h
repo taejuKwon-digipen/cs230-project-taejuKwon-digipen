@@ -9,7 +9,7 @@ Creation date: 2/15/2021
 -----------------------------------------------------------------*/
 
 #pragma once
-
+ 
 #include "..\Engine\GameObject.h"
 
 class TreeStump : public CS230::GameObject {

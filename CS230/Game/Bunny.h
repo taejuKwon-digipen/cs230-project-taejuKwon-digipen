@@ -9,9 +9,8 @@ Creation date: 2/15/2021
 -----------------------------------------------------------------*/
 
 #pragma once
-
 #include "..\Engine\GameObject.h"
-
+ 
 class Bunny : public CS230::GameObject {
 public:
 	Bunny(math::vec2 pos);

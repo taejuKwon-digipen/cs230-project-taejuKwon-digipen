@@ -10,7 +10,7 @@ Creation date: 3/10/2021
 #include "../Engine/Engine.h"    //Engine::GetWindow
 #include "../Engine/TransformMatrix.h"
 #include "Ship.h"
-#include "Flame_Anims.h"
+#include "Flame_Anims.h" 
 
 Ship::Ship(math::vec2 pos) :rotateCounterKey(CS230::InputKey::Keyboard::A), 
 				rotateClockKey(CS230::InputKey::Keyboard::D), accelerateKey(CS230::InputKey::Keyboard::W), isAccelerating(false),

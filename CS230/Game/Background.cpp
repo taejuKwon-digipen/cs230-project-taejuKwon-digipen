@@ -34,4 +34,4 @@ void Background::Draw(const CS230::Camera &camera) {
     for (ParallaxInfo& levelInfo : backgrounds) {
         levelInfo.texturePtr->Draw(math::TranslateMatrix(-math::vec2{ camera.GetPosition().x / levelInfo.level, camera.GetPosition().y }));
     }
-}
+} 

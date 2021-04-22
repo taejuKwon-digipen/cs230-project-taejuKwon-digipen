@@ -9,8 +9,9 @@ Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #include "../Engine/Engine.h"	//GetGameStateManager
 #include "../Engine/TransformMatrix.h"
-#include "Screens.h"
+#include "Screens.h" 
 #include "Splash.h"
+#include "..\Engine/Texture.h"
 
 Splash::Splash() : texturePtr(nullptr),timer(0.) {}
 

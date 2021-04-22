@@ -8,10 +8,8 @@ Author: Kevin Wright
 Creation date: 2/11/2021
 -----------------------------------------------------------------*/
 #pragma once
-#include "..\Engine\Sprite.h"
 #include "..\Engine\Input.h"
 #include "..\Engine\Vec2.h"
-#include "..\Engine\TransformMatrix.h"
 #include "..\Engine\GameObject.h"
 
 namespace CS230 {

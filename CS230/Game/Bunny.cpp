@@ -10,7 +10,7 @@ Creation date: 2/15/2021
 -----------------------------------------------------------------*/
 
 #include "Bunny.h"
-
+ 
 Bunny::Bunny(math::vec2 pos) : GameObject(pos) {
 
 	sprite.Load("assets/Bunny.spt");

@@ -15,7 +15,7 @@ namespace math {
 	class TransformMatrix;
 }
 
-namespace CS230 {
+namespace CS230 { 
 	class Texture {
 		friend class TextureManager;
 	public:

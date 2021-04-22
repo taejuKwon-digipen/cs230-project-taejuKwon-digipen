@@ -7,8 +7,6 @@ Project: CS230
 Author: Taeju Kwon
 Creation date: 3/10/2021
 -----------------------------------------------------------------*/
-
-
 #pragma once
 
 enum class Hero_Anim {

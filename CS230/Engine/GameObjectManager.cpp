@@ -8,7 +8,7 @@ Author: Taeju Kwon
 Creation date: 17/4/2021
 -----------------------------------------------------------------*/
 #include "GameObjectManager.h"
-#include "TransformMatrix.h" //
+#include "TransformMatrix.h" 
 #include "GameObject.h"
 
 void CS230::GameObjectManager::Add(GameObject* obj)

@@ -21,7 +21,7 @@ namespace math {
         vec2 operator * (vec2 rhs) const;
         void Reset();
     protected:
-        double matrix[3][3];
+        double matrix[3][3]; 
     };
 
     class TranslateMatrix : public TransformMatrix {

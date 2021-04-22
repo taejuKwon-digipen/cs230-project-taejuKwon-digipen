@@ -10,7 +10,7 @@ Creation date: 2/10/2021
 #pragma once
 #include <string>	// std::string
 #include <fstream>		// std::ofstream
-#include <chrono>    // std::chrono
+#include <chrono>    // std::chrono 
 
 namespace CS230 {
 	class Logger {

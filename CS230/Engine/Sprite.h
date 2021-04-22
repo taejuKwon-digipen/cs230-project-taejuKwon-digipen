@@ -12,7 +12,7 @@ Creation date: 2/11/2021
 #include <vector>
 #include "Vec2.h"
 
-namespace math {
+namespace math { 
 	class TransformMatrix;
 }
 

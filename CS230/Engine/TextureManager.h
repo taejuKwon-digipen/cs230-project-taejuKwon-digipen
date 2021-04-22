@@ -10,7 +10,7 @@ Creation date: 2/19/2021
 #include <filesystem>
 #include <map>
 
-namespace CS230 {
+namespace CS230 { 
     class Texture;
 
     class TextureManager {

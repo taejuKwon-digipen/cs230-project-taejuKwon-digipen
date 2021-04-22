@@ -8,7 +8,7 @@ Author: Taeju Kwon
 Creation date: 3/12/2021
 -----------------------------------------------------------------*/
 
-#pragma once
+#pragma once 
 
 enum class Flame_Anim {
     None_Anim,
