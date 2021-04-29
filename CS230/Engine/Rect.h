@@ -14,9 +14,15 @@ namespace math {
     struct [[nodiscard]] rect2 {
         vec2 bottomLeft{ 0.0, 0.0 };
         vec2 topRight{ 0.0, 0.0 };
+
+        constexpr vec2 Size() const noexcept { return { topRight.x - bottomLeft.x, std::abs(topRight.y - bottomLeft.y) }; }
     };
     struct [[nodiscard]] irect2 {
         ivec2 bottomLeft{ 0, 0 };
         ivec2 topRight{ 0, 0 };
+
+        constexpr ivec2 Size() const noexcept { return { topRight.x - bottomLeft.x, std::abs(topRight.y - bottomLeft.y) }; }
+
     };
+	
 }

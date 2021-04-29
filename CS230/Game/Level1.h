@@ -29,10 +29,19 @@ public:
 
 	std::string GetName() override { return "Level 1"; }
 private:
+
+	int score;
+	int lives;
+	double timer;
+	CS230::Texture scoreTexture;
+	CS230::Texture livesTexture;
+	CS230::Texture timerTexture;
+
+	
 	CS230::Camera camera;
 	Background background;
 	CS230::InputKey levelReload;
-	CS230::InputKey levelNext;
+	CS230::InputKey MainMenu;
 	CS230::GameObjectManager gameObjectManager;
 	Hero* heroPtr;
 

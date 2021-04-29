@@ -93,6 +93,7 @@ void Hero::State_Skidding::Enter(GameObject* object)
 }
 void Hero::State_Skidding::Update(GameObject* object, double dt) {
 	Hero* hero = static_cast<Hero*>(object);
+	
 	if (hero->GetVelocity().x > 0) {
 		/*hero->velocity.x -= (xDrag + xAccel) * dt;*/
 		hero->UpdateVelocity({ -(xDrag + xAccel) * dt , hero->GetVelocity().y });

@@ -24,7 +24,7 @@ void Splash::Load() {
 void Splash::Update(double dt) {
 	timer += dt;
 	if (timer >= DISPLAY_TIME) {
-		Engine::Instance().GetGameStateManager().SetNextState(static_cast<int>(Screens::Level1));
+		Engine::Instance().GetGameStateManager().SetNextState(static_cast<int>(Screens::MainMenu));
 	}
 }
 

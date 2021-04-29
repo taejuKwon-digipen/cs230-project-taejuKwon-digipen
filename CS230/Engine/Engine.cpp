@@ -12,6 +12,7 @@ Creation date: 2/10/2021
 #include <stdlib.h>
 #include <time.h>
 
+
 Engine::Engine() : frameCount(0), lastTick(std::chrono::system_clock::now()),
 #ifdef _DEBUG				
 logger(CS230::Logger::Severity::Debug, true, lastTick)
@@ -59,3 +60,9 @@ void Engine::Update() {
 bool Engine::HasGameEnded() {
 	return gameStateManager.HasGameEnded();
 }
+
+void Engine::AddSpriteFont(const std::filesystem::path& fileName)
+{
+	return fonts.push_back(fileName);
+}
+

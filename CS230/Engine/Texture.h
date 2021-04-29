@@ -18,12 +18,20 @@ namespace math {
 namespace CS230 { 
 	class Texture {
 		friend class TextureManager;
+		friend class SpriteFont;
 	public:
+
+		Texture() {}
+
 		void Draw(math::TransformMatrix displayMatrix);
 		void Draw(math::TransformMatrix displayMatrix, math::ivec2 texelPos, math::ivec2 frameSize);
+		unsigned int GetPixel(math::ivec2 texel);
+
 		math::ivec2 GetSize();
 	private:
 		Texture(const std::filesystem::path& filePath);
+		Texture(doodle::Image&& doodleImage);
+
 		doodle::Image image;
 	};
 }
