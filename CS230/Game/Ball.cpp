@@ -10,6 +10,8 @@ Creation date: 3/10/2021
 #include "Level1.h"	//Level1::gravity, floor
 #include "Ball.h"
 #include "Ball_Anims.h"
+#include "Gravity.h"
+#include "../Engine/Engine.h"
 
 Ball::Ball(math::vec2 startPos) : GameObject(startPos) {
     AddGOComponent(new CS230::Sprite("assets/Ball.spt", this));
@@ -24,7 +26,7 @@ void Ball::State_Bounce::Enter(GameObject* object) {
 }
 void Ball::State_Bounce::Update(GameObject* object, double dt) {
     Ball* ball = static_cast<Ball*>(object);
-    ball->UpdateVelocity({ ball->GetVelocity().x, -(Level1::gravity * dt) });
+    ball->UpdateVelocity({ ball->GetVelocity().x, -(Engine::GetGSComponent<Gravity>()->GetValue() * dt) });
 }
 void Ball::State_Bounce::TestForExit(GameObject* object) {
     Ball* ball = static_cast<Ball*>(object);

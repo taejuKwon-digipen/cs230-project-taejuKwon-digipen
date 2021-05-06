@@ -13,6 +13,11 @@ Creation date: 2/11/2021
 
 #include "../Engine/Engine.h"
 
+Background::~Background()
+{
+	
+}
+
 void Background::Add(const std::filesystem::path& texturePath, int level) {
 
     backgrounds.push_back({Engine::GetTextureManager().Load(texturePath), level });
@@ -27,9 +32,6 @@ math::ivec2 Background::Size() {
     return { 0,0 };
 }
 
-void Background::Unload() {
-    backgrounds.clear();
-}
 
 void Background::Draw(const CS230::Camera &camera) {
     for (ParallaxInfo& levelInfo : backgrounds) {

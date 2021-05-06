@@ -80,7 +80,6 @@ namespace CS230 {
 		void ChangeState(State* newState);
 		State* currState;
 		ShowCollision* show;
-		Collision* collision;
 	
 	private:
 		math::TransformMatrix objectMatrix;

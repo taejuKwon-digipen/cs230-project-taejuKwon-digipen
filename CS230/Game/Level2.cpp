@@ -13,17 +13,16 @@ Creation date: 2/10/2021
 #include "Meteor.h"
 #include "Fonts.h"
 #include "Screens.h"
-#include "ScreenWrap.h"
+#include "Score.h"
 
 Level2::Level2() 
-	:levelReload(CS230::InputKey::Keyboard::R), mainmenu(CS230::InputKey::Keyboard::Escape), timer(0), score(0), lives(0),Show(CS230::InputKey::Keyboard::Tilde){}
+	:levelReload(CS230::InputKey::Keyboard::R), mainmenu(CS230::InputKey::Keyboard::Escape), timer(0), score(0), lives(0){}
 
 void Level2::Load()
 {
 	objectPtr = new CS230::GameObjectManager();
-	
-	std::string scoreString = "Score: " + std::to_string(score / 100) + std::to_string((score % 100) / 10) + std::to_string(score % 10);
-	scoreTexture = Engine::GetSpriteFont(static_cast<int>(Fonts::Font2)).DrawTextToTexture(scoreString, 0xFFFFFFFF, true);
+	scorePtr = new Score(0, Fonts::Font1);
+	AddGSComponent(scorePtr);
 	
 	objectPtr->Add(new Ship({ Engine::GetWindow().GetSize() / 2.0 }));
 	objectPtr->Add(new Meteor());
@@ -64,5 +63,5 @@ void Level2::Draw() {
 
 	math::ivec2 winSize = Engine::GetWindow().GetSize();
 	
-	scoreTexture.Draw(math::TranslateMatrix(math::ivec2{ 10, winSize.y - scoreTexture.GetSize().y - 5 }));
+	scorePtr->Draw(math::ivec2{ winSize.x / 2, winSize.y });
 }

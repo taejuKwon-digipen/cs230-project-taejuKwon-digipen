@@ -37,7 +37,7 @@ void CS230::CircleCollision::Draw(math::TransformMatrix cameraMatrix) {
 
 math::rect2 CS230::RectCollision::GetWorldCoorRect()
 {
-    return math::rect2{ objectPtr->GetMatrix()*math::vec2{rect.point1 } , objectPtr->GetMatrix()*math::vec2{rect.point2 } };
+    return math::rect2{ objectPtr->GetMatrix()* math::vec2{rect.point1 } , objectPtr->GetMatrix()*math::vec2{rect.point2 } };
 };
 
 double CS230::CircleCollision::GetRadius()

@@ -17,8 +17,8 @@ namespace CS230 {
 
 class Background : public CS230::Component {
 public:
+    ~Background();
     void Add(const std::filesystem::path &texturePath, int level);
-    void Unload();
     void Draw(const CS230::Camera& camera);
     math::ivec2 Size();
 private:

@@ -16,6 +16,7 @@ Creation date: 2/10/2021
 
 class Ship;
 class ScreenWrap;
+class Score;
 
 class Level2 : public CS230::GameState {
 public:
@@ -35,15 +36,13 @@ private:
 	
 	CS230::InputKey levelReload;
 	CS230::InputKey mainmenu;
-	CS230::InputKey Show;
 	
 	CS230::GameObjectManager* objectPtr;
 	math::TransformMatrix cameraMatrix;
 	ScreenWrap* wrapPtr;
+	Score* scorePtr;
 
-	CS230::Texture scoreTexture;
 	CS230::Texture livesTexture;
-	CS230::Texture timerTexture;
 
 };
 

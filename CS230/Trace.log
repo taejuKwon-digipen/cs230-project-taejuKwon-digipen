@@ -1,0 +1,16 @@
+[0.0011]	Event	Engine Init
+[0.9338]	Event	Window Resized
+[0.9444]	Event	Seed = 1620333521
+[1.0271]	Event	Load Splash
+[1.0315]	Event	Load Complete
+[4.0619]	Event	Unload Splash
+[4.0619]	Event	Clear Textures
+[4.0785]	Event	Load MainMenu
+[4.1252]	Event	Load Complete
+[6.5988]	Event	FPS:  45.463087
+[6.9119]	Event	Unload MainMenu
+[6.9119]	Event	Clear Textures
+[6.9286]	Event	Load Level 1
+[7.0672]	Event	Load Complete
+[11.8732]	Event	FPS:  56.878092
+[16.9069]	Event	FPS:  59.598846

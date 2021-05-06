@@ -69,7 +69,12 @@ math::ivec2 CS230::SpriteFont::MeasureText(std::string text) {
 	// Todo: For each character use it's charTexel information to find the width/height of the string
 	for (char c : text) {
 		size.x += charTexels[c - ' '].point2.x - charTexels[c - ' '].point1.x;
-		size.y = charTexels[c - ' '].point1.y - charTexels[c - ' '].point2.y;
+
+		if(size.y < charTexels[c - ' '].point1.y - charTexels[c - ' '].point2.y)
+		{
+			size.y = charTexels[c - ' '].point1.y - charTexels[c - ' '].point2.y;
+		}
+		
 	}
 	return size;
 }

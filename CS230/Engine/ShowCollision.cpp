@@ -20,7 +20,6 @@ void ShowCollision::Update(double)
 	{
 		enabled = !enabled;
 	}
-	
 }
 
 bool ShowCollision::IsEnabled()

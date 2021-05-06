@@ -63,18 +63,17 @@ void Ship::Update(double dt)
 }
 
 void Ship::Draw(math::TransformMatrix cameraMatrix) {
-	GetMatrix();
-	
+
 	flameRight.Draw(GetMatrix() * math::TranslateMatrix(GetGOComponent<CS230::Sprite>()->GetHotSpot(1)) * cameraMatrix);
 	flameLeft.Draw(GetMatrix() * math::TranslateMatrix(GetGOComponent<CS230::Sprite>()->GetHotSpot(2)) * cameraMatrix);
-	GetGOComponent<CS230::Sprite>()->Draw(GetMatrix()* cameraMatrix);
+	GetGOComponent<CS230::Sprite>()->Draw(GetMatrix() * cameraMatrix);
 
 	ShowCollision* showCollision = Engine::GetGSComponent<ShowCollision>();
 	if (showCollision != nullptr)
 	{
 		if (showCollision->IsEnabled() == true)
 		{
-			collision = GetGOComponent<CS230::Collision>();
+			CS230::Collision* collision = GetGOComponent<CS230::Collision>();
 			if (collision != nullptr)
 			{
 				collision->Draw(cameraMatrix);

@@ -36,15 +36,17 @@ void CS230::GameObject::ChangeState(State* newState) {
     currState->Enter(this);
 }
 
-void CS230::GameObject::Draw(math::TransformMatrix cameraMatrix) {
+void CS230::GameObject::Draw(math::TransformMatrix cameraMatrix)
+{
     Sprite* spritePtr = GetGOComponent<Sprite>();
-    if (spritePtr != nullptr) {
+    if (spritePtr != nullptr)
+    {
         spritePtr->Draw(cameraMatrix * GetMatrix());
     }
-    show = Engine::GetGSComponent<ShowCollision>();
-    if (show->IsEnabled() == true && show != nullptr) // f there is a game state component ShowCollision
+    ShowCollision* showcollision = Engine::GetGSComponent<ShowCollision>();
+    if (showcollision != nullptr && showcollision->IsEnabled() == true)
     {
-        collision = GetGOComponent<Collision>();
+        Collision* collision = GetGOComponent<Collision>();
         if (collision != nullptr)
         {
             collision->Draw(cameraMatrix);

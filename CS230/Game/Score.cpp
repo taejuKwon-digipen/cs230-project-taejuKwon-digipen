@@ -13,23 +13,31 @@ Creation date: 2/17/2021
 #include "../Engine/Engine.h"
 #include "../Engine/TransformMatrix.h"
 
-Score::Score(int startingScore, Fonts fontToUse) : fontToUse(fontToUse)
+Score::Score(int startingScore, Fonts fontToUse) : score(startingScore), fontToUse(fontToUse)
 {
-	startingScore = 0;
-	fontToUse = Fonts::Font2;
-	std::string scoreString = "Score: " + std::to_string(score / 100) + std::to_string((score % 100) / 10) + std::to_string(score % 10);
-	scoreTexture = Engine::GetSpriteFont(static_cast<int>(Fonts::Font1)).DrawTextToTexture(scoreString, 0xFFFFFFFF, true);
+	RenderText();
+}
+
+void Score::AddScore(int newPoints)
+{
+	score += newPoints;
 }
 
 void Score::Draw(math::ivec2 location)
 {
-	math::ivec2 winSize = Engine::GetWindow().GetSize();
 	scoreTexture.Draw(math::TranslateMatrix(math::ivec2{ 10, location.y - scoreTexture.GetSize().y - 5 }));
 }
 
 void Score::RenderText()
 {
-	
+	std::string scoreString = "Score: " + std::to_string(score / 100) + std::to_string((score % 100) / 10) + std::to_string(score % 10);
+	if(fontToUse == Fonts::Font1)
+	{
+		scoreTexture = Engine::GetSpriteFont(static_cast<int>(Fonts::Font1)).DrawTextToTexture(scoreString, 0xFFFFFFFF, true);
+	} else if(fontToUse == Fonts::Font2 )
+	{
+		scoreTexture = Engine::GetSpriteFont(static_cast<int>(Fonts::Font1)).DrawTextToTexture(scoreString, 0xFFFFFFFF, false);
+	}
 }
 
 

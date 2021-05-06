@@ -18,7 +18,6 @@ Creation date: 19/4/2021
 #include "TreeStump.h"
 #include "..\Engine/Camera.h"
 #include "Timer.h"
-#include "Score.h"
 #include "Gravity.h"
 
 Level1::Level1() : levelReload(CS230::InputKey::Keyboard::R), MainMenu(CS230::InputKey::Keyboard::Escape), lives(3), heroPtr(nullptr), score(0), timer(0), Show(CS230::InputKey::Keyboard::Tilde) {}
@@ -26,7 +25,7 @@ Level1::Level1() : levelReload(CS230::InputKey::Keyboard::R), MainMenu(CS230::In
 void Level1::Load() {
 	objectPtr = new CS230::GameObjectManager();
 	timePtr = new Timer(60);
-	scorePtr = new Score(0, Fonts::Font2);
+	scorePtr = new Score(0, Fonts::Font1);
 	heroPtr = new Hero({ 150, Level1::floor });
 	gravPtr = new Gravity(2000);
 	background = new Background();
@@ -101,7 +100,6 @@ void Level1::Update(double dt) {
 }
 
 void Level1::Unload() {
-	background->Unload();
 	ClearGSComponent();
 }
 
