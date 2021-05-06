@@ -13,27 +13,34 @@ Creation date: 2/10/2021
 #include "Meteor.h"
 #include "Fonts.h"
 #include "Screens.h"
+#include "ScreenWrap.h"
 
 Level2::Level2() 
-	:levelReload(CS230::InputKey::Keyboard::R), mainmenu(CS230::InputKey::Keyboard::Escape), timer(0), score(0), lives(0){}
+	:levelReload(CS230::InputKey::Keyboard::R), mainmenu(CS230::InputKey::Keyboard::Escape), timer(0), score(0), lives(0),Show(CS230::InputKey::Keyboard::Tilde){}
 
 void Level2::Load()
 {
+	objectPtr = new CS230::GameObjectManager();
+	
 	std::string scoreString = "Score: " + std::to_string(score / 100) + std::to_string((score % 100) / 10) + std::to_string(score % 10);
 	scoreTexture = Engine::GetSpriteFont(static_cast<int>(Fonts::Font2)).DrawTextToTexture(scoreString, 0xFFFFFFFF, true);
 	
-	gameObjectManager.Add(new Ship({ Engine::GetWindow().GetSize() / 2.0 }));
-	gameObjectManager.Add(new Meteor());
-	gameObjectManager.Add(new Meteor());
-	gameObjectManager.Add(new Meteor());
-	gameObjectManager.Add(new Meteor());
-	gameObjectManager.Add(new Meteor());
+	objectPtr->Add(new Ship({ Engine::GetWindow().GetSize() / 2.0 }));
+	objectPtr->Add(new Meteor());
+	objectPtr->Add(new Meteor());
+	objectPtr->Add(new Meteor());
+	objectPtr->Add(new Meteor());
+	objectPtr->Add(new Meteor());
 
+#ifdef _DEBUG
+	AddGSComponent(new ShowCollision(CS230::InputKey::Keyboard::Tilde));
+#endif
+	
 }
 
 void Level2::Update(double dt) {
 	
-	gameObjectManager.UpdateAll(dt);
+	objectPtr->Update(dt);
 
 	if (mainmenu.IsKeyReleased() == true) {
 		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::MainMenu));
@@ -42,16 +49,18 @@ void Level2::Update(double dt) {
     if (levelReload.IsKeyReleased() == true) {
         Engine::GetGameStateManager().ReloadState();
     }
+	GetGSComponent<ShowCollision>()->Update(dt);
+	
 #endif
 }
 
 void Level2::Unload() {
-	gameObjectManager.Unload();
+	ClearGSComponent();
 }
 
 void Level2::Draw() {
 	Engine::GetWindow().Clear(0x000000FF);
-	gameObjectManager.DrawAll(cameraMatrix);
+	objectPtr->DrawAll(cameraMatrix);
 
 	math::ivec2 winSize = Engine::GetWindow().GetSize();
 	

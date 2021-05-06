@@ -13,16 +13,18 @@ Creation date: 2/11/2021
 #include "..\Engine\Vec2.h"
 #include "..\Engine\TransformMatrix.h" 
 #include "..\Engine/GameObject.h"
+#include "..\Engine/Component.h"
+
+class ScreenWrap;
 
 class Ship : public CS230::GameObject{
 public:
 	Ship(math::vec2 startPos);
 	void Update(double dt) override;
 	void Draw(math::TransformMatrix cameraMatrix) override;
+	
 
 private:
-	void TestForWrap();
-	
 	CS230::Sprite flameLeft;
 	CS230::Sprite flameRight;
 
@@ -30,8 +32,8 @@ private:
 	static constexpr double accel = 400;
 	static constexpr double drag = 1;
 	static constexpr double rotationRate = 2.0;
-
 	CS230::InputKey rotateCounterKey;
 	CS230::InputKey rotateClockKey;
 	CS230::InputKey accelerateKey;
+	ShowCollision* show;
 };

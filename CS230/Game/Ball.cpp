@@ -12,14 +12,14 @@ Creation date: 3/10/2021
 #include "Ball_Anims.h"
 
 Ball::Ball(math::vec2 startPos) : GameObject(startPos) {
-    sprite.Load("assets/Ball.spt");
+    AddGOComponent(new CS230::Sprite("assets/Ball.spt", this));
     currState = &stateBounce;
     currState->Enter(this);
 }
 
 void Ball::State_Bounce::Enter(GameObject* object) {
     Ball* ball = static_cast<Ball*>(object);
-    ball->sprite.PlayAnimation(static_cast<int>(Ball_Anim::None_Anim));
+    ball->GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(Ball_Anim::None_Anim));
     ball->SetVelocity({ ball->GetVelocity().x, bounceVelocity }); 
 }
 void Ball::State_Bounce::Update(GameObject* object, double dt) {
@@ -38,14 +38,15 @@ void Ball::State_Bounce::TestForExit(GameObject* object) {
 void Ball::State_Land::Enter(GameObject* object)
 {
     Ball* ball = static_cast<Ball*>(object);
-    ball->sprite.PlayAnimation(static_cast<int>(Ball_Anim::Squish_Anim));
+    ball->GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(Ball_Anim::Squish_Anim));
 }
 void Ball::State_Land::Update([[maybe_unused]] GameObject* object, [[maybe_unused]] double dt){}
 
 void Ball::State_Land::TestForExit(GameObject* object) {
     Ball* ball = static_cast<Ball*>(object);
-	if(ball->sprite.IsAnimationDone() == true)
-	{
-        ball->ChangeState(&ball->stateBounce);
-	}
+    if (ball->GetGOComponent<CS230::Sprite>()->IsAnimationDone() == true) {
+        {
+            ball->ChangeState(&ball->stateBounce);
+        }
+    }
 }

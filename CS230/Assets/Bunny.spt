@@ -1,5 +1,6 @@
 assets/Bunny.png
 HotSpot 35 0
+CollisionRect -35 0 35 70
 FrameSize 70 97
 Frame 0 0
 Frame 70 0

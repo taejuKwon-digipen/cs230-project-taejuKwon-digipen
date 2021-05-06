@@ -9,12 +9,13 @@ Creation date: 2/11/2021
 -----------------------------------------------------------------*/
 #pragma once
 #include "..\Engine\Texture.h"
+#include "..\Engine\Component.h"
 
 namespace CS230 {
     class Camera;
 }
 
-class Background {
+class Background : public CS230::Component {
 public:
     void Add(const std::filesystem::path &texturePath, int level);
     void Unload();

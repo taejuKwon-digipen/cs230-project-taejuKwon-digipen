@@ -10,19 +10,32 @@ Creation date: 2/14/2021
 -----------------------------------------------------------------*/
 #pragma once
 
+#include "..\Engine\ComponentManager.h"
 #include "..\Engine\Vec2.h"
 #include "..\Engine\Sprite.h"
 #include "..\Engine\TransformMatrix.h"
+#include "ShowCollision.h"
+#include "Collision.h"
 
 namespace CS230 {
+	
+	class Component;
+	
 	class GameObject {
+		friend class Sprite;
+		
 	public:
 		GameObject(math::vec2 position); //hero
 		GameObject(math::vec2 position, double rotation, math::vec2 scale); //ship
-		virtual ~GameObject() {}
-
+		virtual ~GameObject()
+		{
+			ClearGOComponents();
+		}
+		
 		virtual void Update(double dt);
 		virtual void Draw(math::TransformMatrix cameraMatrix);
+
+		void SetPosition(math::vec2 newPosition);
 
 		const math::TransformMatrix& GetMatrix();
 		const math::vec2& GetPosition() const;
@@ -30,8 +43,10 @@ namespace CS230 {
 		const math::vec2& GetScale() const;
 		double GetRotation() const;
 
+		template<typename T>
+		T* GetGOComponent() { return components.GetComponent<T>(); }
+
 	protected:
-		void SetPosition(math::vec2 newPosition);
 		void UpdatePosition(math::vec2 adjustPosition);
 		void SetVelocity(math::vec2 newPosition);
 		void UpdateVelocity(math::vec2 adjustPosition);
@@ -39,7 +54,12 @@ namespace CS230 {
 		void SetRotation(double newRotationAmount);
 		void UpdateRotation(double newRotationAmount);
 
-		Sprite sprite;
+		void AddGOComponent(Component* component) { components.AddComponent(component); }
+		void UpdateGOComponents(double dt) { components.UpdateAll(dt); }
+		void ClearGOComponents() { components.Clear(); }
+		
+		template<typename T>
+		void RemoveGOComponent() { components.RemoveComponent<T>(); }
 
 		class State {
 		public:
@@ -59,15 +79,20 @@ namespace CS230 {
 		State_Nothing state_nothing;
 		void ChangeState(State* newState);
 		State* currState;
-
+		ShowCollision* show;
+		Collision* collision;
+	
 	private:
 		math::TransformMatrix objectMatrix;
 		bool updateMatrix;
+		ComponentManager components;
 
 		double rotation;
 		math::vec2 scale;
 		math::vec2 position;
 		math::vec2 velocity;
+
+
 	};
 }
 

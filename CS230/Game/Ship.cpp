@@ -10,20 +10,20 @@ Creation date: 3/10/2021
 #include "../Engine/Engine.h"    //Engine::GetWindow
 #include "../Engine/TransformMatrix.h"
 #include "Ship.h"
-#include "Flame_Anims.h" 
+#include "Flame_Anims.h"
+#include "ScreenWrap.h"
 
 Ship::Ship(math::vec2 pos) :rotateCounterKey(CS230::InputKey::Keyboard::A), 
 				rotateClockKey(CS230::InputKey::Keyboard::D), accelerateKey(CS230::InputKey::Keyboard::W), isAccelerating(false),
-				GameObject(pos, GetRotation(), GetScale())
+				GameObject(pos, GetRotation(), GetScale()), flameLeft("assets/Flame.spt", this), flameRight("assets/Flame.spt", this)
 {
-	sprite.Load("assets/Ship.spt");
-	flameLeft.Load("assets/Flame.spt");
-	flameRight.Load("assets/Flame.spt");
+	AddGOComponent(new CS230::Sprite("assets/Ship.spt", this));
+	AddGOComponent(new ScreenWrap(*this));
 }
 
 void Ship::Update(double dt)
 {
-	sprite.Update(dt);
+	GetGOComponent<CS230::Sprite>()->Update(dt);
 	flameLeft.Update(dt);
 	flameRight.Update(dt);
 	
@@ -53,39 +53,32 @@ void Ship::Update(double dt)
 			isAccelerating = false;
 		}
 	}
-
-	/*velocity -= (velocity * Ship::drag * dt);*/
 	UpdateVelocity({ -(GetVelocity() * Ship::drag * dt) });
-
-	/*position += velocity * dt;*/
 	UpdatePosition( GetVelocity() * dt );
 
 	SetScale({  0.75, 0.75 });
-	/*objectMatrix = math::TranslateMatrix(position) * math::RotateMatrix(rotationAmount) * math::ScaleMatrix({ 0.75, 0.75 });*/
-	TestForWrap();
-}
 
-void Ship::TestForWrap() {
-	if (GetPosition().y > Engine::GetWindow().GetSize().y + sprite.GetFrameSize().y / 2.0) {
-		/*position.y = 0 - sprite.GetFrameSize().y / 2.0;*/
-		SetPosition({ GetPosition().x, 0 - sprite.GetFrameSize().y / 2.0 });
-	} else if (GetPosition().y < 0 - sprite.GetFrameSize().y / 2.0) {
-		/*position.y = Engine::GetWindow().GetSize().y + sprite.GetFrameSize().y / 2.0;*/
-		SetPosition({ GetPosition().x,Engine::GetWindow().GetSize().y + sprite.GetFrameSize().y / 2.0 });
-	}
-	if (GetPosition().x > Engine::GetWindow().GetSize().x + sprite.GetFrameSize().x / 2.0) {
-		/*position.x = 0 - sprite.GetFrameSize().x / 2.0;*/
-		SetPosition({ 0 - sprite.GetFrameSize().x / 2.0 , GetPosition().y });
-	} else if (GetPosition().x < 0 - sprite.GetFrameSize().x / 2.0) {
-		/*position.x = Engine::GetWindow().GetSize().x + sprite.GetFrameSize().x / 2.0;*/
-		SetPosition({ Engine::GetWindow().GetSize().x + sprite.GetFrameSize().x / 2.0 , GetPosition().y });
-	}
+	GetGOComponent<ScreenWrap>()->Update(dt);
+	
 }
 
 void Ship::Draw(math::TransformMatrix cameraMatrix) {
 	GetMatrix();
 	
-	flameRight.Draw(GetMatrix() * math::TranslateMatrix(sprite.GetHotSpot(1)) * cameraMatrix);
-	flameLeft.Draw(GetMatrix() * math::TranslateMatrix(sprite.GetHotSpot(2)) * cameraMatrix);
-	sprite.Draw(GetMatrix()* cameraMatrix);
+	flameRight.Draw(GetMatrix() * math::TranslateMatrix(GetGOComponent<CS230::Sprite>()->GetHotSpot(1)) * cameraMatrix);
+	flameLeft.Draw(GetMatrix() * math::TranslateMatrix(GetGOComponent<CS230::Sprite>()->GetHotSpot(2)) * cameraMatrix);
+	GetGOComponent<CS230::Sprite>()->Draw(GetMatrix()* cameraMatrix);
+
+	ShowCollision* showCollision = Engine::GetGSComponent<ShowCollision>();
+	if (showCollision != nullptr)
+	{
+		if (showCollision->IsEnabled() == true)
+		{
+			collision = GetGOComponent<CS230::Collision>();
+			if (collision != nullptr)
+			{
+				collision->Draw(cameraMatrix);
+			}
+		}
+	}
 }

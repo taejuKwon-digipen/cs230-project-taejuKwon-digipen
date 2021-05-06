@@ -14,6 +14,7 @@ Creation date: 2/11/2021
 #include "../Engine/Engine.h"
 
 void Background::Add(const std::filesystem::path& texturePath, int level) {
+
     backgrounds.push_back({Engine::GetTextureManager().Load(texturePath), level });
 }
 

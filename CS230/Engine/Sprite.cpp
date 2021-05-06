@@ -12,9 +12,13 @@ Creation date: 12/3/2021
 #include "TransformMatrix.h"
 #include "Texture.h"
 #include "Animation.h"
- 
+#include "Collision.h"
+#include "GameObject.h"
 
-CS230::Sprite::Sprite() : currAnim(0), currFrame(0), texturePtr(nullptr) {}
+CS230::Sprite::Sprite(const std::filesystem::path& spriteInfoFile, GameObject* object) : currAnim(0), currFrame(0), texturePtr(nullptr)
+{
+	Load(spriteInfoFile,object);
+}
 
 CS230::Sprite::~Sprite() {
 	for (Animation* anim : animations) {
@@ -23,7 +27,7 @@ CS230::Sprite::~Sprite() {
 	animations.clear();
 }
 
-void CS230::Sprite::Load(const std::filesystem::path& spriteInfoFile) {
+void CS230::Sprite::Load(const std::filesystem::path& spriteInfoFile, GameObject* object) {
 	
 	hotSpotList.clear();
 	frameTexel.clear();
@@ -73,6 +77,26 @@ void CS230::Sprite::Load(const std::filesystem::path& spriteInfoFile) {
 			std::string FileName;
 			inFile >> FileName;
 			animations.push_back(new Animation(FileName));
+		}
+		else if (text == "CollisionRect") {
+			math::irect2 rect;
+			inFile >> rect.point1.x >> rect.point1.y >> rect.point2.x >> rect.point2.y;
+			if (object == nullptr) {
+				Engine::GetLogger().LogError("Trying to add collision to a nullobject");
+			}
+			else {
+				object->AddGOComponent(new RectCollision(rect, object));
+			}
+		}
+		else if (text == "CollisionCircle") {
+			double radius;
+			inFile >> radius;
+			if (object == nullptr) {
+				Engine::GetLogger().LogError("Trying to add collision to a nullobject");
+			}
+			else {
+				object->AddGOComponent(new CircleCollision(radius, object));
+			}
 		}
 		else {
 			Engine::GetLogger().LogError("Unknown spt command " + text);

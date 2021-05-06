@@ -10,7 +10,7 @@ Creation date: 2/11/2021
 #include "TransformMatrix.h"
 #include "Camera.h"
 
-CS230::Camera::Camera(math::rect2 movableRange) : movableRange(movableRange) {}
+CS230::Camera::Camera(math::rect2 movableRange) : movableRange(movableRange), position(0,0) {}
 
 void CS230::Camera::SetPosition(math::vec2 newPosition) {
 	position = newPosition;
@@ -25,24 +25,24 @@ void CS230::Camera::SetExtent(math::irect2 newExtent) {
 }
 
 void CS230::Camera::Update(const math::vec2& followObjPos) {
-	if (followObjPos.x  > movableRange.topRight.x + position.x) {
-		position.x = followObjPos.x - movableRange.topRight.x;
+	if (followObjPos.x  > movableRange.Right() + position.x) {
+		position.x = followObjPos.x - movableRange.Right();
 	}
-	if (followObjPos.x - position.x < movableRange.bottomLeft.x) {
-		position.x = followObjPos.x - movableRange.bottomLeft.x;
+	if (followObjPos.x - position.x < movableRange.Left()) {
+		position.x = followObjPos.x - movableRange.Left();
 	}
 
-	if (position.x < extent.bottomLeft.x) {
-		position.x = extent.bottomLeft.x;
+	if (position.x < extent.Left()) {
+		position.x = extent.Left();
 	}
-	if (position.x > extent.topRight.x) {
-		position.x = extent.topRight.x;
+	if (position.x > extent.Right()) {
+		position.x = extent.Right();
 	}
-	if (position.y < extent.bottomLeft.y) {
-		position.y = extent.bottomLeft.y;
+	if (position.y < extent.Bottom()) {
+		position.y = extent.Bottom();
 	}
-	if (position.y > extent.topRight.y) {
-		position.y = extent.topRight.y;
+	if (position.y > extent.Top()) {
+		position.y = extent.Top();
 	}
 }
 

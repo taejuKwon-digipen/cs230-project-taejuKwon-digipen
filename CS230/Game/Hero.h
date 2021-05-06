@@ -18,7 +18,7 @@ namespace CS230 {
 
 class Hero : public CS230::GameObject {
 public:
-	Hero(math::vec2 startPos, const CS230::Camera& camera);
+	Hero(math::vec2 startPos);
 
     void Update(double dt) override;
 	const math::vec2& GetPosition() const { return GameObject::GetPosition(); }
@@ -66,9 +66,7 @@ private:
     State_Falling stateFalling;
 
     void UpdateXVelocity(double dt);
-  
-	const CS230::Camera& camera;
-
+	
 	bool isFlipped;
 
 	static constexpr double jumpVelocity = 950;

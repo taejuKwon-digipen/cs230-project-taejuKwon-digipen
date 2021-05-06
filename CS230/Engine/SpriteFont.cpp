@@ -48,8 +48,8 @@ void CS230::SpriteFont::SetupCharRects() {
 		nextColor = texture.GetPixel({ xPos, 0 });
 		testColor = nextColor;
 
-		charTexels[index].topRight = { xPos-1 ,1} ;
-		charTexels[index].bottomLeft = { xPos - width ,height };
+		charTexels[index].point2 = { xPos-1 ,1} ;
+		charTexels[index].point1 = { xPos - width ,height };
 	}
 }
 
@@ -68,8 +68,8 @@ math::ivec2 CS230::SpriteFont::MeasureText(std::string text) {
 	math::ivec2 size = { 0,0 };
 	// Todo: For each character use it's charTexel information to find the width/height of the string
 	for (char c : text) {
-		size.x += charTexels[c - ' '].topRight.x - charTexels[c - ' '].bottomLeft.x;
-		size.y = charTexels[c - ' '].bottomLeft.y - charTexels[c - ' '].topRight.y;
+		size.x += charTexels[c - ' '].point2.x - charTexels[c - ' '].point1.x;
+		size.y = charTexels[c - ' '].point1.y - charTexels[c - ' '].point2.y;
 	}
 	return size;
 }
@@ -105,7 +105,7 @@ CS230::Texture CS230::SpriteFont::DrawTextToTexture(std::string text, unsigned i
 
 void CS230::SpriteFont::DrawChar(math::TransformMatrix& matrix, char c) {
 	math::irect2& displayRect = GetCharRect(c);
-	const math::ivec2 topLeftTexel = { displayRect.bottomLeft.x, displayRect.topRight.y };
+	const math::ivec2 topLeftTexel = { displayRect.point1.x, displayRect.point2.y };
 	if (c != ' ') {
 		texture.Draw(matrix, topLeftTexel, displayRect.Size());
 	}

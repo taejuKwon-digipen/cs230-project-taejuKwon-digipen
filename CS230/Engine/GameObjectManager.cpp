@@ -11,21 +11,21 @@ Creation date: 17/4/2021
 #include "TransformMatrix.h" 
 #include "GameObject.h"
 
-void CS230::GameObjectManager::Add(GameObject* obj)
+CS230::GameObjectManager::~GameObjectManager()
 {
-	gameObjects.push_back(obj);
-}
-
-void CS230::GameObjectManager::Unload()
-{
-	for(int i = 0; i < gameObjects.size(); i++)
+	for (GameObject*& index : gameObjects)
 	{
-		delete gameObjects[i];
+		delete index;
 	}
 	gameObjects.clear();
 }
 
-void CS230::GameObjectManager::UpdateAll(double dt)
+	void CS230::GameObjectManager::Add(GameObject* obj)
+{
+	gameObjects.push_back(obj);
+}
+
+void CS230::GameObjectManager::Update(double dt)
 {
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
