@@ -51,7 +51,7 @@ void Ship::Update(double dt)
 			flameLeft.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
 			flameRight.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
 			isAccelerating = false;
-		}
+		} 
 	}
 	UpdateVelocity({ -(GetVelocity() * Ship::drag * dt) });
 	UpdatePosition( GetVelocity() * dt );
