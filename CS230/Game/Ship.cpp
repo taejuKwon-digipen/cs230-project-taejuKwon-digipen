@@ -60,7 +60,7 @@ void Ship::Update(double dt)
 
 	GetGOComponent<ScreenWrap>()->Update(dt);
 	
-}
+} 
 
 void Ship::Draw(math::TransformMatrix cameraMatrix) {
 

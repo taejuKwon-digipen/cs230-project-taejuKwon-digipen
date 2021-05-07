@@ -18,7 +18,7 @@ Creation date: 2/14/2021
 #include "Collision.h"
 
 namespace CS230 {
-	 
+	  
 	class Component;
 	
 	class GameObject {
