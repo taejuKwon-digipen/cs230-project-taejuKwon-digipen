@@ -10,6 +10,7 @@ Creation date: 2/10/2021
 #pragma once
 #include <vector>
 #include "GameState.h"
+#include "GameObjectManager.h"
 
 namespace CS230 {
 

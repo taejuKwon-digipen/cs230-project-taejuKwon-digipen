@@ -11,6 +11,7 @@ Creation date: 2/11/2021
 #include "..\Engine\Input.h"
 #include "..\Engine\Vec2.h"
 #include "..\Engine\GameObject.h"
+#include "GameObjectTypes.h"
 
 namespace CS230 {
 	class Camera;
@@ -22,6 +23,13 @@ public:
 
     void Update(double dt) override;
 	const math::vec2& GetPosition() const { return GameObject::GetPosition(); }
+
+    GameObjectType GetObjectType() override { return GameObjectType::Hero; }
+    std::string GetObjectTypeName() override { return "Hero"; }
+	bool CanCollideWith(GameObjectType objectBType) override;
+
+    void Draw(math::TransformMatrix displayMatrix);
+    void ResolveCollision(GameObject* objectB) override;
 
 private:
     class State_Idle : public State {
@@ -77,4 +85,10 @@ private:
 	CS230::InputKey jumpKey;
 	CS230::InputKey moveLeftKey;
 	CS230::InputKey moveRightKey;
+
+    static constexpr double hurtTime = 2;
+
+    double hurtTimer;
+    bool drawHero;
+
 };

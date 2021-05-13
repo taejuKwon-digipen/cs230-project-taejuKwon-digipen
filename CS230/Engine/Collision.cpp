@@ -24,7 +24,6 @@ void CS230::RectCollision::Draw(math::TransformMatrix cameraMatrix) {
     doodle::pop_settings();
 }
 
-
 void CS230::CircleCollision::Draw(math::TransformMatrix cameraMatrix) {
     doodle::no_fill();
     doodle::set_outline_width(2);
@@ -38,10 +37,33 @@ void CS230::CircleCollision::Draw(math::TransformMatrix cameraMatrix) {
 math::rect2 CS230::RectCollision::GetWorldCoorRect()
 {
     return math::rect2{ objectPtr->GetMatrix()* math::vec2{rect.point1 } , objectPtr->GetMatrix()*math::vec2{rect.point2 } };
+}
+
+bool CS230::RectCollision::DoesCollideWith(GameObject* objectB)
+{
+	if(this->GetWorldCoorRect().Left() < objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Right() &&
+        this->GetWorldCoorRect().Right() > objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Left() &&
+        this->GetWorldCoorRect().Bottom() < objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Top() &&
+        this->GetWorldCoorRect().Top() > objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Bottom())
+	{
+        return true;
+	}
+    return false;
 };
 
 double CS230::CircleCollision::GetRadius()
 {
     return objectPtr->GetScale().x * radius;
+}
+
+bool CS230::CircleCollision::DoesCollideWith(GameObject* objectB)
+{
+        if ((this->GetRadius() + objectB->GetGOComponent<CircleCollision>()->GetRadius()) * 2 >
+            (objectB->GetPosition().x + objectPtr->GetPosition().x) * (objectB->GetPosition().x + objectPtr->GetPosition().x)
+            + (objectB->GetPosition().y + objectPtr->GetPosition().y) * (objectB->GetPosition().y + objectPtr->GetPosition().y))
+        {
+            return true;
+        }
+        return false;
 }
 

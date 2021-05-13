@@ -10,13 +10,15 @@ Creation date: 2/14/2021
 #pragma once
 #include "..\Engine\Vec2.h"
 #include "..\Engine\GameObject.h"
+#include "GameObjectTypes.h"
 
 namespace math { struct vec2; }
 
 class Ball : public CS230::GameObject{
 public:
 	Ball(math::vec2 startPos);
-
+    GameObjectType GetObjectType() override { return GameObjectType::Ball; }
+    std::string GetObjectTypeName() override { return "Ball"; }
 private:
     class State_Bounce : public State {
         void Enter(GameObject* object) override;

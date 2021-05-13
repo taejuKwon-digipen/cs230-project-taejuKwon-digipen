@@ -16,7 +16,7 @@ Creation date: 2/14/2021
 #include "..\Engine\TransformMatrix.h"
 #include "ShowCollision.h"
 #include "Collision.h"
-
+enum class GameObjectType;
 namespace CS230 {
 	  
 	class Component;
@@ -31,6 +31,8 @@ namespace CS230 {
 		{
 			ClearGOComponents();
 		}
+
+		virtual void ResolveCollision(GameObject*);
 		
 		virtual void Update(double dt);
 		virtual void Draw(math::TransformMatrix cameraMatrix);
@@ -45,6 +47,11 @@ namespace CS230 {
 
 		template<typename T>
 		T* GetGOComponent() { return components.GetComponent<T>(); }
+
+		virtual GameObjectType GetObjectType() = 0;
+		virtual std::string GetObjectTypeName() = 0;
+		virtual bool CanCollideWith(GameObjectType objectBType);
+		bool DoesCollideWith(GameObject* objectB);
 
 	protected:
 		void UpdatePosition(math::vec2 adjustPosition);

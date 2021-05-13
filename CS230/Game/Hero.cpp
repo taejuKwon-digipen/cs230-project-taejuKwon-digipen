@@ -16,7 +16,7 @@ Creation date: 2/11/2021
 #include "Hero_Anims.h"
 
 Hero::Hero(math::vec2 startPos) :GameObject(startPos), isFlipped(false), jumpKey(CS230::InputKey::Keyboard::Up),
-									moveLeftKey(CS230::InputKey::Keyboard::Left), moveRightKey(CS230::InputKey::Keyboard::Right)
+									moveLeftKey(CS230::InputKey::Keyboard::Left), moveRightKey(CS230::InputKey::Keyboard::Right), drawHero(true)
 {
 	AddGOComponent(new CS230::Sprite("assets/Hero.spt", this));
 	currState = &stateIdle;
@@ -25,14 +25,20 @@ Hero::Hero(math::vec2 startPos) :GameObject(startPos), isFlipped(false), jumpKey
 
 void Hero::Update(double dt) {
 	GameObject::Update(dt);
+	
 	// Boundary Check
-	if (GetPosition().x < Engine::GetGSComponent<CS230::Camera>()-> GetPosition().x+ GetGOComponent<CS230::Sprite>()->GetFrameSize().x / 2) {
-		SetPosition({ Engine::GetGSComponent<CS230::Camera>()->GetPosition().x + GetGOComponent<CS230::Sprite>()->GetFrameSize().x / 2 , GetPosition().y });
+	if (GetPosition().x < Engine::GetGSComponent<CS230::Camera>()-> GetPosition().x+ GetGOComponent<CS230::RectCollision>()->GetWorldCoorRect().Size().x /2) {
+		SetPosition({ Engine::GetGSComponent<CS230::Camera>()->GetPosition().x + GetGOComponent<CS230::RectCollision>()->GetWorldCoorRect().Size().x/2, GetPosition().y });
 		SetVelocity({ 0, GetVelocity().y });
 	}
-	if (GetPosition().x + GetGOComponent<CS230::Sprite>()->GetFrameSize().x / 2 > Engine::GetGSComponent<CS230::Camera>()->GetPosition().x + Engine::GetWindow().GetSize().x) {
-		SetPosition({ Engine::GetGSComponent<CS230::Camera>()->GetPosition().x + Engine::GetWindow().GetSize().x - GetGOComponent<CS230::Sprite>()->GetFrameSize().x / 2 , GetPosition().y });
+	if (GetPosition().x + GetGOComponent<CS230::RectCollision>()->GetWorldCoorRect().Size().x/2 > Engine::GetGSComponent<CS230::Camera>()->GetPosition().x + Engine::GetWindow().GetSize().x) {
+		SetPosition({ Engine::GetGSComponent<CS230::Camera>()->GetPosition().x + Engine::GetWindow().GetSize().x - GetGOComponent<CS230::RectCollision>()->GetWorldCoorRect().Size().x/2 , GetPosition().y });
 		SetVelocity({ 0,GetVelocity().y });
+	}
+
+	if(hurtTimer != 0. )
+	{
+		drawHero = !drawHero;
 	}
 }
 
@@ -97,11 +103,9 @@ void Hero::State_Skidding::Update(GameObject* object, double dt) {
 	Hero* hero = static_cast<Hero*>(object);
 	
 	if (hero->GetVelocity().x > 0) {
-		/*hero->velocity.x -= (xDrag + xAccel) * dt;*/
 		hero->UpdateVelocity({ -(xDrag + xAccel) * dt , hero->GetVelocity().y });
 	}
 	else if (hero->GetVelocity().x < 0) {
-		/*hero->velocity.x += (xDrag + xAccel) * dt;*/
 		hero->UpdateVelocity({ (xDrag + xAccel) * dt , hero->GetVelocity().y });
 	}
 }
@@ -128,7 +132,6 @@ void Hero::State_Skidding::TestForExit(GameObject* object) {
 void Hero::State_Jumping::Enter(GameObject* object) {
 	Hero* hero = static_cast<Hero*>(object);
 	hero->GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(Hero_Anim::Hero_Jump_Anim));
-	/*hero->velocity.y = Hero::jumpVelocity;*/
 	hero->SetVelocity({ hero->GetVelocity().x, Hero::jumpVelocity });
 }
 
@@ -181,38 +184,99 @@ void Hero::State_Falling::TestForExit(GameObject* object) {
 		} else {
 			hero->ChangeState(&hero->stateIdle);
 		}
-		/*hero->velocity.y = 0;*/
 		hero->SetVelocity({ hero->GetVelocity().x, 0 });
-		/*hero->position.y = Level1::floor;*/
 		hero->SetPosition({ hero->GetPosition().x,  Level1::floor });
 	}
 }
 
 void Hero::UpdateXVelocity(double dt) {
 	if (moveLeftKey.IsKeyDown() == true) {
-		/*velocity.x -= Hero::xAccel * dt;*/	// apply acceleration
 		UpdateVelocity({ -(Hero::xAccel * dt), 0});
 		if (GetVelocity().x < -Hero::maxXVelocity) {
-			/*velocity.x = -Hero::maxXVelocity;*/
 			SetVelocity({ -Hero::maxXVelocity , GetVelocity().y });
 		}
 	} else if (moveRightKey.IsKeyDown() == true) {
 		UpdateVelocity({ (Hero::xAccel * dt), 0 });// apply acceleration
 		if (GetVelocity().x > Hero::maxXVelocity) {
-			/*velocity.x = Hero::maxXVelocity;*/
 			SetVelocity({ Hero::maxXVelocity , GetVelocity().y });
 		}
 	} else {
 		// no key is down, need to apply drag to slow down
 		double xDragDt = Hero::xDrag * dt;
 		if (GetVelocity().x > xDragDt) {
-			/*velocity.x -= xDragDt;*/
+
 			UpdateVelocity({ -xDragDt , 0 });
 		} else if (GetVelocity().x < -xDragDt) {
 			UpdateVelocity({ xDragDt ,0 });
 		} else {
-			/*velocity.x = 0;*/
 			SetVelocity({ 0, GetVelocity().y });
 		}
 	}
 }
+
+bool Hero::CanCollideWith(GameObjectType)
+{
+	return true;
+}
+
+void Hero::Draw(math::TransformMatrix displayMatrix)
+{
+	if(drawHero==true)
+	{
+		GameObject::Draw(displayMatrix);
+	}
+}
+
+void Hero::ResolveCollision(GameObject* objectB)
+{
+	math::rect2 collideRect = objectB->GetGOComponent<CS230::RectCollision>()->GetWorldCoorRect();
+	math::rect2 heroRect = GetGOComponent<CS230::RectCollision>()->GetWorldCoorRect();
+
+	
+	switch (objectB->GetObjectType())
+	{
+	case GameObjectType::TreeStump:
+		if (heroRect.Left() + heroRect.Size().x / 2 <= collideRect.Left() + collideRect.Size().x / 2) //¿ÞÂÊ
+		{
+			SetPosition(math::vec2{ collideRect.Left() - heroRect.Size().x / 2, GetPosition().y });
+			SetVelocity(math::vec2{ 0, GetVelocity().y });
+		}
+		if (heroRect.Left() + heroRect.Size().x / 2 >= collideRect.Left() + collideRect.Size().x / 2) //¿À¸¥ÂÊ
+		{
+			SetPosition(math::vec2{ collideRect.Right() + heroRect.Size().x / 2, GetPosition().y });
+			SetVelocity(math::vec2{ 0,GetVelocity().y });
+		}
+		break;
+
+	case GameObjectType::Bunny:
+
+		hurtTimer = hurtTime;
+		ChangeState(&stateJumping);
+
+		if (this->GetPosition().x <= objectB->GetPosition().x)
+		{
+			SetVelocity({ -xAccel   ,GetVelocity().y * jumpVelocity * 0.001 });
+		}
+		else
+		{
+			SetVelocity({ xAccel  ,GetVelocity().y * jumpVelocity * 0.001 });
+		}
+
+		break;
+
+	case GameObjectType::Ball:
+		if (this->GetPosition().x <= objectB->GetPosition().x)
+		{
+			SetVelocity({ -xAccel   ,GetVelocity().y * jumpVelocity * 0.001 });
+		}
+		else
+		{
+			SetVelocity({ xAccel  ,GetVelocity().y * jumpVelocity * 0.001 });
+		}
+		
+		break;
+	
+	}
+
+}
+

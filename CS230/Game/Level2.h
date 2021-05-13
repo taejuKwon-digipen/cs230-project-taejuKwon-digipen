@@ -41,8 +41,13 @@ private:
 	math::TransformMatrix cameraMatrix;
 	ScreenWrap* wrapPtr;
 	Score* scorePtr;
+	Ship* shipPtr;
 
 	CS230::Texture livesTexture;
+	
+	CS230::Texture GameOverTexture;
+	CS230::Texture RestartTexture;
+
 
 };
 

@@ -31,10 +31,7 @@ public:
 
 	std::string GetName() override { return "Level 1"; }
 private:
-
-	int score;
 	int lives;
-	double timer;
 	CS230::Texture livesTexture;
 
 	Background* background;

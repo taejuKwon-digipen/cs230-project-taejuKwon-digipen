@@ -8,6 +8,7 @@ Author: Kevin Wright
 Creation date: 2/11/2021
 -----------------------------------------------------------------*/
 #pragma once
+#include "GameObjectTypes.h"
 #include "..\Engine\Input.h"
 #include "..\Engine\Sprite.h"
 #include "..\Engine\Vec2.h"
@@ -22,7 +23,14 @@ public:
 	Ship(math::vec2 startPos);
 	void Update(double dt) override;
 	void Draw(math::TransformMatrix cameraMatrix) override;
-	
+
+	GameObjectType GetObjectType() override { return GameObjectType::Ship; }
+	std::string GetObjectTypeName() override { return "Ship"; }
+	bool CanCollideWith(GameObjectType objectBType) override;
+
+	void ResolveCollision(CS230::GameObject* objectB) override;
+	bool IsDead() { return isDead; }
+
 
 private:
 	CS230::Sprite flameLeft;
@@ -36,4 +44,6 @@ private:
 	CS230::InputKey rotateClockKey;
 	CS230::InputKey accelerateKey;
 	ShowCollision* show;
+
+	bool isDead;
 };

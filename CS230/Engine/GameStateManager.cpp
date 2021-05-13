@@ -36,15 +36,24 @@ void CS230::GameStateManager::Update(double dt) {
 		Engine::GetLogger().LogEvent("Load Complete");
 		state = State::UPDATE;
 		break;
+		
 	case State::UPDATE:
-		if (currGameState != nextGameState) {
+		if (currGameState != nextGameState) 
+		{
 			state = State::UNLOAD;
-		} else {
+		}
+		else 
+		{
 			Engine::GetLogger().LogVerbose("Update " + currGameState->GetName());
 			currGameState->Update(dt);
+			if(currGameState->GetGSComponent<GameObjectManager>() != nullptr )
+			{
+				currGameState->GetGSComponent<GameObjectManager>()->CollideTest();
+			}
 			currGameState->Draw();
 		}
 		break;
+		
 	case State::UNLOAD:
 		Engine::GetLogger().LogEvent("Unload " + currGameState->GetName());
 		if(currGameState != nextGameState)
@@ -54,9 +63,10 @@ void CS230::GameStateManager::Update(double dt) {
 		currGameState->Unload();
 		if (nextGameState == nullptr) {
 			state = State::SHUTDOWN;
-			break;
+		}else
+		{
+		state = State::LOAD;	
 		}
-		state = State::LOAD;
 		break;
 	case State::SHUTDOWN:
 		state = State::EXIT;

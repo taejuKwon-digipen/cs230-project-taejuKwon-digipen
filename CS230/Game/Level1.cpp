@@ -20,7 +20,7 @@ Creation date: 19/4/2021
 #include "Timer.h"
 #include "Gravity.h"
 
-Level1::Level1() : levelReload(CS230::InputKey::Keyboard::R), MainMenu(CS230::InputKey::Keyboard::Escape), lives(3), heroPtr(nullptr), score(0), timer(0), Show(CS230::InputKey::Keyboard::Tilde) {}
+Level1::Level1() : levelReload(CS230::InputKey::Keyboard::R), MainMenu(CS230::InputKey::Keyboard::Escape), lives(3), heroPtr(nullptr), Show(CS230::InputKey::Keyboard::Tilde) {}
 
 void Level1::Load() {
 	objectPtr = new CS230::GameObjectManager();

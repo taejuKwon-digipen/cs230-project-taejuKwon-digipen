@@ -9,7 +9,6 @@ Creation date: 2/14/2021
 -----------------------------------------------------------------*/
 
 #include "GameObject.h"
-
 #include "Engine.h"
 
 
@@ -117,6 +116,27 @@ void CS230::GameObject::UpdateRotation(double newRotationAmount)
     updateMatrix = true;
 }
 
+bool CS230::GameObject::CanCollideWith(GameObjectType)
+{
+    return false;
+}
+
+bool CS230::GameObject::DoesCollideWith(GameObject* objectB) // call) this-> collide = true
+{
+    if (CanCollideWith(objectB->GetObjectType()) == true)
+    {
+        if (GetGOComponent<Collision>() != nullptr)
+        {
+            return GetGOComponent<Collision>()->DoesCollideWith(objectB);
+        }
+    }
+    return false;
+}
+
+void CS230::GameObject::ResolveCollision(GameObject*)
+{
+    Engine::GetLogger().LogError(" ResolveCollision");
+}
 
 
 

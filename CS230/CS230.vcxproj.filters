@@ -209,9 +209,6 @@
     <ClInclude Include="Game\MainMenu.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentManager.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Component.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -232,6 +229,15 @@
     </ClInclude>
     <ClInclude Include="Engine\ShowCollision.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ComponentManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObjectTypes.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Ship_Anims.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
