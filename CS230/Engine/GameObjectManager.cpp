@@ -7,39 +7,22 @@ Project: CS230
 Author: Taeju Kwon
 Creation date: 17/4/2021
 -----------------------------------------------------------------*/
-#include "GameObjectManager.h"
-#include "Engine.h"
-#include "TransformMatrix.h" 
-#include "GameObject.h"
-
-CS230::GameObjectManager::~GameObjectManager()
-{
-	for (GameObject*& index : gameObjects)
-	{
-		delete index;
-	}
-	gameObjects.clear();
-}
-
-	void CS230::GameObjectManager::Add(GameObject* obj)
+#include"GameObjectManager.h"
+#include"GameObject.h"   // gameobject
+#include"TransformMatrix.h"  //TransformMatrix
+#include"Engine.h"
+void CS230::GameObjectManager::Add(GameObject* obj)
 {
 	gameObjects.push_back(obj);
 }
 
-void CS230::GameObjectManager::Update(double dt)
-{
-	for (int i = 0; i < static_cast<int>(gameObjects.size()-1); i++)
-	{
-		gameObjects[i]->Update(dt);
-	}
-}
-
-void CS230::GameObjectManager::DrawAll(math::TransformMatrix& cameraMatrix)
+CS230::GameObjectManager::~GameObjectManager()
 {
 	for (int i = 0; i < static_cast<int>(gameObjects.size()); i++)
 	{
-		gameObjects[i]->Draw(cameraMatrix);
+		delete gameObjects[i];
 	}
+	gameObjects.clear();
 }
 
 void CS230::GameObjectManager::CollideTest()
@@ -58,11 +41,20 @@ void CS230::GameObjectManager::CollideTest()
 			}
 		}
 	}
-
-
 }
 
+void CS230::GameObjectManager::Update(double dt)
+{
+	for (int i = 0; i < static_cast<int>(gameObjects.size()); i++)
+	{
+		gameObjects[i]->Update(dt);
+	}
+}
 
-
-
-
+void CS230::GameObjectManager::DrawAll(math::TransformMatrix& cameraMatrix)
+{
+	for (int i = 0; i < static_cast<int>(gameObjects.size()); i++)
+	{
+		gameObjects[i]->Draw(cameraMatrix);
+	}
+}

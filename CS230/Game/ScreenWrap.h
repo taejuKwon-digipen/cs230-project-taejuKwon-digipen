@@ -10,10 +10,7 @@ Creation date: 2/17/2021
 -----------------------------------------------------------------*/
 #pragma once
 #include "..\Engine\Component.h" 
-
-namespace CS230 {
-	class GameObject;
-}
+#include"../Engine/GameObject.h"
 
 class ScreenWrap : public CS230::Component {
 public:
@@ -22,5 +19,4 @@ public:
 private:
     CS230::GameObject& object;
 };
-
 

@@ -36,34 +36,34 @@ void CS230::CircleCollision::Draw(math::TransformMatrix cameraMatrix) {
 
 math::rect2 CS230::RectCollision::GetWorldCoorRect()
 {
-    return math::rect2{ objectPtr->GetMatrix()* math::vec2{rect.point1 } , objectPtr->GetMatrix()*math::vec2{rect.point2 } };
+    math::rect2 RectCollision;
+    RectCollision.point1 = math::TransformMatrix(objectPtr->GetMatrix()) * static_cast<math::vec2>(rect.point1);
+    RectCollision.point2 = math::TransformMatrix(objectPtr->GetMatrix()) * static_cast<math::vec2>(rect.point2);
+    return RectCollision;
 }
 
-bool CS230::RectCollision::DoesCollideWith(GameObject* objectB)
-{
-	if(this->GetWorldCoorRect().Left() < objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Right() &&
-        this->GetWorldCoorRect().Right() > objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Left() &&
-        this->GetWorldCoorRect().Bottom() < objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Top() &&
-        this->GetWorldCoorRect().Top() > objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Bottom())
-	{
-        return true;
-	}
-    return false;
-};
 
+bool CS230::RectCollision::DoesCollideWith(GameObject* testAgainstObject)
+{
+    math::rect2 MyRectCollision = this->GetWorldCoorRect();
+    math::rect2 TestRectCollision = testAgainstObject->GetGOComponent<RectCollision>()->GetWorldCoorRect();
+
+    if (MyRectCollision.Left() < TestRectCollision.Right() && MyRectCollision.Right() > TestRectCollision.Left() && MyRectCollision.Bottom() < TestRectCollision.Top() && MyRectCollision.Top() > TestRectCollision.Bottom())
+    {
+        return true;
+    }
+    return false;
+}
 double CS230::CircleCollision::GetRadius()
 {
     return objectPtr->GetScale().x * radius;
 }
 
-bool CS230::CircleCollision::DoesCollideWith(GameObject* objectB)
+bool CS230::CircleCollision::DoesCollideWith(GameObject* testAgainstObject)
 {
-        if ((this->GetRadius() + objectB->GetGOComponent<CircleCollision>()->GetRadius()) * 2 >
-            (objectB->GetPosition().x + objectPtr->GetPosition().x) * (objectB->GetPosition().x + objectPtr->GetPosition().x)
-            + (objectB->GetPosition().y + objectPtr->GetPosition().y) * (objectB->GetPosition().y + objectPtr->GetPosition().y))
-        {
-            return true;
-        }
-        return false;
+    if ((this->objectPtr->GetPosition().x - testAgainstObject->GetPosition().x) * (this->objectPtr->GetPosition().x - testAgainstObject->GetPosition().x) + (this->objectPtr->GetPosition().y - testAgainstObject->GetPosition().y) * (this->objectPtr->GetPosition().y - testAgainstObject->GetPosition().y) < (this->GetRadius() + testAgainstObject->GetGOComponent<CircleCollision>()->GetRadius()) * (this->GetRadius() + testAgainstObject->GetGOComponent<CircleCollision>()->GetRadius()))
+    {
+        return true;
+    }
+    return false;
 }
-

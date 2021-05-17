@@ -30,23 +30,15 @@ public:
 
 private:
 
-	int score;
-	int lives;
-	double timer;
-	
-	CS230::InputKey levelReload;
-	CS230::InputKey mainmenu;
-	
-	CS230::GameObjectManager* objectPtr;
-	math::TransformMatrix cameraMatrix;
-	ScreenWrap* wrapPtr;
-	Score* scorePtr;
 	Ship* shipPtr;
 
-	CS230::Texture livesTexture;
-	
 	CS230::Texture GameOverTexture;
 	CS230::Texture RestartTexture;
+
+	CS230::InputKey mainMenu;
+	CS230::InputKey reload;
+	CS230::GameObjectManager* gameObjectManager;
+	math::TransformMatrix camera;
 
 
 };

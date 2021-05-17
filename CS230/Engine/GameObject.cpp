@@ -8,9 +8,11 @@ Author: Taeju Kwon
 Creation date: 2/14/2021
 -----------------------------------------------------------------*/
 
-#include "GameObject.h"
-#include "Engine.h"
-
+#include"GameObject.h"
+#include"ShowCollision.h"
+#include"Engine.h" 
+#include"Collision.h"
+#include"../Game/GameObjectTypes.h"
 
 CS230::GameObject::GameObject(math::vec2 position) : GameObject(position, 0, { 1, 1 }) {}
 

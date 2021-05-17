@@ -8,42 +8,44 @@ Author: Kevin Wright
 Creation date: 2/11/2021
 -----------------------------------------------------------------*/
 #pragma once
-#include "GameObjectTypes.h"
-#include "..\Engine\Input.h"
 #include "..\Engine\Sprite.h"
+#include "..\Engine\Input.h"
 #include "..\Engine\Vec2.h"
-#include "..\Engine\TransformMatrix.h" 
-#include "..\Engine/GameObject.h"
-#include "..\Engine/Component.h"
-
-class ScreenWrap;
-
-class Ship : public CS230::GameObject{
+#include "..\Engine\GameObject.h"
+#include"GameObjectTypes.h"
+class Ship : public CS230::GameObject
+{
 public:
-	Ship(math::vec2 startPos);
-	void Update(double dt) override;
-	void Draw(math::TransformMatrix cameraMatrix) override;
+    Ship(math::vec2 startPos);
+    void Update(double dt) override;
+    void Draw(math::TransformMatrix cameraMatrix) override;
 
-	GameObjectType GetObjectType() override { return GameObjectType::Ship; }
-	std::string GetObjectTypeName() override { return "Ship"; }
-	bool CanCollideWith(GameObjectType objectBType) override;
-
-	void ResolveCollision(CS230::GameObject* objectB) override;
-	bool IsDead() { return isDead; }
-
-
+	GameObjectType GetObjectType()
+    {
+        return GameObjectType::Ship;
+    }
+	
+    std::string GetObjectTypeName()
+    {
+        return "Ship";
+    }
+	
+    void ResolveCollision(CS230::GameObject* objectB) override;
+    bool IsDead() { return isDead; }
+    bool CanCollideWith(GameObjectType objectBType) override;
 private:
-	CS230::Sprite flameLeft;
-	CS230::Sprite flameRight;
 
-	bool isAccelerating;
-	static constexpr double accel = 400;
-	static constexpr double drag = 1;
-	static constexpr double rotationRate = 2.0;
-	CS230::InputKey rotateCounterKey;
-	CS230::InputKey rotateClockKey;
-	CS230::InputKey accelerateKey;
-	ShowCollision* show;
+    CS230::Sprite left_flame;
+    CS230::Sprite right_flame;
 
-	bool isDead;
+    CS230::InputKey rotateCounterKey;
+    CS230::InputKey rotateClockKey;
+    CS230::InputKey accelerateKey;
+
+    static constexpr double accel = 400;
+    static constexpr double drag = 1.0f;
+    double rotation_speed = 3;
+    bool is_accelerate = false;
+    bool isDead = false;
+    math::vec2 speed = { 10,10 };
 };
