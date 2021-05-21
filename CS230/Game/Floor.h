@@ -2,21 +2,25 @@
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
-File Name: Bunny.h
+File Name: Floor.h
 Project: CS230
-Author: Taeju Kwon
-Creation date: 2/15/2021
+Author: Kevin Wright
+Creation date: 2/19/2021
 -----------------------------------------------------------------*/
-
 #pragma once
+
 #include "GameObjectTypes.h"
 #include "..\Engine\GameObject.h"
- 
-class Bunny : public CS230::GameObject {
+
+namespace math {
+    struct irect2;
+}
+
+class Floor : public CS230::GameObject {
 public:
-	Bunny(math::vec2 pos);
-	GameObjectType GetObjectType() override { return GameObjectType::Bunny; }
-	std::string GetObjectTypeName() override { return "Bunny"; }
-	void ResolveCollision(GameObject* objectA) override;
+    Floor(math::irect2 rect);
+    std::string GetObjectTypeName() override { return "Floor"; }
+    virtual GameObjectType GetObjectType() override { return GameObjectType::Floor; }
 private:
 };
+

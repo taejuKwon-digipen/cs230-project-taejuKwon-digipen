@@ -43,27 +43,52 @@ math::rect2 CS230::RectCollision::GetWorldCoorRect()
 }
 
 
-bool CS230::RectCollision::DoesCollideWith(GameObject* testAgainstObject)
+bool CS230::RectCollision::DoesCollideWith(math::vec2 point)
 {
     math::rect2 MyRectCollision = this->GetWorldCoorRect();
-    math::rect2 TestRectCollision = testAgainstObject->GetGOComponent<RectCollision>()->GetWorldCoorRect();
+   
+	if(MyRectCollision.Left() <= point.x && MyRectCollision.Right() >= point.x && MyRectCollision.Bottom() <= point.y && MyRectCollision.Top() >= point.y)
+	{
+        return true;
+	}
+    return false;
+}
 
-    if (MyRectCollision.Left() < TestRectCollision.Right() && MyRectCollision.Right() > TestRectCollision.Left() && MyRectCollision.Bottom() < TestRectCollision.Top() && MyRectCollision.Top() > TestRectCollision.Bottom())
+bool CS230::RectCollision::DoesCollideWith(GameObject* objectB)
+{
+    if (this->GetWorldCoorRect().Left() < objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Right() &&
+        this->GetWorldCoorRect().Right() > objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Left() &&
+        this->GetWorldCoorRect().Bottom() < objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Top() &&
+        this->GetWorldCoorRect().Top() > objectB->GetGOComponent<RectCollision>()->GetWorldCoorRect().Bottom())
     {
         return true;
     }
     return false;
-}
+};
+
 double CS230::CircleCollision::GetRadius()
 {
     return objectPtr->GetScale().x * radius;
 }
 
-bool CS230::CircleCollision::DoesCollideWith(GameObject* testAgainstObject)
+bool CS230::CircleCollision::DoesCollideWith(GameObject* objectB)
 {
-    if ((this->objectPtr->GetPosition().x - testAgainstObject->GetPosition().x) * (this->objectPtr->GetPosition().x - testAgainstObject->GetPosition().x) + (this->objectPtr->GetPosition().y - testAgainstObject->GetPosition().y) * (this->objectPtr->GetPosition().y - testAgainstObject->GetPosition().y) < (this->GetRadius() + testAgainstObject->GetGOComponent<CircleCollision>()->GetRadius()) * (this->GetRadius() + testAgainstObject->GetGOComponent<CircleCollision>()->GetRadius()))
+    if ((this->GetRadius() + objectB->GetGOComponent<CircleCollision>()->GetRadius()) * 2 >
+        (objectB->GetPosition().x + objectPtr->GetPosition().x) * (objectB->GetPosition().x + objectPtr->GetPosition().x)
+        + (objectB->GetPosition().y + objectPtr->GetPosition().y) * (objectB->GetPosition().y + objectPtr->GetPosition().y))
     {
         return true;
     }
     return false;
+}
+
+
+bool CS230::CircleCollision::DoesCollideWith(math::vec2 point)
+{
+    if (this->objectPtr->GetPosition().x == point.x && this->objectPtr->GetPosition().y == point.y)
+    {
+        return true;
+    }
+        return false;
+	
 }

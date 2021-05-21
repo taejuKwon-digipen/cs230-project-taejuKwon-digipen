@@ -17,10 +17,10 @@ class Hero;
 class Timer;
 class Score;
 class Gravity;
+class Floor;
 
 class Level1 : public CS230::GameState {
 public:
-	static constexpr double floor = 126.0f;
 	static constexpr double gravity = 1875;
 
 	Level1();
@@ -31,6 +31,8 @@ public:
 
 	std::string GetName() override { return "Level 1"; }
 private:
+	static constexpr double floor = 126.0f;
+	
 	int lives;
 	CS230::Texture livesTexture;
 
@@ -43,7 +45,6 @@ private:
 	Timer* timePtr;
 	Score* scorePtr;
 	Gravity* gravPtr;
-
 
 };
 

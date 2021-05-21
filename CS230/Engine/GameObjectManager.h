@@ -24,6 +24,7 @@ namespace CS230 {
 	
 	public:
 		~GameObjectManager();
+		const std::vector<GameObject*>& Objects() { return gameObjects; }
 		
 		void Add(GameObject* obj);
 		void Update(double dt) override;

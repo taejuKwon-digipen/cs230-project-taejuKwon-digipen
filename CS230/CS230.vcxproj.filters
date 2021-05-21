@@ -105,6 +105,12 @@
     <ClCompile Include="Game\Score.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Floor.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Exit.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Logger.h">
@@ -237,6 +243,15 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Game\Ship_Anims.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Floor.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Exit.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Bunny_Anims.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>

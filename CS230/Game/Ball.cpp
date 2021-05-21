@@ -7,11 +7,11 @@ Project: CS230
 Author: Taeju Kwon
 Creation date: 3/10/2021
 -----------------------------------------------------------------*/
-#include "Level1.h"	//Level1::gravity, floor
 #include "Ball.h"
 #include "Ball_Anims.h"
 #include "Gravity.h"
 #include "../Engine/Engine.h"
+#include "../Engine/Collision.h"
 
 Ball::Ball(math::vec2 startPos) : GameObject(startPos) {
     AddGOComponent(new CS230::Sprite("assets/Ball.spt", this));
@@ -28,13 +28,14 @@ void Ball::State_Bounce::Update(GameObject* object, double dt) {
     Ball* ball = static_cast<Ball*>(object);
     ball->UpdateVelocity({ ball->GetVelocity().x, -(Engine::GetGSComponent<Gravity>()->GetValue() * dt) });
 }
-void Ball::State_Bounce::TestForExit(GameObject* object) {
-    Ball* ball = static_cast<Ball*>(object);
+
+void Ball::State_Bounce::TestForExit(GameObject* /*object*/) {
+   /* Ball* ball = static_cast<Ball*>(object);
     if (ball->GetPosition().y < Level1::floor) {
         ball->SetPosition({ ball->GetPosition().x, Level1::floor });
         ball->SetVelocity({ ball->GetVelocity().x, 0 });
         ball->ChangeState(&ball->stateLand);
-    }
+    }*/
 }
 
 void Ball::State_Land::Enter(GameObject* object)
@@ -52,3 +53,26 @@ void Ball::State_Land::TestForExit(GameObject* object) {
         }
     }
 }
+
+bool Ball::CanCollideWith(GameObjectType objectBType)
+{
+    if (objectBType == GameObjectType::Floor) {
+        return true;
+    }
+    return false;
+
+}
+
+void Ball::ResolveCollision(GameObject* objectB)
+{
+    if (objectB->GetObjectType() == GameObjectType::Floor) {
+        CS230::RectCollision* collideRect =
+            static_cast<CS230::RectCollision*>(objectB->GetGOComponent<CS230::RectCollision>());
+        SetPosition({ GetPosition().x, collideRect->GetWorldCoorRect().Top() });
+        SetVelocity({ GetVelocity().x, 0 });
+        ChangeState(&stateLand);
+    }
+
+}
+
+

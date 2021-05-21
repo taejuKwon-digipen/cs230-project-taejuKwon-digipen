@@ -2,21 +2,26 @@
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
-File Name: Bunny.h
+File Name: Exit.h
 Project: CS230
-Author: Taeju Kwon
-Creation date: 2/15/2021
+Author: Kevin Wright
+Creation date: 2/20/2021
 -----------------------------------------------------------------*/
-
 #pragma once
-#include "GameObjectTypes.h"
+
 #include "..\Engine\GameObject.h"
- 
-class Bunny : public CS230::GameObject {
+#include "GameObjectTypes.h"
+
+namespace math {
+    struct irect2;
+}
+
+class Exit : public CS230::GameObject {
 public:
-	Bunny(math::vec2 pos);
-	GameObjectType GetObjectType() override { return GameObjectType::Bunny; }
-	std::string GetObjectTypeName() override { return "Bunny"; }
-	void ResolveCollision(GameObject* objectA) override;
+    Exit(math::irect2 rect);
+    void ResolveCollision(GameObject* objectA) override;
+    std::string GetObjectTypeName() { return "Exit"; }
 private:
+    virtual GameObjectType GetObjectType() override { return GameObjectType::Trigger; }
 };
+

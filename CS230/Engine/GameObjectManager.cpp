@@ -31,7 +31,7 @@ void CS230::GameObjectManager::CollideTest()
 	{
 		for (int j = 0; j < static_cast<int>(gameObjects.size()); j++)
 		{
-			if (gameObjects[i]->CanCollideWith(gameObjects[j]->GetObjectType()) == true)
+			if (gameObjects[i]->CanCollideWith(gameObjects[j]->GetObjectType()) == true && gameObjects[i] != gameObjects[j])
 			{
 				if (gameObjects[i]->DoesCollideWith(gameObjects[j]) == true)
 				{

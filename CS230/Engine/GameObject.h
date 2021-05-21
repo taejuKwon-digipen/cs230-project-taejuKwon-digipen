@@ -51,6 +51,7 @@ namespace CS230 {
 		virtual GameObjectType GetObjectType() = 0;
 		virtual std::string GetObjectTypeName() = 0;
 		virtual bool CanCollideWith(GameObjectType objectBType);
+		bool DoesCollideWith(math::vec2 point);
 		bool DoesCollideWith(GameObject* objectB);
 
 	protected:

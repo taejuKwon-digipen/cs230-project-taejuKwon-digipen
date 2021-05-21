@@ -13,6 +13,8 @@ Creation date: 19/4/2021
 #include "Ball.h"
 #include "Hero.h"
 #include "Bunny.h"
+#include "Exit.h"
+#include "Floor.h"
 #include "Fonts.h"
 #include "Score.h"
 #include "TreeStump.h"
@@ -20,27 +22,28 @@ Creation date: 19/4/2021
 #include "Timer.h"
 #include "Gravity.h"
 
-Level1::Level1() : levelReload(CS230::InputKey::Keyboard::R), MainMenu(CS230::InputKey::Keyboard::Escape), lives(3), heroPtr(nullptr), Show(CS230::InputKey::Keyboard::Tilde) {}
+Level1::Level1() : levelReload(CS230::InputKey::Keyboard::R), MainMenu(CS230::InputKey::Keyboard::Escape), lives(3), heroPtr(nullptr), Show(CS230::InputKey::Keyboard::Tilde)
+{
+}
 
 void Level1::Load() {
+
+
 	objectPtr = new CS230::GameObjectManager();
 	timePtr = new Timer(60);
 	scorePtr = new Score(0, Fonts::Font1);
-	heroPtr = new Hero({ 150, Level1::floor });
 	gravPtr = new Gravity(2000);
 	background = new Background();
+	
+	std::string liveString = "Lives:" + std::to_string(lives);
+	livesTexture = Engine::GetSpriteFont(static_cast<int>(Fonts::Font1)).DrawTextToTexture(liveString, 0xFFFFFFFF, true);
 
+	AddGSComponent(objectPtr);
 	AddGSComponent(timePtr);
 	AddGSComponent(scorePtr);
 	AddGSComponent(gravPtr);
 	AddGSComponent(background);
 
-	std::string liveString = "Lives:" + std::to_string(lives);
-	livesTexture = Engine::GetSpriteFont(static_cast<int>(Fonts::Font1)).DrawTextToTexture(liveString, 0xFFFFFFFF, true);
-
-	AddGSComponent(objectPtr);
-
-	objectPtr->Add(heroPtr);
 	objectPtr->Add(new Ball({ 600, Level1::floor }));
 	objectPtr->Add(new Ball({ 2700, Level1::floor }));
 	objectPtr->Add(new Ball({ 4800, Level1::floor }));
@@ -53,7 +56,14 @@ void Level1::Load() {
 	objectPtr->Add(new TreeStump({ 2200, Level1::floor }, 1));
 	objectPtr->Add(new TreeStump({ 2800, Level1::floor }, 5));
 	objectPtr->Add(new TreeStump({ 5100, Level1::floor }, 5));
+	objectPtr->Add(new Floor({ {0, 0}, {1471, static_cast<int>(Level1::floor)} }));
+	objectPtr->Add(new Floor({ {1602, 0}, {4262, static_cast<int>(Level1::floor)} }));
+	objectPtr->Add(new Floor({ {4551, 0}, {5760, static_cast<int>(Level1::floor)} }));
+	objectPtr->Add(new Exit({ {5550, static_cast<int>(Level1::floor)}, {5760, 683} }));
 
+	heroPtr = new Hero({ 100, Level1::floor - 1 });
+	objectPtr->Add(heroPtr);
+	
 	background->Add("assets/clouds.png", 4);
 	background->Add("assets/mountains.png", 2);
 	background->Add("assets/foreground.png", 1);
@@ -75,6 +85,20 @@ void Level1::Update(double dt) {
 	scorePtr->Update(dt);
 	
 	if (timePtr->hasEnded() == true )
+	{
+		lives--;
+		if (lives == 0)
+		{
+			lives = 3;
+			Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::MainMenu));
+		}
+		else
+		{
+			Engine::GetGameStateManager().ReloadState();
+		}
+	}
+
+	if (heroPtr->IsDead() == true)
 	{
 		lives--;
 		if (lives == 0)

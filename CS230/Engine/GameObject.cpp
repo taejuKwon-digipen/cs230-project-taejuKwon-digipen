@@ -125,14 +125,23 @@ bool CS230::GameObject::CanCollideWith(GameObjectType)
 
 bool CS230::GameObject::DoesCollideWith(GameObject* objectB) // call) this-> collide = true
 {
-    if (CanCollideWith(objectB->GetObjectType()) == true)
+   
+    if (GetGOComponent<Collision>() != nullptr && objectB->GetGOComponent<Collision>() != nullptr)
     {
-        if (GetGOComponent<Collision>() != nullptr)
-        {
-            return GetGOComponent<Collision>()->DoesCollideWith(objectB);
-        }
+        return this->GetGOComponent<Collision>()->DoesCollideWith(objectB);
     }
+ 
     return false;
+}
+
+bool CS230::GameObject::DoesCollideWith(math::vec2 point) // call) this-> collide = true
+{
+      if (GetGOComponent<Collision>() != nullptr) //collision 이 null이 아니면
+        {
+            return GetGOComponent<Collision>()->DoesCollideWith(point); //does collide return
+        }
+      return false;
+	
 }
 
 void CS230::GameObject::ResolveCollision(GameObject*)

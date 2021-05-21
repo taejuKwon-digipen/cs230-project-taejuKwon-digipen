@@ -30,6 +30,8 @@ public:
 
     void Draw(math::TransformMatrix displayMatrix);
     void ResolveCollision(GameObject* objectB) override;
+    bool IsDead() { return isDead; }
+
 
 private:
     class State_Idle : public State {
@@ -90,5 +92,8 @@ private:
 
     double hurtTimer;
     bool drawHero;
+    bool isDead;
+    GameObject* standingOnObject;
+
 
 };
