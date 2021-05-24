@@ -10,6 +10,7 @@ Creation date: 2/10/2021
 #include "Engine.h"			//logger
 #include "GameStateManager.h"
 #include "GameState.h"
+#include "GameObjectManager.h"
 
 CS230::GameStateManager::GameStateManager() : currGameState(nullptr), nextGameState(nullptr), state(State::START) {}
 
@@ -41,12 +42,18 @@ void CS230::GameStateManager::Update(double dt) {
 		} else {
 			Engine::GetLogger().LogVerbose("Update " + currGameState->GetName());
 			currGameState->Update(dt);
+			if (GetGSComponent<CS230::GameObjectManager>() != nullptr) {
+				GetGSComponent<CS230::GameObjectManager>()->CollideTest();
+			}
 			currGameState->Draw();
 		}
 		break;
 	case State::UNLOAD:
 		Engine::GetLogger().LogEvent("Unload " + currGameState->GetName());
 		currGameState->Unload();
+		if (nextGameState != currGameState) {
+			Engine::GetTextureManager().Unload();
+		}
 		if (nextGameState == nullptr) {
 			state = State::SHUTDOWN;
 			break;

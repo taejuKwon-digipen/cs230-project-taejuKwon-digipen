@@ -9,65 +9,95 @@ Creation date: 2/11/2021
 -----------------------------------------------------------------*/
 #include "../Engine/Engine.h"    //Engine::GetWindow
 #include "../Engine/TransformMatrix.h"
+#include "../Engine/Sprite.h"
+#include "../Engine/ShowCollision.h"
+#include "../Engine/Collision.h"
+#include "../Engine/GameObjectManager.h"
 #include "Ship.h"
+#include "Laser.h"
+#include "Flame_Anims.h"
+#include "Ship_Anims.h"
+#include "ScreenWrap.h"
 
-Ship::Ship(math::vec2 pos) : initPosition(pos), rotateCounterKey(CS230::InputKey::Keyboard::A), 
-				rotateClockKey(CS230::InputKey::Keyboard::D), accelerateKey(CS230::InputKey::Keyboard::W) {}
-
-void Ship::Load() {
-	sprite.Load("assets/Ship.png", { {50, 41}, {-15, -41}, {15, -41} });
-	position = initPosition;
-
-	flameLeft.Load("assets/flame.png", { 8,15 });
-	flameRight.Load("assets/flame.png", { 8,15 });
-	velocity = { 0,0 };
-	rotationAmount = 0;
+Ship::Ship(math::vec2 pos) : GameObject(pos, 0, { .75, .75 }), rotateCounterKey(CS230::InputKey::Keyboard::A),
+			rotateClockKey(CS230::InputKey::Keyboard::D), accelerateKey(CS230::InputKey::Keyboard::W), isAccelerating(false),
+			flameLeft("assets/flame.spt", this), flameRight("assets/flame.spt", this),
+			fireLazerKey(CS230::InputKey::Keyboard::Space), isDead(false) {
+	AddGOComponent(new CS230::Sprite("assets/Ship.spt", this));
+	AddGOComponent(new ScreenWrap(*this));
+	GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(Ship_Anim::None_Anim));
+	flameLeft.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
+	flameRight.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
 }
 
 void Ship::Update(double dt) {
-	if (rotateClockKey.IsKeyDown() == true) {
-		rotationAmount -= Ship::rotationRate * dt;
-	}
-	if (rotateCounterKey.IsKeyDown() == true) {
-		rotationAmount += Ship::rotationRate * dt;
-	}
-	math::TransformMatrix roation = math::RotateMatrix(rotationAmount);
-	if (accelerateKey.IsKeyDown() == true) {
-		velocity += math::RotateMatrix(rotationAmount) * math::vec2 { 0, accel* dt };
-		if (isAccelerating == false) {
-			Engine::GetLogger().LogDebug("Accelerating");
-			isAccelerating = true;
+	flameLeft.Update(dt);
+	flameRight.Update(dt);
+
+	if (IsDead() == false) {
+		if (rotateClockKey.IsKeyDown() == true) {
+			UpdateRotation(-Ship::rotationRate * dt);
 		}
-	} else {
-		if (isAccelerating == true) {
-			Engine::GetLogger().LogDebug("Stopped Accelerating");
-			isAccelerating = false;
+		if (rotateCounterKey.IsKeyDown() == true) {
+			UpdateRotation(Ship::rotationRate * dt);
+		}
+		if (accelerateKey.IsKeyDown() == true) {
+			SetVelocity(GetVelocity() + math::RotateMatrix(GetRotation()) * math::vec2{ 0, accel * dt });
+			if (isAccelerating == false) {
+				flameLeft.PlayAnimation(static_cast<int>(Flame_Anim::Flame_Anim));
+				flameRight.PlayAnimation(static_cast<int>(Flame_Anim::Flame_Anim));
+				isAccelerating = true;
+			}
+		} else {
+			if (isAccelerating == true) {
+				flameLeft.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
+				flameRight.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
+				isAccelerating = false;
+			}
+		}
+		if (fireLazerKey.IsKeyReleased() == true) {
+			Engine::GetGSComponent<CS230::GameObjectManager>()->Add(
+				new Laser(GetMatrix() * static_cast<math::vec2>(GetGOComponent<CS230::Sprite>()->GetHotSpot(3)),
+					GetRotation(), GetScale(), math::RotateMatrix(GetRotation()) * Laser::LaserVelocity));
+			Engine::GetGSComponent<CS230::GameObjectManager>()->Add(
+				new Laser(GetMatrix() * static_cast<math::vec2>(GetGOComponent<CS230::Sprite>()->GetHotSpot(4)),
+					GetRotation(), GetScale(), math::RotateMatrix(GetRotation()) * Laser::LaserVelocity));
 		}
 	}
+	SetVelocity(GetVelocity() - GetVelocity() * Ship::drag * dt);
+	UpdatePosition(GetVelocity() * dt);
 
-	velocity -= (velocity * Ship::drag * dt);
-
-	position += velocity * dt;
-
-	objectMatrix = math::TranslateMatrix(position) * math::RotateMatrix(rotationAmount) * math::ScaleMatrix({ 0.75, 0.75 });
-	TestForWrap();
+	UpdateGOComponents(dt);
 }
 
-void Ship::TestForWrap() {
-	if (position.y > Engine::GetWindow().GetSize().y + sprite.GetTextureSize().y / 2.0) {
-		position.y = 0 - sprite.GetTextureSize().y / 2.0;
-	} else if (position.y < 0 - sprite.GetTextureSize().y / 2.0) {
-		position.y = Engine::GetWindow().GetSize().y + sprite.GetTextureSize().y / 2.0;
-	}
-	if (position.x > Engine::GetWindow().GetSize().x + sprite.GetTextureSize().x / 2.0) {
-		position.x = 0 - sprite.GetTextureSize().x / 2.0;
-	} else if (position.x < 0 - sprite.GetTextureSize().x / 2.0) {
-		position.x = Engine::GetWindow().GetSize().x + sprite.GetTextureSize().x / 2.0;
+void Ship::Draw(math::TransformMatrix cameraMatrix) {
+
+	math::TransformMatrix shipScreenMatrix = cameraMatrix * GetMatrix();
+	flameRight.Draw(shipScreenMatrix * math::TranslateMatrix(GetGOComponent<CS230::Sprite>()->GetHotSpot(1)));
+	flameLeft.Draw(shipScreenMatrix * math::TranslateMatrix(GetGOComponent<CS230::Sprite>()->GetHotSpot(2)));
+	GetGOComponent<CS230::Sprite>()->Draw(shipScreenMatrix);
+
+	ShowCollision* showCollisionPtr = Engine::GetGSComponent<ShowCollision>();
+	if (showCollisionPtr != nullptr && showCollisionPtr->IsEnabled() == true) {
+		CS230::Collision* collisionPtr = GetGOComponent<CS230::Collision>();
+		if (collisionPtr != nullptr) {
+			collisionPtr->Draw(cameraMatrix);
+		}
 	}
 }
 
-void Ship::Draw() {
-	flameRight.Draw(objectMatrix * math::TranslateMatrix(sprite.GetHotSpot(1)));
-	flameLeft.Draw(objectMatrix * math::TranslateMatrix(sprite.GetHotSpot(2)));
-	sprite.Draw(objectMatrix);
+bool Ship::CanCollideWith(GameObjectType) {
+	return true;
+}
+
+void Ship::ResolveCollision(CS230::GameObject* objectB) {
+	switch (objectB->GetObjectType()) {
+	case GameObjectType::Meteor:
+		GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(Ship_Anim::Explode_Anim));
+		flameRight.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
+		flameLeft.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
+		RemoveGOComponent<CS230::Collision>();
+		isDead = true;
+		break;
+	}
 }

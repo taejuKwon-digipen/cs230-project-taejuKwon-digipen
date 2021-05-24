@@ -9,7 +9,10 @@ Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #pragma once
 #include "..\Engine\GameState.h"
-#include "..\Engine\Texture.h"
+
+namespace CS230 {
+	class Texture;
+}
 
 class Splash : public CS230::GameState {
 public:
@@ -23,6 +26,6 @@ public:
 private:
 	double timer;
 	const int DISPLAY_TIME = 3;
-	CS230::Texture texture;
+	CS230::Texture* texturePtr;
 };
 

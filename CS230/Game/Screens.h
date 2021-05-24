@@ -11,6 +11,7 @@ Creation date: 2/10/2021
 
 enum class Screens {
 	Splash,
+	MainMenu,
 	Level1,
 	Level2
 };

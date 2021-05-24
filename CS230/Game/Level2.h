@@ -8,9 +8,11 @@ Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
 #pragma once
+#include "..\Engine\GameObjectManager.h"
 #include "..\Engine\GameState.h"
 #include "..\Engine\Input.h"
-#include "Ship.h"
+
+class Ship;
 
 class Level2 : public CS230::GameState {
 public:
@@ -22,8 +24,12 @@ public:
 
 	std::string GetName() override { return "Level 2"; }
 private:
-	Ship ship;
+	Ship* shipPtr;
+
 	CS230::InputKey levelReload;
-	CS230::InputKey levelNext;
+	CS230::InputKey mainMenu;
+
+	CS230::Texture GameOverTexture;
+	CS230::Texture RestartTexture;
 };
 

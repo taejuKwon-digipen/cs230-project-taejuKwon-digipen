@@ -10,13 +10,14 @@ Creation date: 2/11/2021
 #pragma once
 #include "Vec2.h"
 #include "Rect.h"
+#include "Component.h"
 
 namespace math {
 	class TransformMatrix;
 }
 
 namespace CS230 {
-	class Camera {
+	class Camera : public Component {
 	public:
 		Camera(math::rect2 movableRange);
 		void SetPosition(math::vec2 newPosition);

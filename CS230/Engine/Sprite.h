@@ -10,26 +10,41 @@ Creation date: 2/11/2021
 #pragma once
 #include <string>
 #include <vector>
+#include <filesystem>
 #include "Vec2.h"
-#include "Texture.h"
+#include "Component.h"
 
 namespace math {
 	class TransformMatrix;
 }
 
 namespace CS230 {
-	class Sprite {
-	public:
-		Sprite();
+	class Texture;
+	class Animation;
+	class GameObject;
+}
 
-		void Load(const std::filesystem::path & texturePath);
-		void Load(const std::filesystem::path& texturePath, math::ivec2 hotspot);
-		void Load(const std::filesystem::path& texturePath, std::initializer_list<math::ivec2> hotspots);
+namespace CS230 {
+	class Sprite : public Component {
+	public:
+		Sprite(const std::filesystem::path& spriteInfoFile, GameObject* object);
+		~Sprite();
+		void Load(const std::filesystem::path& spriteInfoFile, GameObject* object);
+		void Update(double dt) override;
 		void Draw(math::TransformMatrix displayMatrix);
+		void PlayAnimation(int anim);
+		int GetCurrentAnim();
+		bool IsAnimationDone();
 		math::ivec2 GetHotSpot(int index);
-		math::ivec2 GetTextureSize();
+		math::ivec2 GetFrameSize() const;
 	private:
-		Texture texture;
+		math::ivec2 GetFrameTexel(int frameNum) const;
+
+		Texture *texturePtr;    
+		int currAnim;
+		math::ivec2 frameSize;
+		std::vector<math::ivec2> frameTexel;
+		std::vector<Animation*> animations;
 		std::vector<math::ivec2> hotSpotList;
 	};
 }

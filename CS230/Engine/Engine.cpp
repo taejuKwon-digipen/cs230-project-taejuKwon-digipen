@@ -24,6 +24,10 @@ void Engine::Init(std::string windowName) {
 	logger.LogEvent("Engine Init");
 	window.Init(windowName);
 	fpsCalcTime = lastTick;
+
+	int seed = static_cast<unsigned int>(time(NULL));
+	srand(seed);
+	Engine::GetLogger().LogEvent("Seed = " + std::to_string(seed));
 }
 
 void Engine::Shutdown() {
@@ -33,6 +37,13 @@ void Engine::Shutdown() {
 void Engine::Update() {
 	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 	double dt = std::chrono::duration<double>(now - lastTick).count();
+
+#ifdef _DEBUG
+	if (dt > 2 / Engine::Target_FPS) {
+		dt = 1 / Engine::Target_FPS;
+		Engine::GetLogger().LogEvent("Long Frame detected!");
+	}
+#endif
 
 	if (dt >= 1 / Engine::Target_FPS) 	{
 		logger.LogVerbose("Engine Update");
@@ -52,4 +63,8 @@ void Engine::Update() {
 
 bool Engine::HasGameEnded() {
 	return gameStateManager.HasGameEnded();
+}
+
+void Engine::AddSpriteFont(const std::filesystem::path& fileName) {
+	fonts.push_back(CS230::SpriteFont(fileName));
 }

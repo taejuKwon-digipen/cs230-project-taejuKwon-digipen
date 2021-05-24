@@ -10,15 +10,11 @@ Creation date: 2/10/2021
 #pragma once
 #include "..\Engine\GameState.h"
 #include "..\Engine\Input.h"
-#include "..\Engine\Camera.h"
-#include "Hero.h"
-#include "Ball.h"
 #include "Background.h"
 
+class Hero;
 class Level1 : public CS230::GameState {
 public:
-	static constexpr double floor = 126.0f;
-	static constexpr double gravity = 1875;
 
 	Level1();
 	void Load() override;
@@ -28,14 +24,13 @@ public:
 
 	std::string GetName() override { return "Level 1"; }
 private:
-	CS230::Camera camera;
+	static constexpr double floor = 126.0f;
+	int lives;
+	CS230::Texture livesTexture;
 
-	Hero hero;
-	Ball ball1;
-	Ball ball2;
-	Ball ball3;
-	Background background;
+	Hero* heroPtr;
+
 	CS230::InputKey levelReload;
-	CS230::InputKey levelNext;
+	CS230::InputKey mainMenu;
 };
 

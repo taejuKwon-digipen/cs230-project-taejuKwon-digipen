@@ -7,37 +7,85 @@ Project: CS230
 Author: Kevin Wright
 Creation date: 2/10/2021
 -----------------------------------------------------------------*/
-#include "../Engine/Engine.h"	//GetGameStateManager
+#include "../Engine/Engine.h"
+#include "../Engine/Camera.h"
+#include "../Engine/GameObjectManager.h"
+#include "../Engine/ShowCollision.h"
 #include "Screens.h"
 #include "Level1.h"
+#include "Hero.h"
+#include "Ball.h"
+#include "Bunny.h"
+#include "TreeStump.h"
+#include "Fonts.h"
+#include "Score.h"
+#include "Timer.h"
+#include "Gravity.h"
+#include "Floor.h"
+#include "Exit.h"
 
-Level1::Level1() : hero({ 150, Level1::floor }, camera), 
-						camera({ { 0.15 * Engine::GetWindow().GetSize().x, 0 }, {0.35 * Engine::GetWindow().GetSize().x, 0 }}),
-						ball1({ 600, Level1::floor }), ball2({ 2700, Level1::floor }), ball3({ 4800, Level1::floor }),
-						levelReload(CS230::InputKey::Keyboard::R), levelNext(CS230::InputKey::Keyboard::Enter) {}
+Level1::Level1() : levelReload(CS230::InputKey::Keyboard::R), mainMenu(CS230::InputKey::Keyboard::Escape), lives(3) {
+}
 
 void Level1::Load() {
-	hero.Load();
-	ball1.Load();
-	ball2.Load();
-	ball3.Load();
+	AddGSComponent(new Gravity(1875));
+#ifdef _DEBUG
+	AddGSComponent(new ShowCollision(CS230::InputKey::Keyboard::Tilde));
+#endif
 
-	background.Add("assets/clouds.png", 4);
-	background.Add("assets/mountains.png", 2);
-	background.Add("assets/foreground.png", 1);
+	Background* bgPtr = new Background();
+	AddGSComponent(bgPtr);
+	bgPtr->Add("assets/clouds.png", 4);
+	bgPtr->Add("assets/mountains.png", 2);
+	bgPtr->Add("assets/foreground.png", 1);
 
-	camera.SetPosition({ 0,0 });
-	camera.SetExtent({{ 0,0 }, { background.Size() - Engine::GetWindow().GetSize() } });
+	AddGSComponent(new Score(0, Fonts::Font1));
+	AddGSComponent(new Timer(60));
+
+	CS230::Camera* cameraPtr = new CS230::Camera({ { 0.15 * Engine::GetWindow().GetSize().x, 0 }, {0.35 * Engine::GetWindow().GetSize().x, 0 } });
+	AddGSComponent(cameraPtr);
+	cameraPtr->SetExtent({ { 0,0 }, { GetGSComponent<Background>()->Size() - Engine::GetWindow().GetSize() } });
+
+	CS230::GameObjectManager* gom = new CS230::GameObjectManager();
+	AddGSComponent(gom);
+	gom->Add(new Ball({ 600, Level1::floor }));
+	gom->Add(new Ball({ 2700, Level1::floor }));
+	gom->Add(new Ball({ 4800, Level1::floor }));
+	gom->Add(new Bunny({ 1000, Level1::floor }));
+	gom->Add(new Bunny({ 2000, Level1::floor }));
+	gom->Add(new Bunny({ 3200, Level1::floor }));
+	gom->Add(new Bunny({ 3800, Level1::floor }));
+	gom->Add(new TreeStump({ 300, Level1::floor }, 3));
+	gom->Add(new TreeStump({ 1200, Level1::floor }, 2));
+	gom->Add(new TreeStump({ 2200, Level1::floor }, 1));
+	gom->Add(new TreeStump({ 2800, Level1::floor }, 5));
+	gom->Add(new TreeStump({ 5100, Level1::floor }, 5));
+	gom->Add(new Floor({ {0, 0}, {1471, static_cast<int>(Level1::floor)} }));
+	gom->Add(new Floor({ {1602, 0}, {4262, static_cast<int>(Level1::floor)} }));
+	gom->Add(new Floor({ {4551, 0}, {5760, static_cast<int>(Level1::floor)} }));
+	gom->Add(new Exit({ {5550, static_cast<int>(Level1::floor)}, {5760, 683} }));
+	heroPtr = new Hero({ 100, Level1::floor-1 });
+	gom->Add(heroPtr);
+
+
+	CS230::SpriteFont& font = Engine::GetSpriteFont(static_cast<int>(Fonts::Font1));
+	livesTexture = font.DrawTextToTexture("Lives: " + std::to_string(lives), 0xFFFFFFFF, true);
 }
 void Level1::Update(double dt) {
-	hero.Update(dt);
-	ball1.Update(dt);
-	ball2.Update(dt);
-	ball3.Update(dt);
-	camera.Update(hero.GetPosition());
+	UpdateGSComponents(dt);
+	GetGSComponent<CS230::Camera>()->Update(heroPtr->GetPosition());
 
-	if (levelNext.IsKeyReleased() == true) {
-		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::Level2));
+	if (GetGSComponent<Timer>()->hasEnded() || heroPtr->IsDead() == true) {
+		if (lives > 1) {
+			lives--;
+			Engine::GetGameStateManager().ReloadState();
+		} else {
+			Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::MainMenu));
+			lives = 3;
+		}
+	}
+	if (mainMenu.IsKeyReleased() == true) {
+		Engine::GetGameStateManager().SetNextState(static_cast<int>(Screens::MainMenu));
 	}
 #ifdef _DEBUG
 	if (levelReload.IsKeyReleased() == true) {
@@ -46,17 +94,24 @@ void Level1::Update(double dt) {
 #endif
 }
 void Level1::Unload() {
-	background.Unload();
+	ClearGSComponent();
+	heroPtr = nullptr;
 }
 
 void Level1::Draw() {
 	Engine::GetWindow().Clear(0x3399DAFF);
 
-	background.Draw(camera);
+	CS230::Camera* cameraPtr = GetGSComponent<CS230::Camera>();
+	GetGSComponent<Background>()->Draw(*cameraPtr);
+	math::TransformMatrix cameraMatrix = cameraPtr->GetMatrix();
+	GetGSComponent<CS230::GameObjectManager>()->DrawAll(cameraMatrix);
 
-	math::TransformMatrix cameraMatrix = camera.GetMatrix();
-	hero.Draw(cameraMatrix);
-	ball1.Draw(cameraMatrix);
-	ball2.Draw(cameraMatrix);
-	ball3.Draw(cameraMatrix);
+	math::ivec2 winSize = Engine::GetWindow().GetSize();
+	if (GetGSComponent<Score>() != nullptr) {
+		GetGSComponent<Score>()->Draw({ 10, winSize.y - 5 });
+	}
+	if (GetGSComponent<Timer>() != nullptr) {
+		GetGSComponent<Timer>()->Draw({ winSize.x - 10, winSize.y - 5 });
+	}
+	livesTexture.Draw(math::TranslateMatrix(math::ivec2{ winSize.x / 2 - livesTexture.GetSize().x / 2, winSize.y - livesTexture.GetSize().y - 5 }));
 }

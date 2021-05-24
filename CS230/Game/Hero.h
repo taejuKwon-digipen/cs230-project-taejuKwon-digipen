@@ -9,64 +9,55 @@ Creation date: 2/11/2021
 -----------------------------------------------------------------*/
 #pragma once
 #include "..\Engine\Sprite.h"
-#include "..\Engine\Input.h"
-#include "..\Engine\Vec2.h"
-#include "..\Engine\TransformMatrix.h"
+#include "..\Engine\Input.h"		//Input::InputKey
+#include "..\Engine\GameObject.h"
+#include "GameObjectTypes.h"
 
-//class CS230::Camera;
-namespace CS230 {
-	class Camera;
-}
-
-class Hero {
+class Hero : public CS230::GameObject {
 public:
-	Hero(math::vec2 startPos, const CS230::Camera& camera);
-	void Load();
-	void Update(double dt);
-	void Draw(math::TransformMatrix cameraMatrix);
+    Hero(math::vec2 startPos);
+    void Update(double dt);
+    void Draw(math::TransformMatrix displayMatrix);
+    GameObjectType GetObjectType() override { return GameObjectType::Hero; }
+    std::string GetObjectTypeName() override { return "Hero"; }
+    bool CanCollideWith(GameObjectType objectBType) override;
+    void ResolveCollision(GameObject* objectB) override;
 
-	const math::vec2& GetPosition() const { return position; }
+    bool IsDead() { return isDead; }
 private:
-    class State {
-    public:
-        virtual void Enter(Hero* hero) = 0;
-        virtual void Update(Hero* hero, double dt) = 0;
-        virtual void TestForExit(Hero* hero) = 0;
-        virtual std::string GetName() = 0;
-    };
     class State_Idle : public State {
     public:
-        virtual void Enter(Hero* hero) override;
-        virtual void Update(Hero* hero, double dt) override;
-        virtual void TestForExit(Hero* hero) override;
+        virtual void Enter(GameObject* object) override;
+        virtual void Update(GameObject* object, double dt) override;
+        virtual void TestForExit(GameObject* object) override;
         std::string GetName() override { return "Idle"; }
     };
     class State_Running : public State {
     public:
-        virtual void Enter(Hero* hero) override;
-        virtual void Update(Hero* hero, double dt) override;
-        virtual void TestForExit(Hero* hero) override;
+        virtual void Enter(GameObject* object) override;
+        virtual void Update(GameObject* object, double dt) override;
+        virtual void TestForExit(GameObject* object) override;
         std::string GetName() override { return "Running"; }
     };
     class State_Skidding : public State {
     public:
-        virtual void Enter(Hero* hero) override;
-        virtual void Update(Hero* hero, double dt) override;
-        virtual void TestForExit(Hero* hero) override;
+        virtual void Enter(GameObject* object) override;
+        virtual void Update(GameObject* object, double dt) override;
+        virtual void TestForExit(GameObject* object) override;
         std::string GetName() override { return "Skidding"; }
     };
     class State_Jumping : public State {
     public:
-        virtual void Enter(Hero* hero) override;
-        virtual void Update(Hero* hero, double dt) override;
-        virtual void TestForExit(Hero* hero) override;
+        virtual void Enter(GameObject* object) override;
+        virtual void Update(GameObject* object, double dt) override;
+        virtual void TestForExit(GameObject* object) override;
         std::string GetName() override { return "Jumping"; }
     };
     class State_Falling : public State {
     public:
-        virtual void Enter(Hero* hero) override;
-        virtual void Update(Hero* hero, double dt) override;
-        virtual void TestForExit(Hero* hero) override;
+        virtual void Enter(GameObject* object) override;
+        virtual void Update(GameObject* object, double dt) override;
+        virtual void TestForExit(GameObject* object) override;
         std::string GetName() override { return "Falling"; }
     };
     State_Idle stateIdle;
@@ -76,21 +67,17 @@ private:
     State_Falling stateFalling;
 
     void UpdateXVelocity(double dt);
-    void ChangeState(State* newState);
-
-    State* currState;
-	const CS230::Camera& camera;
-	CS230::Sprite sprite;
-	math::vec2 startPos;
-	math::vec2 position;
-	math::vec2 velocity;
-	math::TransformMatrix objectMatrix;
-	bool isFlipped;
 
 	static constexpr double jumpVelocity = 950;
 	static constexpr double xAccel = 500;
 	static constexpr double xDrag = 750;
 	static constexpr double maxXVelocity = 750;
+    static constexpr double hurtTime = 2;
+
+    double hurtTimer;
+    bool drawHero;
+    bool isDead;
+    GameObject* standingOnObject;
 
 	CS230::InputKey jumpKey;
 	CS230::InputKey moveLeftKey;

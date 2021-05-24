@@ -11,31 +11,32 @@ Creation date: 2/11/2021
 #include "..\Engine\Input.h"
 #include "..\Engine\Sprite.h"
 #include "..\Engine\Vec2.h"
-#include "..\Engine\TransformMatrix.h"
+#include "..\Engine\GameObject.h"
+#include "GameObjectTypes.h"
 
-class Ship {
+class Ship : public CS230::GameObject {
 public:
 	Ship(math::vec2 startPos);
-	void Load();
 	void Update(double dt);
-	void Draw();
+	void Draw(math::TransformMatrix displayMatrix);
 
+	GameObjectType GetObjectType() override { return GameObjectType::Ship; }
+	std::string GetObjectTypeName() override { return "Ship"; }
+	bool CanCollideWith(GameObjectType objectBType) override;
+	void ResolveCollision(CS230::GameObject* objectB) override;
+
+	bool IsDead() { return isDead; }
 private:
-	void TestForWrap();
-	CS230::Sprite sprite;
 	CS230::Sprite flameLeft;
 	CS230::Sprite flameRight;
-	math::vec2 initPosition;
-	math::vec2 position;
-	math::vec2 velocity;    
-	math::TransformMatrix objectMatrix;
-	double rotationAmount;
 
 	bool isAccelerating;
+	bool isDead;
 	static constexpr double accel = 400;
 	static constexpr double drag = 1;
 	static constexpr double rotationRate = 2.0;
 
+	CS230::InputKey fireLazerKey;
 	CS230::InputKey rotateCounterKey;
 	CS230::InputKey rotateClockKey;
 	CS230::InputKey accelerateKey;
