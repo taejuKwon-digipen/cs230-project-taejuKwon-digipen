@@ -23,6 +23,7 @@ Creation date: 2/10/2021
 #include "Gravity.h"
 #include "Floor.h"
 #include "Exit.h"
+#include "GameParticles.h"
 
 Level1::Level1() : levelReload(CS230::InputKey::Keyboard::R), mainMenu(CS230::InputKey::Keyboard::Escape), lives(3) {
 }
@@ -31,9 +32,11 @@ void Level1::Load() {
 	AddGSComponent(new Gravity(1875));
 #ifdef _DEBUG
 	AddGSComponent(new ShowCollision(CS230::InputKey::Keyboard::Tilde));
+	/*AddGSComponent(new CS230::ParticleEmitter::Particle("assets/smoke.spt")); */
 #endif
 
 	Background* bgPtr = new Background();
+
 	AddGSComponent(bgPtr);
 	bgPtr->Add("assets/clouds.png", 4);
 	bgPtr->Add("assets/mountains.png", 2);

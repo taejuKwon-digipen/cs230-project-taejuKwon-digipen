@@ -171,6 +171,7 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"</Command>
     <ClCompile Include="Engine\Input_Doodle.cpp" />
     <ClCompile Include="Engine\Logger.cpp" />
     <ClCompile Include="Engine\MemManager.cpp" />
+    <ClCompile Include="Engine\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\ShowCollision.cpp" />
     <ClCompile Include="Engine\Sprite.cpp" />
     <ClCompile Include="Engine\SpriteFont.cpp" />
@@ -183,6 +184,7 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"</Command>
     <ClCompile Include="Game\Bunny.cpp" />
     <ClCompile Include="Game\Exit.cpp" />
     <ClCompile Include="Game\Floor.cpp" />
+    <ClCompile Include="Game\GameParticles.cpp" />
     <ClCompile Include="Game\Hero.cpp" />
     <ClCompile Include="Game\Laser.cpp" />
     <ClCompile Include="Game\Level1.cpp" />
@@ -211,6 +213,7 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"</Command>
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Logger.h" />
     <ClInclude Include="Engine\MemManager.h" />
+    <ClInclude Include="Engine\ParticleEmitter.h" />
     <ClInclude Include="Engine\Rect.h" />
     <ClInclude Include="Engine\ShowCollision.h" />
     <ClInclude Include="Engine\Sprite.h" />
@@ -230,6 +233,7 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"</Command>
     <ClInclude Include="Game\Floor.h" />
     <ClInclude Include="Game\Fonts.h" />
     <ClInclude Include="Game\GameObjectTypes.h" />
+    <ClInclude Include="Game\GameParticles.h" />
     <ClInclude Include="Game\Gravity.h" />
     <ClInclude Include="Game\Hero.h" />
     <ClInclude Include="Game\Hero_Anims.h" />

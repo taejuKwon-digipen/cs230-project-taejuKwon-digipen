@@ -78,4 +78,5 @@ namespace math
     constexpr vec2 ivec2::operator*(double scale) const noexcept { return { x * scale, y * scale }; }
     constexpr vec2 ivec2::operator/(double divisor) const noexcept { return { x / divisor, y / divisor }; }
     constexpr ivec2 operator*(int scale, const ivec2& v) noexcept { return v * scale; }
+
 }

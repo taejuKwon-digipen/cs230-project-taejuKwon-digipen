@@ -42,6 +42,8 @@ namespace math {
         constexpr vec2  operator/(double divisor) const noexcept;
         constexpr vec2& operator*=(double scale) noexcept;
         constexpr vec2& operator/=(double divisor) noexcept;
+
+        vec2 Normalize() const noexcept;
     };
 
     constexpr vec2 operator*(double scale, const vec2& v) noexcept;

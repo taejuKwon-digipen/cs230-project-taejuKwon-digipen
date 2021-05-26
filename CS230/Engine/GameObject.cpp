@@ -13,13 +13,13 @@ Creation date: 2/14/2021
 #include "Collision.h"
 #include "ShowCollision.h"
 
+CS230::GameObject::GameObject() {};
 
 CS230::GameObject::GameObject(math::vec2 position) : GameObject(position, 0, { 1, 1 }) {}
 
 CS230::GameObject::GameObject(math::vec2 position, double rotation, math::vec2 scale)
 							: velocity{ 0,0 }, position(position), updateMatrix(true), 
-							scale(scale), rotation(rotation), currState(&state_nothing) {
-}
+							scale(scale), rotation(rotation), currState(&state_nothing) {}
 
 CS230::GameObject::~GameObject() {
 	ClearGOComponents();
