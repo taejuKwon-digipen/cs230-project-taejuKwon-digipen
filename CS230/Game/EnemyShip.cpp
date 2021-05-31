@@ -20,7 +20,7 @@ constexpr double PI = 3.1415926535897932384626433832795;
 
 EnemyShip::EnemyShip(GameObject* player) : GameObject(), flameLeft("assets/flame.spt", this), flameRight("assets/flame.spt", this), isDead(false), player(player)
 {
-	const double distance = -((((rand() % 1024) / 1024.) * 128.) + 128);  //-random number
+	const double distance = -((((rand() % 1024) / 1024.) * 1024.) - 1024);  //-random number
 	const math::vec2 shipPosition = { player->GetPosition() };
 
 	SetRotation((rand() % 1024 / 1024.) * 2 * PI);
