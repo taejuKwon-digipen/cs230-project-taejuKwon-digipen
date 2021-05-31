@@ -40,7 +40,7 @@ namespace CS230 {
         void Emit(int number, math::vec2 position, math::vec2 emitterVelocity, math::vec2 emitVector, double spread);
     private:
         std::vector<Particle*> particleMemoryPool;
-        int particleIndexToUse;
+        int particleIndexToUse = 0;
         double lifetime;
     };
 }

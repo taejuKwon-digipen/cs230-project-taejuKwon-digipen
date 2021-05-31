@@ -19,11 +19,11 @@ namespace math {
         return i1 == i2;
     }
 
+
     struct [[nodiscard]] vec2 {
         double x{ 0.0 };
         double y{ 0.0 };
-
-
+    	
         constexpr vec2() noexcept = default;
         constexpr vec2(double x_value, double y_value) noexcept : x{ x_value }, y{ y_value } {};
 
@@ -32,6 +32,7 @@ namespace math {
 
         constexpr vec2  operator+(const vec2& v) const noexcept;
         constexpr vec2& operator+=(const vec2& v) noexcept;
+        [[nodiscard]] constexpr double Cross(const vec2& v) const noexcept;
 
         constexpr vec2  operator-(const vec2& v) const noexcept;
         constexpr vec2& operator-=(const vec2& v) noexcept;
@@ -42,16 +43,19 @@ namespace math {
         constexpr vec2  operator/(double divisor) const noexcept;
         constexpr vec2& operator*=(double scale) noexcept;
         constexpr vec2& operator/=(double divisor) noexcept;
+		inline    vec2 Normalize() noexcept;
 
-        vec2 Normalize() const noexcept;
     };
-
+	
     constexpr vec2 operator*(double scale, const vec2& v) noexcept;
+    constexpr double vec2::Cross(const vec2& v) const noexcept
+    {
+        return (x * v.y - y * v.x);
+    }
 
     struct [[nodiscard]] ivec2 {
         int x{ 0 };
         int y{ 0 };
-
 
         constexpr ivec2() noexcept = default;
         constexpr ivec2(int x_value, int y_value) noexcept : x{ x_value }, y{ y_value } {};
@@ -78,6 +82,7 @@ namespace math {
         constexpr vec2& operator*=(double scale) noexcept;
         constexpr vec2& operator/=(double divisor) noexcept;
     };
+
 }
 
 #include "Vec2.inl"

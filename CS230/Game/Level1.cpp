@@ -32,7 +32,6 @@ void Level1::Load() {
 	AddGSComponent(new Gravity(1875));
 #ifdef _DEBUG
 	AddGSComponent(new ShowCollision(CS230::InputKey::Keyboard::Tilde));
-	/*AddGSComponent(new CS230::ParticleEmitter::Particle("assets/smoke.spt")); */
 #endif
 
 	Background* bgPtr = new Background();
@@ -54,10 +53,8 @@ void Level1::Load() {
 	gom->Add(new Ball({ 600, Level1::floor }));
 	gom->Add(new Ball({ 2700, Level1::floor }));
 	gom->Add(new Ball({ 4800, Level1::floor }));
-	gom->Add(new Bunny({ 1000, Level1::floor }));
-	gom->Add(new Bunny({ 2000, Level1::floor }));
-	gom->Add(new Bunny({ 3200, Level1::floor }));
-	gom->Add(new Bunny({ 3800, Level1::floor }));
+	
+
 	gom->Add(new TreeStump({ 300, Level1::floor }, 3));
 	gom->Add(new TreeStump({ 1200, Level1::floor }, 2));
 	gom->Add(new TreeStump({ 2200, Level1::floor }, 1));
@@ -67,8 +64,15 @@ void Level1::Load() {
 	gom->Add(new Floor({ {1602, 0}, {4262, static_cast<int>(Level1::floor)} }));
 	gom->Add(new Floor({ {4551, 0}, {5760, static_cast<int>(Level1::floor)} }));
 	gom->Add(new Exit({ {5550, static_cast<int>(Level1::floor)}, {5760, 683} }));
-	heroPtr = new Hero({ 100, Level1::floor-1 });
+
+	heroPtr = new Hero({ 100, Level1::floor - 1 });
+	gom->Add(new Bunny({ 1000, floor }, { 674, 1132 }, heroPtr));
+	gom->Add(new Bunny({ 2000, floor }, { 1635, 2135 }, heroPtr));
+	gom->Add(new Bunny({ 3200, floor }, { 2860, 4250 }, heroPtr));
+	gom->Add(new Bunny({ 3800, floor }, { 2860, 4250 }, heroPtr));
+
 	gom->Add(heroPtr);
+	AddGSComponent(new SmokeEmitter()); 
 
 
 	CS230::SpriteFont& font = Engine::GetSpriteFont(static_cast<int>(Fonts::Font1));

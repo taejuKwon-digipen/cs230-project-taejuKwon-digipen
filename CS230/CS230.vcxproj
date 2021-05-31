@@ -182,6 +182,7 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"</Command>
     <ClCompile Include="Game\Background.cpp" />
     <ClCompile Include="Game\Ball.cpp" />
     <ClCompile Include="Game\Bunny.cpp" />
+    <ClCompile Include="Game\EnemyShip.cpp" />
     <ClCompile Include="Game\Exit.cpp" />
     <ClCompile Include="Game\Floor.cpp" />
     <ClCompile Include="Game\GameParticles.cpp" />
@@ -228,6 +229,7 @@ xcopy /d /y Assets\* "$(OutputPath)Assets"</Command>
     <ClInclude Include="Game\Ball_Anims.h" />
     <ClInclude Include="Game\Bunny.h" />
     <ClInclude Include="Game\Bunny_Anims.h" />
+    <ClInclude Include="Game\EnemyShip.h" />
     <ClInclude Include="Game\Exit.h" />
     <ClInclude Include="Game\Flame_Anims.h" />
     <ClInclude Include="Game\Floor.h" />

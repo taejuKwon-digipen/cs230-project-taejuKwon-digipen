@@ -13,7 +13,7 @@ Creation date: 2/14/2021
 #include "Collision.h"
 #include "ShowCollision.h"
 
-CS230::GameObject::GameObject() {};
+CS230::GameObject::GameObject():GameObject({0,0}) {};
 
 CS230::GameObject::GameObject(math::vec2 position) : GameObject(position, 0, { 1, 1 }) {}
 

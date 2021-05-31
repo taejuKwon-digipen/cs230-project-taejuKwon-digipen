@@ -20,18 +20,18 @@ CS230::ParticleEmitter::Particle::Particle(const std::filesystem::path& spriteFi
 
 void CS230::ParticleEmitter::Particle::Revive(math::vec2 position, math::vec2 velocity, double life)
 {
-	AddGOComponent(new CS230::ParticleEmitter(life));
-	/*GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(Meteor_Anim::None_Anim));*/
+	this->life = life;
+	GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(0));
 	SetPosition(position);
 	SetVelocity(velocity);
 }
 
 void CS230::ParticleEmitter::Particle::Update(double dt)
 {
+	life -= dt;
 	if(this->IsAlive() == true)
 	{
-		GetGOComponent<Particle>()->Update(life); //?이상한데 일단 넣어봄
-		Particle::Update(dt);
+		GameObject::Update(dt);
 	}
 }
 
@@ -39,13 +39,11 @@ void CS230::ParticleEmitter::Particle::Draw(math::TransformMatrix matrix)
 {
 	if(IsAlive()== true)
 	{
-		GetGOComponent<Particle>()->Draw(matrix);
+		GameObject::Draw(matrix);
 	}
 }
 
-CS230::ParticleEmitter::ParticleEmitter(double lifetime)
-{
-	Engine::GetGSComponent<>()
+CS230::ParticleEmitter::ParticleEmitter(double lifetime) : lifetime(lifetime){
 }
 
 CS230::ParticleEmitter::~ParticleEmitter()
@@ -57,21 +55,33 @@ void CS230::ParticleEmitter::AddParticle(Particle* particleData)
 {
 	particleMemoryPool.push_back(particleData);
 	Engine::GetGSComponent<CS230::GameObjectManager>()->Add(particleData);
-	
 }
 
 void CS230::ParticleEmitter::Emit(int number, math::vec2 position, math::vec2 emitterVelocity, math::vec2 emitVector, double spread)
 {
-	for(int i = 0; i < number; i++)
-	{
-		/*if(i == particleIndexToUse)
-		{
-			Engine::GetLogger().LogError("ParticleEmitter Error");	
-		}*/
-	}
+	math::vec2 emit{};
 	
-	double angle = (rand() % static_cast<int>(((-spread / 2) + spread / 2)));
-	emitterVelocity = math::RotateMatrix{ angle } * emitVector;
+	for (int i = 0; i < number; i++)
+	{
+		const double emitSpread = (rand() % 1024 / 1024. * spread) - spread / 2; //범위
+		const double speed = ((rand() % 1024) / 2048. + 0.5); //0.5~1.0
+		if (particleMemoryPool[particleIndexToUse]->IsAlive() == true)
+		{
+			Engine::GetLogger().LogError("ParticleEmitter Error");
+		}
+		emit = math::RotateMatrix{ emitSpread }*emitVector + emitterVelocity;
+		emit *= speed;
+		
+		particleMemoryPool[particleIndexToUse]->Revive(position, emit, lifetime);
+		if (particleIndexToUse >= static_cast<int>(particleMemoryPool.size()) - 1)
+		{
+			particleIndexToUse = 0;
+		}
+		else if (particleIndexToUse < static_cast<int>(particleMemoryPool.size()) - 1)
+		{
+			particleIndexToUse++;
+		}
+	}
 }
 
 

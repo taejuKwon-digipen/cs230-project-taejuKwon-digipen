@@ -16,6 +16,7 @@ Creation date: 2/15/2021
 #include "Score.h"
 #include "ScreenWrap.h"
 #include "Meteor_Anims.h"
+#include "GameParticles.h"
 
 constexpr double PI = 3.1415926535897932384626433832795;
 
@@ -59,12 +60,22 @@ void Meteor::Update(double dt) {
 }
 
 void Meteor::ResolveCollision(GameObject* objectB) {
-    switch (objectB->GetObjectType()) {
+    math::vec2 vectorToObject{};
+    math::vec2 collisionPoint{};
+    math::vec2 blueVector{};
+	
+    switch (objectB->GetObjectType())
+    {
     case GameObjectType::Laser:
         health -= 10;
+		vectorToObject = math::vec2{ objectB->GetPosition() - this->GetPosition() }.Normalize();
+		collisionPoint = vectorToObject * GetGOComponent<CS230::CircleCollision>()->GetRadius() + this->GetPosition();
+        blueVector = vectorToObject * 2 + math::vec2{ objectB->GetVelocity() }.Normalize();
+        Engine::GetGSComponent<HitEmitter>()->Emit(1, collisionPoint, GetVelocity(), { 0,0 }, 0);
+        Engine::GetGSComponent<MeteorBitEmitter>()->Emit(10, collisionPoint, GetVelocity(), blueVector * 50, PI / 2);
         break;
     }
-
+     
     if (health <= 0) {
         if (size < 3) {
             Meteor* newMeteorA = new Meteor(*this);
@@ -74,10 +85,13 @@ void Meteor::ResolveCollision(GameObject* objectB) {
             Engine::GetGSComponent<CS230::GameObjectManager>()->Add(newMeteorA);
             Engine::GetGSComponent<CS230::GameObjectManager>()->Add(newMeteorB);
         }
+
         GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(Meteor_Anim::Fade_Anim));
         RemoveGOComponent<CS230::Collision>();
         Engine::GetGSComponent<Score>()->AddScore(100 * size);
-    } else {
+    }
+    else
+    {
         UpdateVelocity(objectB->GetVelocity() * 0.01);
     }
-}
+} 

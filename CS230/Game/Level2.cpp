@@ -14,7 +14,9 @@ Creation date: 2/10/2021
 #include "Ship.h"
 #include "Meteor.h"
 #include "Fonts.h"
+#include "GameParticles.h"
 #include "Score.h"
+#include "EnemyShip.h"
 
 Level2::Level2() : levelReload(CS230::InputKey::Keyboard::R), mainMenu(CS230::InputKey::Keyboard::Escape), shipPtr(nullptr) {}
 
@@ -32,6 +34,10 @@ void Level2::Load() {
 	gom->Add(new Meteor());
 	gom->Add(new Meteor());
 	gom->Add(shipPtr);
+	AddGSComponent(new HitEmitter());
+	AddGSComponent(new MeteorBitEmitter());
+	
+	gom->Add(new EnemyShip(shipPtr));
 
 	AddGSComponent(new Score(0, Fonts::Font2));
 

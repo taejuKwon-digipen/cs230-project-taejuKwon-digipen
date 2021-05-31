@@ -9,17 +9,29 @@ Creation date: 5/27/2021
 -----------------------------------------------------------------*/
 #include "GameParticles.h"
 
-SmokeEmitter::SmokeParticle::SmokeParticle(std::string spriteFile): CS230::ParticleEmitter::Particle(spriteFile)
+SmokeEmitter::SmokeEmitter() : CS230::ParticleEmitter(1.0)
 {
-	AddGOComponent(new CS230::ParticleEmitter(1.0));
+	for (int i = 0; i < NumParticles; i++)
+	{
+		AddParticle(new SmokeParticle("assets/smoke.spt"));
+	}
 }
 
-HitEmitter::HitParticle::HitParticle(std::string spriteFile): CS230::ParticleEmitter::Particle(spriteFile)
+HitEmitter::HitEmitter() : CS230::ParticleEmitter(1.0)
 {
-	AddGOComponent(new CS230::ParticleEmitter(1.0));
+	for (int i = 0; i < NumParticles; i++)
+	{
+		AddParticle(new HitParticle("assets/hit.spt"));
+	}
 }
 
-MeteorBitEmitter::MeteorBit::MeteorBit(std::string spriteFile): CS230::ParticleEmitter::Particle(spriteFile)
+MeteorBitEmitter::MeteorBitEmitter() : CS230::ParticleEmitter(1.5)
 {
-	AddGOComponent(new CS230::ParticleEmitter(1.5));
+	for (int i = 0; i < NumParticles; i++)
+	{
+		AddParticle(new MeteorBit("assets/MeteorBit.spt"));
+	}
 }
+
+
+
