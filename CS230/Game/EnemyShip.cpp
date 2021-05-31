@@ -11,6 +11,7 @@ Creation date: 6/14/2021
 #include "../Engine/Engine.h"
 #include "Flame_Anims.h"
 #include "GameObjectTypes.h"
+#include "Score.h"
 #include "Ship_Anims.h"
 #include "Ship.h"
 #include "../Engine/Collision.h"
@@ -86,6 +87,7 @@ void EnemyShip::ResolveCollision(GameObject* collidedWith)
 {
 	switch (collidedWith->GetObjectType()) {
 	case GameObjectType::Laser:
+		Engine::GetGSComponent<Score>()->AddScore(300);
 		GetGOComponent<CS230::Sprite>()->PlayAnimation(static_cast<int>(1));
 		flameRight.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
 		flameLeft.PlayAnimation(static_cast<int>(Flame_Anim::None_Anim));
